@@ -1,0 +1,88 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 32px;
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-gray-50);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  color: var(--color-black-700);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.search {
+  width: 280px;
+}
+
+.bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.bell:hover {
+  background: var(--color-gray-25);
+}
+
+.bellBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+  font-size: var(--text-m-size);
+  font-weight: 500;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-size: var(--text-m-size);
+  font-weight: 500;
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+}
+
+.userRole {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-black-500);
+}

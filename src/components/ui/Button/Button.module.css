@@ -1,0 +1,140 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-size: var(--text-m-size);
+  font-weight: 500;
+  line-height: var(--text-m-line);
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Primary */
+.primarySolid {
+  background: var(--color-primary-500);
+  color: var(--color-white);
+}
+.primarySolid:hover:not(:disabled) {
+  background: var(--color-primary-600);
+}
+
+.primarySoft {
+  background: var(--color-primary-100);
+  color: var(--color-primary-500);
+}
+.primarySoft:hover:not(:disabled) {
+  background: var(--color-primary-200);
+  color: var(--color-primary-600);
+}
+
+.primaryOutline {
+  background: transparent;
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-500);
+}
+.primaryOutline:hover:not(:disabled) {
+  background: var(--color-primary-100);
+}
+
+/* Gray */
+.graySolid {
+  background: var(--color-gray-50);
+  color: var(--color-black-700);
+}
+.graySolid:hover:not(:disabled) {
+  background: var(--color-gray-100);
+}
+
+.graySoft {
+  background: var(--color-gray-25);
+  color: var(--color-black-600);
+}
+.graySoft:hover:not(:disabled) {
+  background: var(--color-gray-50);
+}
+
+.grayOutline {
+  background: transparent;
+  border-color: var(--color-gray-200);
+  color: var(--color-black-700);
+}
+.grayOutline:hover:not(:disabled) {
+  background: var(--color-gray-25);
+}
+
+/* Danger */
+.dangerSolid {
+  background: var(--color-red-500);
+  color: var(--color-white);
+}
+.dangerSolid:hover:not(:disabled) {
+  background: var(--color-red-600);
+}
+
+.dangerSoft {
+  background: var(--color-red-100);
+  color: var(--color-red-500);
+}
+.dangerSoft:hover:not(:disabled) {
+  background: var(--color-red-200);
+  color: var(--color-red-600);
+}
+
+.dangerOutline {
+  background: transparent;
+  border-color: var(--color-red-500);
+  color: var(--color-red-500);
+}
+.dangerOutline:hover:not(:disabled) {
+  background: var(--color-red-100);
+}
+
+/* Success */
+.successSolid {
+  background: var(--color-green-500);
+  color: var(--color-white);
+}
+.successSolid:hover:not(:disabled) {
+  background: var(--color-green-600);
+}
+
+.successSoft {
+  background: var(--color-green-100);
+  color: var(--color-green-500);
+}
+.successSoft:hover:not(:disabled) {
+  background: var(--color-green-200);
+  color: var(--color-green-600);
+}
+
+.successOutline {
+  background: transparent;
+  border-color: var(--color-green-500);
+  color: var(--color-green-500);
+}
+.successOutline:hover:not(:disabled) {
+  background: var(--color-green-100);
+}

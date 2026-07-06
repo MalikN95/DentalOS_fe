@@ -1,0 +1,71 @@
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  background: var(--color-gray-25);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-black-700);
+}
+
+.logoMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+.subtitle {
+  text-align: center;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.submit {
+  width: 100%;
+}
+
+.eyeButton {
+  all: unset;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.hintCard {
+  text-align: center;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-black-500);
+}

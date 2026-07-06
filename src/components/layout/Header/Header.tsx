@@ -1,0 +1,63 @@
+import { NotificationBadge, TextField } from '@/components/ui';
+import { BellIcon, SearchIcon } from '@/components/icons/icons';
+import styles from './Header.module.css';
+
+type HeaderProps = {
+  title: string;
+  userName: string;
+  userRole: string;
+  notificationsCount?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  onNotificationsClick?: () => void;
+};
+
+const getInitials = (name: string): string =>
+  name
+    .split(' ')
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+export const Header = ({
+  title,
+  userName,
+  userRole,
+  notificationsCount = 0,
+  className,
+  style,
+  onNotificationsClick,
+}: HeaderProps) => (
+  <header className={`${styles.header} ${className ?? ''}`} style={style}>
+    <h1 className={styles.title}>{title}</h1>
+
+    <div className={styles.actions}>
+      <TextField
+        className={styles.search}
+        placeholder="Поиск пациента..."
+        iconLeft={<SearchIcon />}
+      />
+
+      <button
+        type="button"
+        className={styles.bell}
+        aria-label="Уведомления"
+        onClick={onNotificationsClick}
+      >
+        <BellIcon />
+        {notificationsCount > 0 ? (
+          <NotificationBadge className={styles.bellBadge} count={notificationsCount} />
+        ) : null}
+      </button>
+
+      <div className={styles.user}>
+        <span className={styles.avatar}>{getInitials(userName)}</span>
+        <span className={styles.userInfo}>
+          <span className={styles.userName}>{userName}</span>
+          <span className={styles.userRole}>{userRole}</span>
+        </span>
+      </div>
+    </div>
+  </header>
+);
