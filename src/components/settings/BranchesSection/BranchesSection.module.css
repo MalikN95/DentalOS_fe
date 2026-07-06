@@ -1,0 +1,72 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: var(--color-black-700);
+}
+
+.description {
+  margin-top: 4px;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-gray-50);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+}
+
+.table th {
+  font-weight: 500;
+  color: var(--color-black-500);
+  background: var(--color-gray-25);
+}
+
+.table td {
+  color: var(--color-black-700);
+}
+
+.stateCell {
+  text-align: center;
+  color: var(--color-black-500);
+}
+
+.actionsCell {
+  width: 120px;
+  text-align: right;
+}
+
+.secondaryText {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-black-500);
+}

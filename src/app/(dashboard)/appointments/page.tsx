@@ -1,6 +1,5 @@
-import { MOCK_APPOINTMENTS } from '@/common/mocks/dashboard.mock';
-import { AppointmentsTable } from '@/components/dashboard/AppointmentsTable/AppointmentsTable';
+import { AppointmentsPageContent } from '@/app/(dashboard)/appointments/AppointmentsPageContent';
 
-const AppointmentsPage = () => <AppointmentsTable appointments={MOCK_APPOINTMENTS} />;
+const AppointmentsPage = () => <AppointmentsPageContent />;
 
 export default AppointmentsPage;

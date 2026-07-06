@@ -5,7 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { MOCK_ACCESS_TOKEN, MOCK_USER } from '@/common/mocks/auth.mock';
+import { API_URL } from '@/common/constants/env';
+import { buildRequestHeaders } from '@/helpers/build-request-headers';
+import { decodeJwtPayload } from '@/helpers/jwt';
 import { useAppDispatch } from '@/store/hooks';
 import { setCredentials } from '@/store/slices/auth/auth.slice';
 
@@ -16,7 +18,12 @@ const loginSchema = z.object({
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
-const MOCK_REQUEST_DELAY_MS = 600;
+type LoginResponse = {
+  accessToken?: string;
+  refreshToken?: string;
+  mfaRequired?: boolean;
+  mfaToken?: string;
+};
 
 export const useLoginForm = () => {
   const dispatch = useAppDispatch();
@@ -31,18 +38,58 @@ export const useLoginForm = () => {
   const onSubmit = form.handleSubmit(async (values) => {
     setServerError(null);
 
-    // Mock auth: replace with POST /api/auth/login when API is wired
-    await new Promise((resolve) => {
-      setTimeout(resolve, MOCK_REQUEST_DELAY_MS);
-    });
+    try {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: buildRequestHeaders(null),
+        body: JSON.stringify(values),
+      });
 
-    if (values.email !== MOCK_USER.email) {
-      setServerError('Неверный email или пароль. Попробуйте admin@smile.clinic');
-      return;
+      if (response.ok === false) {
+        const errorBody = (await response.json().catch(() => null)) as {
+          message?: string | string[];
+        } | null;
+        const message = Array.isArray(errorBody?.message)
+          ? errorBody.message.join(', ')
+          : errorBody?.message;
+
+        setServerError(message ?? 'Неверный email или пароль');
+        return;
+      }
+
+      const data = (await response.json()) as LoginResponse;
+
+      if (data.mfaRequired) {
+        setServerError('Для этого аккаунта включена MFA. Поддержка MFA на фронте скоро.');
+        return;
+      }
+
+      if (!data.accessToken) {
+        setServerError('Сервер не вернул access token');
+        return;
+      }
+
+      const payload = decodeJwtPayload(data.accessToken);
+      const emailLocalPart = values.email.split('@')[0] ?? 'User';
+
+      dispatch(
+        setCredentials({
+          accessToken: data.accessToken,
+          user: {
+            id: payload.sub,
+            clinicId: payload.clinicId,
+            email: values.email,
+            firstName: emailLocalPart,
+            lastName: '',
+            role: payload.role,
+          },
+        }),
+      );
+
+      router.push('/');
+    } catch {
+      setServerError('Не удалось подключиться к серверу. Проверьте, что backend запущен.');
     }
-
-    dispatch(setCredentials({ user: MOCK_USER, accessToken: MOCK_ACCESS_TOKEN }));
-    router.push('/');
   });
 
   return { form, onSubmit, serverError };

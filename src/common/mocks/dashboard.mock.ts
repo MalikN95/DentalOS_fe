@@ -60,7 +60,7 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     doctorName: 'Др. Соколова',
     cabinet: 'Кабинет 2',
     service: 'Консультация ортодонта',
-    status: 'in_progress',
+    status: 'in_treatment',
   },
   {
     id: 'a-1004',
@@ -70,7 +70,7 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     doctorName: 'Др. Соколова',
     cabinet: 'Кабинет 2',
     service: 'Установка брекетов',
-    status: 'scheduled',
+    status: 'confirmed',
   },
   {
     id: 'a-1005',
@@ -80,7 +80,7 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     doctorName: 'Др. Ковалёв',
     cabinet: 'Кабинет 1',
     service: 'Имплантация',
-    status: 'scheduled',
+    status: 'confirmed',
   },
   {
     id: 'a-1006',
@@ -90,7 +90,7 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     doctorName: 'Др. Лебедева',
     cabinet: 'Кабинет 3',
     service: 'Удаление зуба мудрости',
-    status: 'scheduled',
+    status: 'pending',
   },
   {
     id: 'a-1007',
@@ -110,7 +110,7 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     doctorName: 'Др. Соколова',
     cabinet: 'Кабинет 2',
     service: 'Коронка на имплант',
-    status: 'scheduled',
+    status: 'pending',
   },
 ];
 

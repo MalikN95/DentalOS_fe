@@ -1,4 +1,5 @@
-export type AppointmentStatus = 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+export type AppointmentStatus =
+  'pending' | 'confirmed' | 'arrived' | 'in_treatment' | 'completed' | 'cancelled' | 'no_show';
 
 export type Appointment = {
   id: string;
@@ -9,6 +10,40 @@ export type Appointment = {
   cabinet: string;
   service: string;
   status: AppointmentStatus;
+};
+
+export type ApiAppointmentPatient = {
+  firstName: string;
+  lastName: string;
+  phone: string | null;
+};
+
+export type ApiAppointmentDoctorUser = {
+  firstName: string;
+  lastName: string;
+};
+
+export type ApiAppointmentDoctorProfile = {
+  user: ApiAppointmentDoctorUser;
+};
+
+export type ApiAppointmentService = {
+  name: string;
+};
+
+export type ApiAppointmentCabinet = {
+  name: string;
+};
+
+export type ApiAppointment = {
+  id: string;
+  startsAt: string;
+  endsAt: string;
+  status: AppointmentStatus;
+  patient: ApiAppointmentPatient;
+  doctorProfile: ApiAppointmentDoctorProfile;
+  service: ApiAppointmentService;
+  cabinet: ApiAppointmentCabinet | null;
 };
 
 export type DashboardStat = {

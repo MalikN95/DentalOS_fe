@@ -11,4 +11,4 @@ export const MOCK_USER: AuthUser = {
 
 export const MOCK_ACCESS_TOKEN = 'mock-access-token';
 
-export const MOCK_CLINIC_NAME = 'Smile Clinic';
+export const MOCK_CLINIC_NAME = 'DentalOS';

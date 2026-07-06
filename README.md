@@ -78,10 +78,11 @@ Components follow the Dashlab Figma design system. Design tokens (colors, radii,
 
 ## Pages (mock data)
 
-- `/login` — clinic login: React Hook Form + Zod validation, mock auth (see the demo hint on the page), stores credentials in the Redux auth slice, redirects to the dashboard.
-- `/` — dashboard: stat cards, today's appointments table, upcoming visits list. Data comes from `src/common/mocks/` until the API is wired.
-- `/appointments` — appointments table (mock data).
-- `/patients`, `/treatment-plans`, `/staff`, `/settings` — placeholder pages (`EmptyState`) until the API is wired.
+- `/login` — clinic login via `POST /api/auth/login`. Subdomain is parsed from the URL hostname (`maximum.localhost` → `maximum`, sent as `X-Clinic-Subdomain`). Fallback: `NEXT_PUBLIC_CLINIC_SUBDOMAIN` when opened on bare `localhost`.
+- `/` — dashboard: stat cards, today's appointments table (mock), upcoming visits list (mock).
+- `/appointments` — today's appointments from `GET /api/appointments?from=&to=` (React Query hook `useTodayAppointments`). Requires login.
+- `/settings` — clinic settings (`GET/PATCH /api/clinic`, logo upload) and branches CRUD (`/api/branches`). Name and subdomain are read-only.
+- `/patients`, `/treatment-plans`, `/staff` — placeholder pages (`EmptyState`) until the API is wired.
 - Layout: the `(dashboard)` route group shares a single `layout.tsx` that renders `DashboardShell` (client component: Redux user, logout). The shell derives the active sidebar item and header title from the pathname (`getNavItemByPathname`), so the sidebar and header persist across navigation.
 
 ## Typography

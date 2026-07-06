@@ -1,12 +1,5 @@
-import { SettingsIcon } from '@/components/icons/icons';
-import { EmptyState } from '@/components/ui';
+import { SettingsPageContent } from '@/app/(dashboard)/settings/SettingsPageContent';
 
-const SettingsPage = () => (
-  <EmptyState
-    icon={<SettingsIcon size={28} />}
-    title="Настройки"
-    description="Раздел в разработке: настройки клиники, филиалы, кабинеты и оборудование."
-  />
-);
+const SettingsPage = () => <SettingsPageContent />;
 
 export default SettingsPage;

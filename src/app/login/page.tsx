@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { MOCK_CLINIC_NAME } from '@/common/mocks/auth.mock';
 import { EyeIcon, EyeOffIcon, ToothIcon } from '@/components/icons/icons';
 import { Alert, Button, TextField } from '@/components/ui';
+import { useClinicSubdomain } from '@/hooks/useClinicSubdomain';
 import { useLoginForm } from '@/hooks/useLoginForm';
 import styles from './page.module.css';
 
 const LoginPage = () => {
   const { form, onSubmit, serverError } = useLoginForm();
+  const clinicSubdomain = useClinicSubdomain();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -62,7 +64,7 @@ const LoginPage = () => {
         </form>
 
         <p className={styles.hintCard}>
-          Демо-доступ: admin@smile.clinic / любой пароль от 8 символов
+          Клиника определяется из URL: <strong>{clinicSubdomain}</strong>
         </p>
       </div>
     </main>
