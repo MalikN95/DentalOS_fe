@@ -107,3 +107,33 @@ export const EyeOffIcon = createIcon(
     <path d="M2 2l20 20" />
   </>,
 );
+
+export const MailIcon = createIcon(
+  <>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="m3.5 7 8.5 6 8.5-6" />
+  </>,
+);
+
+export const LockIcon = createIcon(
+  <>
+    <rect x="4" y="10" width="16" height="11" rx="2" />
+    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+    <circle cx="12" cy="15.5" r="1.2" />
+  </>,
+);
+
+export const ShieldIcon = createIcon(
+  <>
+    <path d="M12 3l7 3v5.5c0 4.4-2.9 8.1-7 9.5-4.1-1.4-7-5.1-7-9.5V6l7-3Z" />
+    <path d="m9 12 2.2 2.2L15.5 10" />
+  </>,
+);
+
+export const ChartIcon = createIcon(
+  <>
+    <path d="M4 20V4" />
+    <path d="M4 20h16" />
+    <path d="m8 16 3.5-4.5 3 2.5L20 7" />
+  </>,
+);

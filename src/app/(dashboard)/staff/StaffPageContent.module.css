@@ -1,0 +1,70 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30px;
+  color: var(--color-black-700);
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.search {
+  flex: 1 1 320px;
+  max-width: 420px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.roleSelect {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  cursor: pointer;
+}
+
+.roleSelect:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+}

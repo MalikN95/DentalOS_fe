@@ -1,0 +1,114 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 12px 20px;
+  background: var(--color-gray-25);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-black-500);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 14px 20px;
+  border-top: 1px solid var(--color-gray-50);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-600);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.wrapCell {
+  max-width: 220px;
+  white-space: normal;
+}
+
+.actionsHead {
+  text-align: right;
+}
+
+.employee {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.employeeName {
+  display: flex;
+  flex-direction: column;
+}
+
+.fullName {
+  font-weight: 500;
+  color: var(--color-black-700);
+}
+
+.experience {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-black-500);
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+}
+
+.phone {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-black-500);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.stateWrap {
+  padding: 16px 20px 0;
+}
+
+.stateCell {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--color-black-500);
+}

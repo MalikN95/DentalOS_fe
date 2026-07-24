@@ -1,19 +1,5 @@
-'use client';
+import { StaffPageContent } from '@/app/(dashboard)/staff/StaffPageContent';
 
-import { useTranslation } from '@/common/locale/LocaleProvider';
-import { StaffIcon } from '@/components/icons/icons';
-import { EmptyState } from '@/components/ui';
-
-const StaffPage = () => {
-  const { t } = useTranslation();
-
-  return (
-    <EmptyState
-      icon={<StaffIcon size={28} />}
-      title={t.placeholders.staffTitle}
-      description={t.placeholders.staffDesc}
-    />
-  );
-};
+const StaffPage = () => <StaffPageContent />;
 
 export default StaffPage;
