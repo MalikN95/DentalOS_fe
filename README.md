@@ -65,7 +65,7 @@ docker run -p 3000:3000 dentalos-fe
 src/
   app/          # Next.js routing & layouts (Server Components by default)
   components/
-    ui/         # design-system components (Dashlab UI kit): Button, Badge, TextField, Checkbox, RadioButton, SwitchToggle, Alert
+    ui/         # design-system components (Dashlab UI kit): Button, Badge, TextField, Checkbox, RadioButton, SwitchToggle, Alert, EmptyState, Modal, Pagination, SearchSelect
   common/       # shared constants, types (incl. generated API schema)
   helpers/      # stateless utilities (openapi-fetch client)
   hooks/        # custom hooks (business logic)
@@ -76,14 +76,32 @@ src/
 
 Components follow the Dashlab Figma design system. Design tokens (colors, radii, focus ring) are CSS variables in `src/app/globals.css`. Live showcase: `/ui-kit` route. All components are pure UI with optional `className`/`style`/`onClick` props.
 
+### Modal
+
+`Modal` is the single shell for every dialog (`PatientFormModal`, `CreateAppointmentModal`, `CreateBranchModal`, `SaveSettingsModal`). It owns the overlay, sticky header and sticky footer, while only the body scrolls — so long forms can never push the action buttons out of the viewport.
+
+- `title`, `children` (body), `footer` (usually two `Button`s), `size` — `sm` 420px / `md` 640px (default) / `lg` 880px
+- `onSubmit` — when passed, the header/body/footer are wrapped in a `<form>`, so a `type="submit"` button in the footer submits the body fields
+- `onClose` — renders the × button, closes on overlay click and on `Escape`; `isLocked` blocks all three (e.g. while saving)
+- Overflow affordances come from the `useScrollShadow` hook (`src/hooks/useScrollShadow.ts`): a gradient shadow appears at the top and/or bottom edge only in the direction that can still be scrolled, plus a chevron button in the bottom-right that scrolls one screen down while more content is hidden. Content growth (conditional fields, async data) is tracked via `ResizeObserver`.
+- Autofill safety net: browser/password-manager autofill sets input values without the events React listens to, so react-hook-form would validate stale empty values ("Укажите имя" on a visibly filled field). On submit the modal calls `replayAutofill` (`src/helpers/autofill.ts`), which re-dispatches native `input`/`change` events — React skips controls whose value it already knows, so only the out-of-sync ones are flushed into form state.
+- Body scroll is locked while a modal is open. Labels are localizable via `closeLabel` / `scrollHintLabel` (`common.close`, `common.scrollForMore`).
+
 ## Pages (mock data)
 
 - `/login` — clinic login via `POST /api/auth/login`. Subdomain is parsed from the URL hostname (`maximum.localhost` → `maximum`, sent as `X-Clinic-Subdomain`). Fallback: `NEXT_PUBLIC_CLINIC_SUBDOMAIN` when opened on bare `localhost`.
 - `/` — dashboard: stat cards, today's appointments table (mock), upcoming visits list (mock).
 - `/appointments` — today's appointments from `GET /api/appointments?from=&to=` (React Query hook `useTodayAppointments`). Requires login.
-- `/settings` — clinic settings (`GET/PATCH /api/clinic`, logo upload) and branches CRUD (`/api/branches`). Name and subdomain are read-only.
-- `/patients`, `/treatment-plans`, `/staff` — placeholder pages (`EmptyState`) until the API is wired.
+- `/settings` — clinic settings (`GET/PATCH /api/clinic`, logo upload) and branches CRUD (`/api/branches`). Name and subdomain are read-only. Timezone / currency / language are searchable `SearchSelect` dropdowns built from `Intl` (`helpers/locale-options`); languages limited to ru/en/ky. Saving opens a `SaveSettingsModal` confirmation that runs the profile update. UI strings come from a locale dictionary (`common/locale/settings.locale`), keyed by the selected language (ru/en, ky→ru fallback).
+- `/patients` — full patients CRUD over `/api/patients` (React Query). Server-side search (name/phone/email), active/inactive filter, pagination (default 20, options 10/20/50/100/200). Create/edit via `PatientFormModal` (`usePatientForm`, React Hook Form + Zod), delete via `DeletePatientDialog`. List state in `usePatients`, mutations in `usePatientForm` / `useDeletePatient`. Click a patient name → detail page.
+- `/patients/[id]` — patient card: left `PatientInfoPanel` (contacts, allergies, chronic diseases, insurance), right `PatientVisits` split into upcoming / past visits. Each `VisitCard` expands to the clinical record (complaints, examination, diagnosis, treatment, prescriptions, recommendations) merged from `/api/medical-records`. Data via `usePatientDetail` (`/patients/:id` + `/patients/:id/history` + `/medical-records?patientId`). "Новая запись" reuses `CreateAppointmentModal`.
+- `/treatment-plans`, `/staff` — placeholder pages (`EmptyState`) until the API is wired.
+- Auth guard: `DashboardShell` calls `useRequireAuth` — every page in the `(dashboard)` group (dashboard, appointments, patients, settings, staff, treatment-plans) redirects to `/login` when there is no access token and renders nothing meanwhile. Individual data hooks no longer redirect; they only gate requests via `enabled`.
 - Layout: the `(dashboard)` route group shares a single `layout.tsx` that renders `DashboardShell` (client component: Redux user, logout). The shell derives the active sidebar item and header title from the pathname (`getNavItemByPathname`), so the sidebar and header persist across navigation.
+
+## Localization (i18n)
+
+All UI strings live in locale dictionaries under `src/common/locale/dictionaries/` (`ru`, `en`, `ky`; `ru` is the source of truth and defines the `Dictionary` type). `LocaleProvider` (in `AppProviders`) exposes `useTranslation()` → `{ t, language, setLanguage }`; components read `t.<namespace>.<key>` instead of hardcoding text. `format(template, vars)` interpolates `{name}`-style placeholders. Language is persisted in `localStorage` (`dentalos.lang`, default `ru`) and switched live from the Settings → Language selector. Adding a locale = one dictionary file typed as `Dictionary`.
 
 ## Typography
 

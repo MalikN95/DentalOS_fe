@@ -1,0 +1,217 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgb(51 56 67 / 40%);
+  overflow: hidden;
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  /* modal surface is always light — keeps native scrollbars/date pickers light too */
+  color-scheme: light;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sizeSm {
+  max-width: 420px;
+}
+
+.sizeMd {
+  max-width: 640px;
+}
+
+.sizeLg {
+  max-width: 880px;
+}
+
+.header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-gray-50);
+  background: var(--color-white);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: var(--color-black-700);
+}
+
+.closeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-black-500);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.closeButton:hover:not(:disabled) {
+  background: var(--color-gray-50);
+}
+
+.closeButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.scrollArea {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-200) transparent;
+}
+
+.body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.body::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--color-gray-200);
+}
+
+.body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+.shadow {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.shadowVisible {
+  opacity: 1;
+}
+
+.shadowTop {
+  top: 0;
+  background: linear-gradient(to bottom, rgb(51 56 67 / 12%), rgb(51 56 67 / 0%));
+}
+
+.shadowBottom {
+  bottom: 0;
+  background: linear-gradient(to top, rgb(51 56 67 / 12%), rgb(51 56 67 / 0%));
+}
+
+.scrollHint {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--color-gray-100);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-black-500);
+  box-shadow: 0 2px 8px rgb(51 56 67 / 16%);
+  cursor: pointer;
+  animation: hint-bounce 1.4s ease-in-out infinite;
+}
+
+.scrollHint:hover {
+  color: var(--color-primary-500);
+  border-color: var(--color-primary-200);
+}
+
+.footer {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--color-gray-50);
+  background: var(--color-white);
+}
+
+@keyframes hint-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollHint {
+    animation: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .overlay {
+    padding: 12px;
+  }
+
+  .content,
+  .header {
+    padding: 16px;
+  }
+
+  .footer {
+    padding: 12px 16px;
+  }
+}

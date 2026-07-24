@@ -1,4 +1,5 @@
 import { API_URL } from '@/common/constants/env';
+import { refreshAccessToken } from '@/helpers/auth-bridge';
 import { buildRequestHeaders } from '@/helpers/build-request-headers';
 
 type ApiErrorBody = {
@@ -25,11 +26,24 @@ export const apiFetch = async <T>(
   accessToken: string,
   path: string,
   init?: RequestInit,
+  allowRefresh = true,
 ): Promise<T> => {
   const response = await fetch(`${API_URL}${path}`, {
     ...init,
     headers: buildRequestHeaders(accessToken, init?.headers),
   });
+
+  // Access token likely expired — try a one-shot refresh, then replay the request.
+  if (response.status === 401 && allowRefresh) {
+    const nextAccessToken = await refreshAccessToken();
+
+    if (nextAccessToken) {
+      return apiFetch<T>(nextAccessToken, path, init, false);
+    }
+
+    // Refresh failed: the bridge has already logged the user out.
+    throw new ApiRequestError('Unauthorized');
+  }
 
   if (response.ok === false) {
     throw new ApiRequestError(await parseApiError(response));

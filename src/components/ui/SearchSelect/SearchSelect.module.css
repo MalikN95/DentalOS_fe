@@ -1,0 +1,154 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* App is light-themed; keep native control rendering light even when the OS is dark. */
+  color-scheme: light;
+}
+
+.label {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  font-weight: 500;
+  color: var(--color-black-700);
+}
+
+.control {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:focus-visible {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.trigger:disabled {
+  background: var(--color-gray-25);
+  cursor: not-allowed;
+}
+
+.triggerError {
+  border-color: var(--color-red-500);
+}
+
+.valueText {
+  color: var(--color-black-700);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placeholder {
+  color: var(--color-black-500);
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--color-black-500);
+  transition: transform 0.15s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.panel {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 280px;
+  padding: 8px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  box-shadow: 0 12px 32px rgb(51 56 67 / 12%);
+}
+
+.search {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+  background: var(--color-white);
+}
+
+.search::placeholder {
+  color: var(--color-black-500);
+}
+
+.search:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.option {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--color-gray-25);
+}
+
+.optionActive {
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.empty {
+  padding: 12px 10px;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+  text-align: center;
+}
+
+.errorText {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-red-500);
+}

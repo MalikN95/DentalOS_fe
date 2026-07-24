@@ -15,6 +15,7 @@ type SidebarProps = {
   items: SidebarItem[];
   activeId: string;
   clinicName: string;
+  logoutLabel: string;
   className?: string;
   style?: React.CSSProperties;
   onLogout?: () => void;
@@ -24,6 +25,7 @@ export const Sidebar = ({
   items,
   activeId,
   clinicName,
+  logoutLabel,
   className,
   style,
   onLogout,
@@ -53,7 +55,7 @@ export const Sidebar = ({
     <div className={styles.footer}>
       <button type="button" className={styles.item} onClick={onLogout}>
         <LogoutIcon />
-        <span className={styles.itemLabel}>Выйти</span>
+        <span className={styles.itemLabel}>{logoutLabel}</span>
       </button>
     </div>
   </aside>

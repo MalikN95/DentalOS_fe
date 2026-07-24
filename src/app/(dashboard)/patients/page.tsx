@@ -1,12 +1,5 @@
-import { PatientsIcon } from '@/components/icons/icons';
-import { EmptyState } from '@/components/ui';
+import { PatientsPageContent } from '@/app/(dashboard)/patients/PatientsPageContent';
 
-const PatientsPage = () => (
-  <EmptyState
-    icon={<PatientsIcon size={28} />}
-    title="Пациенты"
-    description="Раздел в разработке: здесь будет список пациентов с поиском, фильтрами и карточками."
-  />
-);
+const PatientsPage = () => <PatientsPageContent />;
 
 export default PatientsPage;

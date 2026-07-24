@@ -12,26 +12,34 @@ export type AuthUser = {
 export type AuthState = {
   user: AuthUser | null;
   accessToken: string | null;
+  refreshToken: string | null;
 };
 
 const initialState: AuthState = {
   user: null,
   accessToken: null,
+  refreshToken: null,
 };
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ user: AuthUser; accessToken: string }>) => {
+    setCredentials: (
+      state,
+      action: PayloadAction<{ user: AuthUser; accessToken: string; refreshToken: string }>,
+    ) => {
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
     },
-    setAccessToken: (state, action: PayloadAction<string>) => {
-      state.accessToken = action.payload;
+    // Applied after a successful token refresh (rotation returns both tokens)
+    setTokens: (state, action: PayloadAction<{ accessToken: string; refreshToken: string }>) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
     },
     logout: () => initialState,
   },
 });
 
-export const { setCredentials, setAccessToken, logout } = authSlice.actions;
+export const { setCredentials, setTokens, logout } = authSlice.actions;

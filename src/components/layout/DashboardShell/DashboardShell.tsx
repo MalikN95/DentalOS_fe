@@ -1,52 +1,72 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
+import type { Dictionary } from '@/common/locale/dictionaries/ru';
+import { useTranslation } from '@/common/locale/LocaleProvider';
 import { getNavItemByPathname, NAV_ITEMS } from '@/common/constants/navigation';
 import { MOCK_CLINIC_NAME, MOCK_USER } from '@/common/mocks/auth.mock';
 import { Header } from '@/components/layout/Header/Header';
 import { Sidebar } from '@/components/layout/Sidebar/Sidebar';
+import { logoutRequest } from '@/helpers/auth-bridge';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/slices/auth/auth.slice';
-import { selectCurrentUser } from '@/store/slices/auth/selectors';
+import { selectAccessToken, selectCurrentUser } from '@/store/slices/auth/selectors';
 import styles from './DashboardShell.module.css';
 
 type DashboardShellProps = {
   children: React.ReactNode;
 };
 
-const roleLabels: Record<string, string> = {
-  admin: 'Администратор',
-  doctor: 'Врач',
-  receptionist: 'Регистратор',
-};
-
 export const DashboardShell = ({ children }: DashboardShellProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useTranslation();
+  const { isAuthenticated } = useRequireAuth();
   // Mock fallback until real auth is wired to the API
   const user = useAppSelector(selectCurrentUser) ?? MOCK_USER;
+  const accessToken = useAppSelector(selectAccessToken);
 
   const activeItem = getNavItemByPathname(pathname);
+  const items = NAV_ITEMS.map((item) => ({
+    id: item.id,
+    href: item.href,
+    icon: item.icon,
+    badgeCount: item.badgeCount,
+    label: t.nav[item.labelKey],
+  }));
+  const roleKey = user.role as keyof Dictionary['roles'];
+  const userRole = t.roles[roleKey] ?? user.role;
 
   const handleLogout = () => {
+    // Fire-and-forget: the request already carries the current token.
+    logoutRequest(accessToken).catch(() => undefined);
     dispatch(logout());
     router.push('/login');
   };
 
+  // Block dashboard rendering for unauthenticated users (redirect handled by the guard).
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className={styles.shell}>
       <Sidebar
-        items={NAV_ITEMS}
+        items={items}
         activeId={activeItem.id}
         clinicName={MOCK_CLINIC_NAME}
+        logoutLabel={t.nav.logout}
         onLogout={handleLogout}
       />
       <div className={styles.main}>
         <Header
-          title={activeItem.label}
+          title={t.nav[activeItem.labelKey]}
           userName={`${user.firstName} ${user.lastName}`}
-          userRole={roleLabels[user.role] ?? user.role}
+          userRole={userRole}
+          searchPlaceholder={t.header.searchPatient}
+          notificationsLabel={t.header.notifications}
           notificationsCount={3}
         />
         <main className={styles.content}>{children}</main>

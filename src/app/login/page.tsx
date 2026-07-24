@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from '@/common/locale/LocaleProvider';
 import { MOCK_CLINIC_NAME } from '@/common/mocks/auth.mock';
 import { EyeIcon, EyeOffIcon, ToothIcon } from '@/components/icons/icons';
 import { Alert, Button, TextField } from '@/components/ui';
@@ -9,6 +10,7 @@ import { useLoginForm } from '@/hooks/useLoginForm';
 import styles from './page.module.css';
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const { form, onSubmit, serverError } = useLoginForm();
   const clinicSubdomain = useClinicSubdomain();
   const [showPassword, setShowPassword] = useState(false);
@@ -27,21 +29,21 @@ const LoginPage = () => {
           </span>
           {MOCK_CLINIC_NAME}
         </div>
-        <p className={styles.subtitle}>Войдите в кабинет клиники</p>
+        <p className={styles.subtitle}>{t.login.subtitle}</p>
 
         {serverError ? <Alert color="danger">{serverError}</Alert> : null}
 
         <form className={styles.form} onSubmit={onSubmit} noValidate>
           <TextField
-            label="Email"
+            label={t.login.email}
             type="email"
-            placeholder="you@clinic.com"
+            placeholder={t.login.emailPlaceholder}
             autoComplete="email"
             error={errors.email?.message}
             {...register('email')}
           />
           <TextField
-            label="Пароль"
+            label={t.login.password}
             type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
             autoComplete="current-password"
@@ -49,7 +51,7 @@ const LoginPage = () => {
             iconRight={
               <button
                 type="button"
-                aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                aria-label={showPassword ? t.login.hidePassword : t.login.showPassword}
                 className={styles.eyeButton}
                 onClick={() => setShowPassword((prev) => !prev)}
               >
@@ -59,12 +61,12 @@ const LoginPage = () => {
             {...register('password')}
           />
           <Button type="submit" className={styles.submit} disabled={isSubmitting}>
-            {isSubmitting ? 'Входим...' : 'Войти'}
+            {isSubmitting ? t.login.signingIn : t.login.signIn}
           </Button>
         </form>
 
         <p className={styles.hintCard}>
-          Клиника определяется из URL: <strong>{clinicSubdomain}</strong>
+          {t.login.clinicFromUrl} <strong>{clinicSubdomain}</strong>
         </p>
       </div>
     </main>

@@ -6,6 +6,8 @@ type HeaderProps = {
   title: string;
   userName: string;
   userRole: string;
+  searchPlaceholder: string;
+  notificationsLabel: string;
   notificationsCount?: number;
   className?: string;
   style?: React.CSSProperties;
@@ -24,6 +26,8 @@ export const Header = ({
   title,
   userName,
   userRole,
+  searchPlaceholder,
+  notificationsLabel,
   notificationsCount = 0,
   className,
   style,
@@ -35,14 +39,14 @@ export const Header = ({
     <div className={styles.actions}>
       <TextField
         className={styles.search}
-        placeholder="Поиск пациента..."
+        placeholder={searchPlaceholder}
         iconLeft={<SearchIcon />}
       />
 
       <button
         type="button"
         className={styles.bell}
-        aria-label="Уведомления"
+        aria-label={notificationsLabel}
         onClick={onNotificationsClick}
       >
         <BellIcon />

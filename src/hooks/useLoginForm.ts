@@ -64,8 +64,8 @@ export const useLoginForm = () => {
         return;
       }
 
-      if (!data.accessToken) {
-        setServerError('Сервер не вернул access token');
+      if (!data.accessToken || !data.refreshToken) {
+        setServerError('Сервер не вернул токены');
         return;
       }
 
@@ -75,6 +75,7 @@ export const useLoginForm = () => {
       dispatch(
         setCredentials({
           accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
           user: {
             id: payload.sub,
             clinicId: payload.clinicId,

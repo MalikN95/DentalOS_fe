@@ -6,17 +6,35 @@ import {
   Badge,
   Button,
   Checkbox,
+  EmptyState,
+  Modal,
   NotificationBadge,
   RadioButton,
+  SearchSelect,
   SwitchToggle,
   TextField,
 } from '@/components/ui';
+import { CURRENCY_OPTIONS, LANGUAGE_OPTIONS, TIMEZONE_OPTIONS } from '@/helpers/locale-options';
 import styles from './page.module.css';
+
+const MODAL_DEMO_FIELDS = Array.from({ length: 12 }, (_, index) => `Поле ${index + 1}`);
 
 const UiKitPage = () => {
   const [checked, setChecked] = useState(true);
   const [radioValue, setRadioValue] = useState('first');
   const [switchOn, setSwitchOn] = useState(true);
+  const [timezone, setTimezone] = useState('UTC');
+  const [currency, setCurrency] = useState('USD');
+  const [language, setLanguage] = useState('ru');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <main className={styles.main}>
@@ -102,6 +120,67 @@ const UiKitPage = () => {
         </Alert>
         <Alert color="gray">Clinic works until 20:00 today.</Alert>
       </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Search selects</h2>
+        <div className={styles.column}>
+          <SearchSelect
+            label="Часовой пояс"
+            value={timezone}
+            options={TIMEZONE_OPTIONS}
+            onChange={setTimezone}
+          />
+          <SearchSelect
+            label="Валюта"
+            value={currency}
+            options={CURRENCY_OPTIONS}
+            onChange={setCurrency}
+          />
+          <SearchSelect
+            label="Язык"
+            value={language}
+            options={LANGUAGE_OPTIONS}
+            onChange={setLanguage}
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Empty states</h2>
+        <EmptyState
+          title="No appointments yet"
+          description="New appointments will appear here once scheduled."
+          action={<Button variant="soft">Create appointment</Button>}
+        />
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Modal</h2>
+        <Button variant="soft" onClick={openModal}>
+          Открыть модалку
+        </Button>
+      </section>
+
+      {isModalOpen ? (
+        <Modal
+          title="Модалка со скроллом"
+          closeLabel="Закрыть"
+          scrollHintLabel="Прокрутите, чтобы увидеть остальное"
+          onClose={closeModal}
+          footer={
+            <>
+              <Button variant="soft" color="gray" onClick={closeModal}>
+                Отмена
+              </Button>
+              <Button onClick={closeModal}>Сохранить</Button>
+            </>
+          }
+        >
+          {MODAL_DEMO_FIELDS.map((label) => (
+            <TextField key={label} label={label} placeholder={label} />
+          ))}
+        </Modal>
+      ) : null}
     </main>
   );
 };

@@ -14,3 +14,10 @@ export const formatTime = (isoDate: string): string =>
     hour: '2-digit',
     minute: '2-digit',
   });
+
+export const formatDate = (isoDate: string): string =>
+  new Date(isoDate).toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });

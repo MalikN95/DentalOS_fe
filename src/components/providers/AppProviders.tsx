@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Provider } from 'react-redux';
+import { LocaleProvider } from '@/common/locale/LocaleProvider';
+import { registerAuthStore } from '@/helpers/auth-bridge';
 import { makeStore } from '@/store';
 
 type AppProvidersProps = {
@@ -11,7 +13,11 @@ type AppProvidersProps = {
 };
 
 export const AppProviders = ({ children }: AppProvidersProps) => {
-  const [store] = useState(() => makeStore());
+  const [store] = useState(() => {
+    const createdStore = makeStore();
+    registerAuthStore(createdStore);
+    return createdStore;
+  });
 
   const [queryClient] = useState(
     () =>
@@ -29,7 +35,7 @@ export const AppProviders = ({ children }: AppProvidersProps) => {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        {children}
+        <LocaleProvider>{children}</LocaleProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </Provider>

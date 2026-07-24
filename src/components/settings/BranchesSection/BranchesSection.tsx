@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type { BranchSettings } from '@/common/types/settings';
 import { Alert, Badge, Button } from '@/components/ui';
 import { CreateBranchModal } from '@/components/settings/CreateBranchModal/CreateBranchModal';
@@ -16,6 +17,8 @@ const formatCoordinates = (branch: BranchSettings): string | null => {
 };
 
 export const BranchesSection = () => {
+  const { t: dict } = useTranslation();
+  const t = dict.branches;
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { branchesQuery, createForm, createMutation, deleteMutation, resetCreateForm } =
     useBranchSettings();
@@ -45,7 +48,7 @@ export const BranchesSection = () => {
   const handleDeleteBranch = useCallback(
     (branch: BranchSettings) => {
       // eslint-disable-next-line no-alert -- simple delete confirmation
-      const confirmed = window.confirm(`Удалить филиал «${branch.name}»?`);
+      const confirmed = window.confirm(format(t.confirmDelete, { name: branch.name }));
 
       if (!confirmed) {
         return;
@@ -53,7 +56,7 @@ export const BranchesSection = () => {
 
       deleteMutation.mutate(branch.id);
     },
-    [deleteMutation],
+    [deleteMutation, t],
   );
 
   return (
@@ -61,11 +64,11 @@ export const BranchesSection = () => {
       <section className={styles.card}>
         <div className={styles.header}>
           <div>
-            <h2 className={styles.title}>Филиалы</h2>
-            <p className={styles.description}>Добавляйте и управляйте филиалами клиники.</p>
+            <h2 className={styles.title}>{t.title}</h2>
+            <p className={styles.description}>{t.description}</p>
           </div>
           <Button variant="soft" onClick={handleOpenCreateModal}>
-            + Добавить филиал
+            {t.add}
           </Button>
         </div>
 
@@ -75,18 +78,18 @@ export const BranchesSection = () => {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Название</th>
-              <th>Адрес</th>
-              <th>Телефон</th>
-              <th>Статус</th>
-              <th className={styles.actionsCell}>Действия</th>
+              <th>{t.colName}</th>
+              <th>{t.colAddress}</th>
+              <th>{t.colPhone}</th>
+              <th>{t.colStatus}</th>
+              <th className={styles.actionsCell}>{t.colActions}</th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
                 <td className={styles.stateCell} colSpan={5}>
-                  Загрузка филиалов...
+                  {t.loading}
                 </td>
               </tr>
             ) : null}
@@ -94,7 +97,7 @@ export const BranchesSection = () => {
             {!isLoading && branches.length === 0 ? (
               <tr>
                 <td className={styles.stateCell} colSpan={5}>
-                  Филиалов пока нет
+                  {t.empty}
                 </td>
               </tr>
             ) : null}
@@ -112,10 +115,10 @@ export const BranchesSection = () => {
                           <span className={styles.secondaryText}>{coordinates}</span>
                         ) : null}
                       </td>
-                      <td>{branch.phone ?? '—'}</td>
+                      <td>{branch.phone ?? dict.common.dash}</td>
                       <td>
                         <Badge color={branch.isActive ? 'success' : 'gray'}>
-                          {branch.isActive ? 'Активен' : 'Неактивен'}
+                          {branch.isActive ? dict.common.active : dict.common.inactive}
                         </Badge>
                       </td>
                       <td className={styles.actionsCell}>
@@ -126,7 +129,7 @@ export const BranchesSection = () => {
                           disabled={deleteMutation.isPending}
                           onClick={() => handleDeleteBranch(branch)}
                         >
-                          Удалить
+                          {dict.common.delete}
                         </Button>
                       </td>
                     </tr>

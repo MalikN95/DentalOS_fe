@@ -9,3 +9,8 @@ export { SwitchToggle } from './SwitchToggle/SwitchToggle';
 export { Alert } from './Alert/Alert';
 export type { AlertColor } from './Alert/Alert';
 export { EmptyState } from './EmptyState/EmptyState';
+export { Modal } from './Modal/Modal';
+export type { ModalSize } from './Modal/Modal';
+export { Pagination } from './Pagination/Pagination';
+export { SearchSelect } from './SearchSelect/SearchSelect';
+export type { SearchSelectOption } from './SearchSelect/SearchSelect';

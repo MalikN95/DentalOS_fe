@@ -1,68 +1,3 @@
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgb(51 56 67 / 40%);
-}
-
-.dialog {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 560px;
-  max-height: calc(100vh - 48px);
-  background: var(--color-white);
-  border: 1px solid var(--color-gray-50);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--color-gray-50);
-}
-
-.title {
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24px;
-  color: var(--color-black-700);
-}
-
-.closeButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--color-black-500);
-  cursor: pointer;
-}
-
-.closeButton:hover {
-  background: var(--color-gray-50);
-}
-
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 24px;
-  overflow-y: auto;
-}
-
 .field {
   display: flex;
   flex-direction: column;
@@ -95,8 +30,7 @@
   box-shadow: var(--control-focus-ring);
 }
 
-.selectError,
-.textareaError {
+.selectError {
   border-color: var(--color-red-500);
 }
 
@@ -109,13 +43,6 @@
 .textarea {
   min-height: 80px;
   resize: vertical;
-}
-
-.footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 16px 24px 24px;
 }
 
 .state {

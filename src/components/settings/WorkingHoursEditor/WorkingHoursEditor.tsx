@@ -1,5 +1,8 @@
+'use client';
+
 import type { WorkingHours, WeekdayKey } from '@/common/types/settings';
-import { WEEKDAY_KEYS, WEEKDAY_LABELS } from '@/common/types/settings';
+import { WEEKDAY_KEYS } from '@/common/types/settings';
+import { useTranslation } from '@/common/locale/LocaleProvider';
 import {
   normalizeWorkingHours,
   toggleWorkingDay,
@@ -23,6 +26,7 @@ export const WorkingHoursEditor = ({
   className,
   style,
 }: WorkingHoursEditorProps) => {
+  const { t } = useTranslation();
   const hours = normalizeWorkingHours(value);
 
   const handleToggleDay = (day: WeekdayKey, isOpen: boolean) => {
@@ -42,7 +46,7 @@ export const WorkingHoursEditor = ({
         return (
           <div key={day} className={styles.row}>
             <Checkbox
-              label={WEEKDAY_LABELS[day]}
+              label={t.weekdays[day]}
               checked={isOpen}
               disabled={disabled}
               onChange={(checked) => handleToggleDay(day, checked)}
