@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 10px 16px;
 }
 
 .cardTitle {
@@ -21,13 +21,80 @@
   color: var(--color-black-700);
 }
 
+.dateNav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.navButton:hover {
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.dateLabel {
+  min-width: 96px;
+  padding: 0 4px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: center;
+  color: var(--color-black-700);
+}
+
+.calendarTrigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  color: var(--color-black-500);
+}
+
+.calendarIcon {
+  pointer-events: none;
+}
+
+.calendarInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color-scheme: light;
+  opacity: 0;
+  cursor: pointer;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
 }
 
 .table th {
-  padding: 12px 20px;
+  padding: 8px 16px;
   background: var(--color-gray-25);
   font-size: 12px;
   font-weight: 500;
@@ -39,7 +106,7 @@
 }
 
 .table td {
-  padding: 14px 20px;
+  padding: 9px 16px;
   border-top: 1px solid var(--color-gray-50);
   font-size: var(--text-m-size);
   line-height: var(--text-m-line);
@@ -59,7 +126,7 @@
 
 .patientPhone {
   font-size: 12px;
-  line-height: 18px;
+  line-height: 16px;
   color: var(--color-black-500);
 }
 
@@ -76,4 +143,101 @@
   padding: 32px 20px;
   text-align: center;
   color: var(--color-black-500);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: color-mix(in srgb, var(--color-primary-500) 8%, var(--color-gray-25));
+  border-top: 1px solid var(--color-gray-50);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-primary-600);
+  white-space: nowrap;
+}
+
+.dividerIcon {
+  flex-shrink: 0;
+}
+
+.rowNext td {
+  background: color-mix(in srgb, var(--color-primary-500) 6%, transparent);
+  border-top-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.nextHint {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  cursor: default;
+  vertical-align: middle;
+}
+
+.nextHint:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+.nextDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary-500);
+  animation: nextDotPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes nextDotPulse {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+.nextTooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  z-index: 10;
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--color-black-700);
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 2px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  pointer-events: none;
+}
+
+.nextHint:hover .nextTooltip,
+.nextHint:focus-visible .nextTooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
 }

@@ -6,21 +6,27 @@ import type { ApiAppointment, Appointment } from '@/common/types/appointment';
 import type { PaginatedResult } from '@/common/types/pagination';
 import { apiFetch } from '@/helpers/api-fetch';
 import { mapApiAppointmentToRow } from '@/helpers/appointments.mapper';
-import { getTodayIsoRange } from '@/helpers/date';
+import { getDayIsoRange, getTodayIsoRange } from '@/helpers/date';
 
 type FetchTodayAppointmentsParams = {
   accessToken: string;
   signal?: AbortSignal;
 };
 
+type FetchAppointmentsForDateParams = {
+  accessToken: string;
+  date: Date;
+  signal?: AbortSignal;
+};
+
 const LIST_QUERY = 'page=1&limit=200';
 
-export const fetchTodayAppointments = async ({
-  accessToken,
-  signal,
-}: FetchTodayAppointmentsParams): Promise<Appointment[]> => {
-  const { from, to } = getTodayIsoRange();
-  const query = new URLSearchParams({ from, to });
+const fetchAppointmentsInRange = async (
+  accessToken: string,
+  range: { from: string; to: string },
+  signal?: AbortSignal,
+): Promise<Appointment[]> => {
+  const query = new URLSearchParams(range);
   const data = await apiFetch<ApiAppointment[]>(
     accessToken,
     `/api/appointments?${query.toString()}`,
@@ -29,6 +35,19 @@ export const fetchTodayAppointments = async ({
 
   return data.map(mapApiAppointmentToRow);
 };
+
+export const fetchTodayAppointments = ({
+  accessToken,
+  signal,
+}: FetchTodayAppointmentsParams): Promise<Appointment[]> =>
+  fetchAppointmentsInRange(accessToken, getTodayIsoRange(), signal);
+
+export const fetchAppointmentsForDate = ({
+  accessToken,
+  date,
+  signal,
+}: FetchAppointmentsForDateParams): Promise<Appointment[]> =>
+  fetchAppointmentsInRange(accessToken, getDayIsoRange(date), signal);
 
 export const fetchAppointmentFormOptions = async (
   accessToken: string,

@@ -1,8 +1,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px;
+  gap: 6px;
+  padding: 16px 20px;
   background: var(--color-white);
   border: 1px solid var(--color-gray-50);
   border-radius: 12px;
@@ -16,9 +16,9 @@
 }
 
 .value {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
-  line-height: 36px;
+  line-height: 32px;
   color: var(--color-black-700);
 }
 

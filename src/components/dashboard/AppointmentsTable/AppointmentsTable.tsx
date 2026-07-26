@@ -1,10 +1,24 @@
 'use client';
 
+import { Fragment, useEffect, useMemo, useRef } from 'react';
 import { Appointment } from '@/common/types/appointment';
 import { useTranslation } from '@/common/locale/LocaleProvider';
+import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from '@/components/icons/icons';
 import { Alert, Badge, Button } from '@/components/ui';
-import { appointmentStatusColor } from '@/helpers/appointment-status';
+import {
+  appointmentStatusColor,
+  findFirstUpcomingIndex,
+  findNextAppointmentId,
+} from '@/helpers/appointment-status';
+import { isSameDay, parseDateInputValue, toDateInputValue } from '@/helpers/date';
 import styles from './AppointmentsTable.module.css';
+
+type AppointmentsTableDateNav = {
+  date: Date;
+  onPrevDay: () => void;
+  onNextDay: () => void;
+  onSelectDate: (date: Date) => void;
+};
 
 type AppointmentsTableProps = {
   appointments: Appointment[];
@@ -13,6 +27,7 @@ type AppointmentsTableProps = {
   className?: string;
   style?: React.CSSProperties;
   onAddClick?: () => void;
+  dateNav?: AppointmentsTableDateNav;
 };
 
 export const AppointmentsTable = ({
@@ -22,13 +37,67 @@ export const AppointmentsTable = ({
   className,
   style,
   onAddClick,
+  dateNav,
 }: AppointmentsTableProps) => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const nextAppointmentId = useMemo(() => findNextAppointmentId(appointments), [appointments]);
+  const firstUpcomingIndex = useMemo(() => findFirstUpcomingIndex(appointments), [appointments]);
+  const nextRowRef = useRef<HTMLTableRowElement | null>(null);
+
+  useEffect(() => {
+    if (nextAppointmentId) {
+      nextRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [nextAppointmentId]);
 
   return (
     <div className={`${styles.card} ${className ?? ''}`} style={style}>
       <div className={styles.cardHeader}>
-        <span className={styles.cardTitle}>{t.appointments.todayTitle}</span>
+        {dateNav ? (
+          <div className={styles.dateNav}>
+            <button
+              type="button"
+              className={styles.navButton}
+              onClick={dateNav.onPrevDay}
+              aria-label={t.appointments.prevDay}
+            >
+              <ChevronLeftIcon size={16} />
+            </button>
+            <span className={styles.dateLabel}>
+              {isSameDay(dateNav.date, new Date())
+                ? t.appointments.today
+                : dateNav.date.toLocaleDateString(language, {
+                    day: 'numeric',
+                    month: 'long',
+                    weekday: 'short',
+                  })}
+            </span>
+            <button
+              type="button"
+              className={styles.navButton}
+              onClick={dateNav.onNextDay}
+              aria-label={t.appointments.nextDay}
+            >
+              <ChevronRightIcon size={16} />
+            </button>
+            <span className={styles.calendarTrigger}>
+              <CalendarIcon size={15} className={styles.calendarIcon} />
+              <input
+                type="date"
+                className={styles.calendarInput}
+                value={toDateInputValue(dateNav.date)}
+                aria-label={t.appointments.pickDate}
+                onChange={(event) => {
+                  if (event.target.value) {
+                    dateNav.onSelectDate(parseDateInputValue(event.target.value));
+                  }
+                }}
+              />
+            </span>
+          </div>
+        ) : (
+          <span className={styles.cardTitle}>{t.appointments.todayTitle}</span>
+        )}
         <Button variant="soft" onClick={onAddClick}>
           {t.appointments.newAppointment}
         </Button>
@@ -69,9 +138,39 @@ export const AppointmentsTable = ({
           ) : null}
 
           {!isLoading
-            ? appointments.map((appointment) => (
-                <tr key={appointment.id}>
-                  <td className={styles.time}>{appointment.time}</td>
+            ? appointments.map((appointment, index) => {
+                const isNext = appointment.id === nextAppointmentId;
+
+                return (
+                <Fragment key={appointment.id}>
+                  {index === firstUpcomingIndex ? (
+                    <tr>
+                      <td className={styles.divider} colSpan={6}>
+                        <CalendarIcon size={13} className={styles.dividerIcon} />
+                        {t.appointments.upcomingDivider}
+                      </td>
+                    </tr>
+                  ) : null}
+                  <tr
+                    ref={isNext ? nextRowRef : undefined}
+                    className={isNext ? styles.rowNext : undefined}
+                  >
+                  <td className={styles.time}>
+                    {appointment.time}
+                    {isNext ? (
+                      <button
+                        type="button"
+                        className={styles.nextHint}
+                        aria-label={t.appointments.nextHint}
+                        title={t.appointments.nextHint}
+                      >
+                        <span className={styles.nextDot} />
+                        <span className={styles.nextTooltip} role="tooltip">
+                          {t.appointments.nextHint}
+                        </span>
+                      </button>
+                    ) : null}
+                  </td>
                   <td>
                     <span className={styles.patient}>
                       <span className={styles.patientName}>{appointment.patientName}</span>
@@ -86,8 +185,10 @@ export const AppointmentsTable = ({
                       {t.appointmentStatus[appointment.status]}
                     </Badge>
                   </td>
-                </tr>
-              ))
+                  </tr>
+                </Fragment>
+                );
+              })
             : null}
         </tbody>
       </table>

@@ -50,15 +50,6 @@ export type DashboardStat = {
   id: string;
   label: string;
   value: string;
-  change: number;
-  changeLabel: string;
-};
-
-export type ScheduleSlot = {
-  id: string;
-  time: string;
-  patientName: string;
-  service: string;
-  doctorName: string;
-  color: 'primary' | 'success' | 'danger' | 'gray';
+  change?: number;
+  changeLabel?: string;
 };

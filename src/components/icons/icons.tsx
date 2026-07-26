@@ -93,6 +93,10 @@ export const PlusIcon = createIcon(<path d="M12 5v14M5 12h14" />);
 
 export const ChevronDownIcon = createIcon(<path d="m6 9 6 6 6-6" />);
 
+export const ChevronLeftIcon = createIcon(<path d="m15 6-6 6 6 6" />);
+
+export const ChevronRightIcon = createIcon(<path d="m9 6 6 6-6 6" />);
+
 export const EyeIcon = createIcon(
   <>
     <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
@@ -136,4 +140,40 @@ export const ChartIcon = createIcon(
     <path d="M4 20h16" />
     <path d="m8 16 3.5-4.5 3 2.5L20 7" />
   </>,
+);
+
+type LogoProps = {
+  height?: number;
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+// App wordmark: filled tooth glyph + "OS". Uses currentColor so it adapts to
+// light/dark contexts (see public/logo-default.svg for the fixed-color asset).
+export const Logo = ({ height = 24, className, style }: LogoProps) => (
+  <svg
+    height={height}
+    viewBox="0 0 90 24"
+    fill="none"
+    className={className}
+    style={style}
+    role="img"
+    aria-label="DentalOS"
+  >
+    <path
+      d="M12 5.5C10.5 4 8.5 3 7 3 4.5 3 3 5 3 7.5c0 4 2 6 2.6 9.3.3 1.8.9 4.2 2.2 4.2 1.4 0 1.3-2.6 1.7-4.3.3-1.3 1.1-2.2 2.5-2.2s2.2.9 2.5 2.2c.4 1.7.3 4.3 1.7 4.3 1.3 0 1.9-2.4 2.2-4.2C19 13.5 21 11.5 21 7.5 21 5 19.5 3 17 3c-1.5 0-3.5 1-5 2.5Z"
+      fill="currentColor"
+    />
+    <text
+      x="28"
+      y="18.5"
+      fontFamily="Arial, Helvetica, sans-serif"
+      fontWeight="800"
+      fontSize="18"
+      letterSpacing="0.3"
+      fill="currentColor"
+    >
+      OS
+    </text>
+  </svg>
 );

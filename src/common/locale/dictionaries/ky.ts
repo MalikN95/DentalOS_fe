@@ -23,6 +23,8 @@ export const ky: Dictionary = {
     staff: 'Кызматкерлер',
     settings: 'Жөндөөлөр',
     logout: 'Чыгуу',
+    collapseSidebar: 'Менюну жыйыштыруу',
+    expandSidebar: 'Менюну жайып көрсөтүү',
   },
   header: {
     searchPatient: 'Бейтапты издөө...',
@@ -84,7 +86,13 @@ export const ky: Dictionary = {
       'Иштелип жатат: бул жерде дарылоо пландары React Flow диаграммалары түрүндө болот.',
   },
   dashboard: {
-    upcoming: 'Жакынкы кабылдоолор',
+    stats: {
+      todayAppointments: 'Бүгүнкү жазылуулар',
+      newPatients: 'Жаңы бейтаптар',
+      revenueToday: 'Бүгүнкү киреше',
+      cancellationsToday: 'Бүгүн жокко чыгарылгандар',
+      noAccess: 'Уруксат жок',
+    },
   },
   pagination: {
     rowsPerPage: 'Беттеги саптар',
@@ -104,6 +112,12 @@ export const ky: Dictionary = {
   appointments: {
     todayTitle: 'Бүгүнкү жазылуулар',
     newAppointment: '+ Жаңы жазылуу',
+    nextHint: 'Жакынкы кабылдоо',
+    upcomingDivider: 'Жакынкы жазылуулар',
+    today: 'Бүгүн',
+    prevDay: 'Мурунку күн',
+    nextDay: 'Кийинки күн',
+    pickDate: 'Күндү тандоо',
     colTime: 'Убакыт',
     colPatient: 'Бейтап',
     colService: 'Кызмат',
@@ -111,7 +125,7 @@ export const ky: Dictionary = {
     colCabinet: 'Кабинет',
     colStatus: 'Статус',
     loading: 'Жазылуулар жүктөлүүдө...',
-    empty: 'Бүгүнгө жазылуулар жок',
+    empty: 'Жазылуулар жок',
     modalTitle: 'Жаңы жазылуу',
     branch: 'Филиал',
     selectBranch: 'Филиалды тандаңыз',

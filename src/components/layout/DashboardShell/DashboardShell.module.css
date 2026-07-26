@@ -1,7 +1,8 @@
 .shell {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   background: var(--color-gray-25);
+  overflow: hidden;
 }
 
 .main {
@@ -9,9 +10,34 @@
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .content {
   flex: 1;
-  padding: 24px 32px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 15px;
+  /* keep the native scrollbar light even when the OS is in dark mode */
+  color-scheme: light;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-200) transparent;
+}
+
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--color-gray-200);
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
 }

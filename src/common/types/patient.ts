@@ -47,4 +47,6 @@ export type ListPatientsParams = {
   limit: number;
   search?: string;
   isActive?: boolean;
+  createdFrom?: string;
+  createdTo?: string;
 };

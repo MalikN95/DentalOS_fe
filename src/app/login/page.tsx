@@ -9,10 +9,10 @@ import {
   EyeIcon,
   EyeOffIcon,
   LockIcon,
+  Logo,
   MailIcon,
   PatientsIcon,
   ShieldIcon,
-  ToothIcon,
 } from '@/components/icons/icons';
 import { Alert, Button, TextField } from '@/components/ui';
 import { useClinicSubdomain } from '@/hooks/useClinicSubdomain';
@@ -47,9 +47,7 @@ const LoginPage = () => {
           <span className={styles.grid} aria-hidden="true" />
 
           <div className={styles.brandTop}>
-            <span className={styles.brandLogo}>
-              <ToothIcon size={22} />
-            </span>
+            <Logo height={24} />
             <span className={styles.brandName}>{MOCK_CLINIC_NAME}</span>
           </div>
 
@@ -78,7 +76,7 @@ const LoginPage = () => {
         <section className={styles.panel}>
           <div className={styles.mobileLogo}>
             <span className={styles.mobileLogoMark}>
-              <ToothIcon size={20} />
+              <Logo height={20} />
             </span>
             {MOCK_CLINIC_NAME}
           </div>

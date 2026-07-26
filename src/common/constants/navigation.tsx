@@ -23,7 +23,6 @@ export const NAV_ITEMS: NavItem[] = [
     labelKey: 'appointments',
     href: '/appointments',
     icon: <CalendarIcon />,
-    badgeCount: 3,
   },
   { id: 'patients', labelKey: 'patients', href: '/patients', icon: <PatientsIcon /> },
   {

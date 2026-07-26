@@ -8,7 +8,10 @@ import { MOCK_CLINIC_NAME, MOCK_USER } from '@/common/mocks/auth.mock';
 import { Header } from '@/components/layout/Header/Header';
 import { Sidebar } from '@/components/layout/Sidebar/Sidebar';
 import { logoutRequest } from '@/helpers/auth-bridge';
+import { useClinic } from '@/hooks/useClinic';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { useSidebarCollapse } from '@/hooks/useSidebarCollapse';
+import { useTodayAppointments } from '@/hooks/useTodayAppointments';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/slices/auth/auth.slice';
 import { selectAccessToken, selectCurrentUser } from '@/store/slices/auth/selectors';
@@ -27,13 +30,16 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   // Mock fallback until real auth is wired to the API
   const user = useAppSelector(selectCurrentUser) ?? MOCK_USER;
   const accessToken = useAppSelector(selectAccessToken);
+  const { data: todayAppointments } = useTodayAppointments();
+  const { data: clinic } = useClinic();
+  const { isCollapsed, toggle: toggleSidebar } = useSidebarCollapse();
 
   const activeItem = getNavItemByPathname(pathname);
   const items = NAV_ITEMS.map((item) => ({
     id: item.id,
     href: item.href,
     icon: item.icon,
-    badgeCount: item.badgeCount,
+    badgeCount: item.id === 'appointments' ? todayAppointments?.length : item.badgeCount,
     label: t.nav[item.labelKey],
   }));
   const roleKey = user.role as keyof Dictionary['roles'];
@@ -56,8 +62,13 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
       <Sidebar
         items={items}
         activeId={activeItem.id}
-        clinicName={MOCK_CLINIC_NAME}
+        clinicName={clinic?.name ?? MOCK_CLINIC_NAME}
+        logoUrl={clinic?.logoUrl}
         logoutLabel={t.nav.logout}
+        isCollapsed={isCollapsed}
+        onToggleCollapse={toggleSidebar}
+        collapseLabel={t.nav.collapseSidebar}
+        expandLabel={t.nav.expandSidebar}
         onLogout={handleLogout}
       />
       <div className={styles.main}>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { NotificationBadge } from '@/components/ui';
-import { LogoutIcon, ToothIcon } from '@/components/icons/icons';
+import { ChevronLeftIcon, LogoutIcon, Logo } from '@/components/icons/icons';
 import styles from './Sidebar.module.css';
 
 export type SidebarItem = {
@@ -15,7 +15,12 @@ type SidebarProps = {
   items: SidebarItem[];
   activeId: string;
   clinicName: string;
+  logoUrl?: string | null;
   logoutLabel: string;
+  isCollapsed: boolean;
+  onToggleCollapse: () => void;
+  collapseLabel: string;
+  expandLabel: string;
   className?: string;
   style?: React.CSSProperties;
   onLogout?: () => void;
@@ -25,17 +30,40 @@ export const Sidebar = ({
   items,
   activeId,
   clinicName,
+  logoUrl,
   logoutLabel,
+  isCollapsed,
+  onToggleCollapse,
+  collapseLabel,
+  expandLabel,
   className,
   style,
   onLogout,
 }: SidebarProps) => (
-  <aside className={`${styles.sidebar} ${className ?? ''}`} style={style}>
+  <aside
+    className={`${styles.sidebar} ${isCollapsed ? styles.sidebarCollapsed : ''} ${className ?? ''}`}
+    style={style}
+  >
+    <button
+      type="button"
+      className={styles.collapseToggle}
+      onClick={onToggleCollapse}
+      aria-label={isCollapsed ? expandLabel : collapseLabel}
+      title={isCollapsed ? expandLabel : collapseLabel}
+    >
+      <ChevronLeftIcon size={14} className={isCollapsed ? styles.collapseIconFlipped : undefined} />
+    </button>
+
     <div className={styles.logo}>
       <span className={styles.logoMark}>
-        <ToothIcon size={20} />
+        {logoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element -- presigned S3 URL, arbitrary aspect ratio
+          <img src={logoUrl} alt="" className={styles.logoImage} />
+        ) : (
+          <Logo height={22} />
+        )}
       </span>
-      {clinicName}
+      {isCollapsed ? null : clinicName}
     </div>
 
     <nav className={styles.nav}>
@@ -44,18 +72,24 @@ export const Sidebar = ({
           key={item.id}
           href={item.href}
           className={`${styles.item} ${item.id === activeId ? styles.itemActive : ''}`}
+          title={isCollapsed ? item.label : undefined}
         >
           {item.icon}
-          <span className={styles.itemLabel}>{item.label}</span>
-          {item.badgeCount ? <NotificationBadge count={item.badgeCount} /> : null}
+          {isCollapsed ? null : <span className={styles.itemLabel}>{item.label}</span>}
+          {!isCollapsed && item.badgeCount ? <NotificationBadge count={item.badgeCount} /> : null}
         </Link>
       ))}
     </nav>
 
     <div className={styles.footer}>
-      <button type="button" className={styles.item} onClick={onLogout}>
+      <button
+        type="button"
+        className={styles.item}
+        onClick={onLogout}
+        title={isCollapsed ? logoutLabel : undefined}
+      >
         <LogoutIcon />
-        <span className={styles.itemLabel}>{logoutLabel}</span>
+        {isCollapsed ? null : <span className={styles.itemLabel}>{logoutLabel}</span>}
       </button>
     </div>
   </aside>

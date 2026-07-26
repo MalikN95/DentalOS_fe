@@ -1,12 +1,36 @@
-export const getTodayIsoRange = (): { from: string; to: string } => {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-  const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+export const getDayIsoRange = (date: Date): { from: string; to: string } => {
+  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+  const end = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
 
   return {
     from: start.toISOString(),
     to: end.toISOString(),
   };
+};
+
+export const getTodayIsoRange = (): { from: string; to: string } => getDayIsoRange(new Date());
+
+export const isSameDay = (a: Date, b: Date): boolean =>
+  a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+
+export const addDays = (date: Date, amount: number): Date => {
+  const next = new Date(date);
+  next.setDate(next.getDate() + amount);
+  return next;
+};
+
+// 'YYYY-MM-DD' in local time, for <input type="date"> value/onChange — avoids
+// the UTC-shift bugs that toISOString() would introduce.
+export const toDateInputValue = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+export const parseDateInputValue = (value: string): Date => {
+  const [year, month, day] = value.split('-').map(Number);
+  return new Date(year, month - 1, day);
 };
 
 export const formatTime = (isoDate: string): string =>

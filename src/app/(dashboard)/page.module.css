@@ -1,23 +1,12 @@
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 16px;
-  align-items: start;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 @media (max-width: 1200px) {
   .stats {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
   }
 }

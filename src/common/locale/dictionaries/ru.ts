@@ -21,6 +21,8 @@ export const ru = {
     staff: 'Сотрудники',
     settings: 'Настройки',
     logout: 'Выйти',
+    collapseSidebar: 'Свернуть меню',
+    expandSidebar: 'Развернуть меню',
   },
   header: {
     searchPatient: 'Поиск пациента...',
@@ -82,7 +84,13 @@ export const ru = {
       'Раздел в разработке: здесь будут планы лечения в виде диаграмм на React Flow.',
   },
   dashboard: {
-    upcoming: 'Ближайшие приёмы',
+    stats: {
+      todayAppointments: 'Записей сегодня',
+      newPatients: 'Новых пациентов',
+      revenueToday: 'Выручка за день',
+      cancellationsToday: 'Отмен сегодня',
+      noAccess: 'Нет доступа',
+    },
   },
   pagination: {
     rowsPerPage: 'Строк на странице',
@@ -102,6 +110,12 @@ export const ru = {
   appointments: {
     todayTitle: 'Записи на сегодня',
     newAppointment: '+ Новая запись',
+    nextHint: 'Ближайший приём',
+    upcomingDivider: 'Ближайшие записи',
+    today: 'Сегодня',
+    prevDay: 'Предыдущий день',
+    nextDay: 'Следующий день',
+    pickDate: 'Выбрать дату',
     colTime: 'Время',
     colPatient: 'Пациент',
     colService: 'Услуга',
@@ -109,7 +123,7 @@ export const ru = {
     colCabinet: 'Кабинет',
     colStatus: 'Статус',
     loading: 'Загрузка записей...',
-    empty: 'На сегодня записей нет',
+    empty: 'Записей нет',
     modalTitle: 'Новая запись',
     branch: 'Филиал',
     selectBranch: 'Выберите филиал',

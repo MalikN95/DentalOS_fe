@@ -23,6 +23,8 @@ export const en: Dictionary = {
     staff: 'Staff',
     settings: 'Settings',
     logout: 'Log out',
+    collapseSidebar: 'Collapse menu',
+    expandSidebar: 'Expand menu',
   },
   header: {
     searchPatient: 'Search patient...',
@@ -84,7 +86,13 @@ export const en: Dictionary = {
       'Under construction: treatment plans as React Flow diagrams will live here.',
   },
   dashboard: {
-    upcoming: 'Upcoming appointments',
+    stats: {
+      todayAppointments: "Today's appointments",
+      newPatients: 'New patients',
+      revenueToday: "Today's revenue",
+      cancellationsToday: 'Cancellations today',
+      noAccess: 'No access',
+    },
   },
   pagination: {
     rowsPerPage: 'Rows per page',
@@ -104,6 +112,12 @@ export const en: Dictionary = {
   appointments: {
     todayTitle: "Today's appointments",
     newAppointment: '+ New appointment',
+    nextHint: 'Next appointment',
+    upcomingDivider: 'Upcoming appointments',
+    today: 'Today',
+    prevDay: 'Previous day',
+    nextDay: 'Next day',
+    pickDate: 'Pick a date',
     colTime: 'Time',
     colPatient: 'Patient',
     colService: 'Service',
@@ -111,7 +125,7 @@ export const en: Dictionary = {
     colCabinet: 'Cabinet',
     colStatus: 'Status',
     loading: 'Loading appointments...',
-    empty: 'No appointments today',
+    empty: 'No appointments',
     modalTitle: 'New appointment',
     branch: 'Branch',
     selectBranch: 'Select a branch',

@@ -8,7 +8,14 @@ import type {
 import type { ApiMedicalRecord, ApiVisit } from '@/common/types/visit';
 import { apiFetch } from '@/helpers/api-fetch';
 
-const buildListQuery = ({ page, limit, search, isActive }: ListPatientsParams): string => {
+const buildListQuery = ({
+  page,
+  limit,
+  search,
+  isActive,
+  createdFrom,
+  createdTo,
+}: ListPatientsParams): string => {
   const params = new URLSearchParams({ page: String(page), limit: String(limit) });
 
   const trimmed = search?.trim();
@@ -18,6 +25,14 @@ const buildListQuery = ({ page, limit, search, isActive }: ListPatientsParams): 
 
   if (typeof isActive === 'boolean') {
     params.set('isActive', String(isActive));
+  }
+
+  if (createdFrom) {
+    params.set('createdFrom', createdFrom);
+  }
+
+  if (createdTo) {
+    params.set('createdTo', createdTo);
   }
 
   return params.toString();
