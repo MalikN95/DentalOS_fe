@@ -59,6 +59,7 @@
 .employee {
   display: flex;
   align-items: center;
+  min-width: 0;
   gap: 12px;
 }
 
@@ -80,6 +81,7 @@
 .employeeName {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .fullName {
@@ -118,4 +120,78 @@
   padding: 32px 20px;
   text-align: center;
   color: var(--color-black-500);
+}
+
+.mobileList {
+  display: none;
+}
+
+.mobileStateBlock {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--color-black-500);
+}
+
+.mobileCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+}
+
+.mobileCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mobileMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.mobileMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mobileMetaLabel {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-black-500);
+}
+
+.mobileMetaValue {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-600);
+  overflow-wrap: break-word;
+}
+
+.mobileActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .tableWrap {
+    display: none;
+  }
+
+  .mobileList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
 }

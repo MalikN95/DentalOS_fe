@@ -1,6 +1,7 @@
 .card {
   display: flex;
   flex-direction: column;
+  min-height: 0;
   background: var(--color-white);
   border: 1px solid var(--color-gray-50);
   border-radius: 12px;
@@ -9,6 +10,7 @@
 
 .cardHeader {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
@@ -90,7 +92,9 @@
 
 .tableWrap {
   width: 100%;
-  overflow-x: auto;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   cursor: grab;
   touch-action: pan-y;
 }
@@ -106,6 +110,9 @@
 }
 
 .table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   padding: 8px 16px;
   background: var(--color-gray-25);
   font-size: 12px;
@@ -280,4 +287,100 @@
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
+}
+
+.mobileList {
+  display: none;
+}
+
+.mobileStateBlock {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--color-black-500);
+}
+
+.mobileDivider {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 4px 2px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-primary-600);
+}
+
+.mobileCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+}
+
+.mobileCardClickable {
+  cursor: pointer;
+}
+
+.mobileCardClickable:active {
+  background: var(--color-gray-25);
+}
+
+.mobileCardNext {
+  background: color-mix(in srgb, var(--color-primary-500) 6%, var(--color-white));
+  border-color: color-mix(in srgb, var(--color-primary-500) 30%, var(--color-gray-50));
+}
+
+.mobileCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mobileMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.mobileMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 90px;
+}
+
+.mobileMetaLabel {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-black-500);
+}
+
+.mobileMetaValue {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-600);
+}
+
+@media (max-width: 768px) {
+  .tableWrap {
+    display: none;
+  }
+
+  .mobileList {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    gap: 8px;
+    padding: 10px 12px 12px;
+    overflow-y: auto;
+  }
 }

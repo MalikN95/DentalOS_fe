@@ -72,7 +72,7 @@ export const DashboardPageContent = () => {
   }, [queryClient]);
 
   return (
-    <>
+    <div className={styles.page}>
       <div className={styles.stats}>
         {stats.map((stat) => (
           <StatCard
@@ -86,6 +86,7 @@ export const DashboardPageContent = () => {
       </div>
 
       <AppointmentsTable
+        className={styles.tableSection}
         appointments={appointments ?? []}
         isLoading={isLoading}
         errorMessage={error?.message ?? null}
@@ -115,6 +116,6 @@ export const DashboardPageContent = () => {
           onChanged={handleAppointmentsInvalidate}
         />
       ) : null}
-    </>
+    </div>
   );
 };

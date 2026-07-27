@@ -26,6 +26,8 @@ export const ky: Dictionary = {
     logout: 'Чыгуу',
     collapseSidebar: 'Менюну жыйыштыруу',
     expandSidebar: 'Менюну жайып көрсөтүү',
+    openMenu: 'Менюну ачуу',
+    closeMenu: 'Менюну жабуу',
   },
   header: {
     searchPatient: 'Бейтапты издөө...',

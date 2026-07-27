@@ -117,6 +117,63 @@ export const PatientsTable = ({
           </tbody>
         </table>
       </div>
+
+      <div className={styles.mobileList}>
+        {isLoading ? <div className={styles.mobileStateBlock}>{t.patients.loading}</div> : null}
+        {!isLoading && patients.length === 0 ? (
+          <div className={styles.mobileStateBlock}>{t.patients.empty}</div>
+        ) : null}
+
+        {!isLoading
+          ? patients.map((patient) => (
+              <div key={patient.id} className={styles.mobileCard}>
+                <div className={styles.mobileCardHead}>
+                  <span className={styles.patient}>
+                    <button
+                      type="button"
+                      className={styles.patientName}
+                      onClick={() => onRowClick?.(patient)}
+                    >
+                      {patient.lastName} {patient.firstName}
+                    </button>
+                    <span className={styles.patientPhone}>{patient.phone}</span>
+                  </span>
+                  <Badge color={patient.isActive ? 'success' : 'gray'}>
+                    {patient.isActive ? t.common.active : t.common.inactive}
+                  </Badge>
+                </div>
+
+                <div className={styles.mobileMeta}>
+                  <div className={styles.mobileMetaItem}>
+                    <span className={styles.mobileMetaLabel}>{t.patients.colBirthDate}</span>
+                    <span className={styles.mobileMetaValue}>
+                      {patient.birthDate ? formatDate(patient.birthDate) : t.common.dash}
+                    </span>
+                  </div>
+                  <div className={styles.mobileMetaItem}>
+                    <span className={styles.mobileMetaLabel}>{t.patients.colGender}</span>
+                    <span className={styles.mobileMetaValue}>
+                      {patient.gender ? t.gender[patient.gender] : t.common.dash}
+                    </span>
+                  </div>
+                  <div className={styles.mobileMetaItem}>
+                    <span className={styles.mobileMetaLabel}>{t.patients.colEmail}</span>
+                    <span className={styles.mobileMetaValue}>{patient.email ?? t.common.dash}</span>
+                  </div>
+                </div>
+
+                <div className={styles.mobileActions}>
+                  <Button variant="soft" color="gray" onClick={() => onEdit?.(patient)}>
+                    {t.common.edit}
+                  </Button>
+                  <Button variant="soft" color="danger" onClick={() => onDelete?.(patient)}>
+                    {t.common.delete}
+                  </Button>
+                </div>
+              </div>
+            ))
+          : null}
+      </div>
       {footer ?? null}
     </div>
   );

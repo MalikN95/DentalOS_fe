@@ -8,7 +8,11 @@ import { AppointmentsTable } from '@/components/dashboard/AppointmentsTable/Appo
 import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointmentModal/CreateAppointmentModal';
 import { PatientQuickViewModal } from '@/components/patients/PatientQuickViewModal/PatientQuickViewModal';
 import { addDays } from '@/helpers/date';
-import { APPOINTMENTS_BY_DATE_QUERY_KEY, useAppointmentsByDate } from '@/hooks/useAppointmentsByDate';
+import {
+  APPOINTMENTS_BY_DATE_QUERY_KEY,
+  useAppointmentsByDate,
+} from '@/hooks/useAppointmentsByDate';
+import styles from './page.module.css';
 
 export const AppointmentsPageContent = () => {
   const queryClient = useQueryClient();
@@ -41,8 +45,9 @@ export const AppointmentsPageContent = () => {
   }, [queryClient]);
 
   return (
-    <>
+    <div className={styles.page}>
       <AppointmentsTable
+        className={styles.tableSection}
         appointments={data ?? []}
         isLoading={isLoading}
         errorMessage={error?.message ?? null}
@@ -75,6 +80,6 @@ export const AppointmentsPageContent = () => {
           onChanged={handleAppointmentsInvalidate}
         />
       ) : null}
-    </>
+    </div>
   );
 };

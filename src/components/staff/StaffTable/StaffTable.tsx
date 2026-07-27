@@ -135,6 +135,83 @@ export const StaffTable = ({
           </tbody>
         </table>
       </div>
+
+      <div className={styles.mobileList}>
+        {isLoading ? <div className={styles.mobileStateBlock}>{t.staff.loading}</div> : null}
+        {!isLoading && staff.length === 0 ? (
+          <div className={styles.mobileStateBlock}>{t.staff.empty}</div>
+        ) : null}
+
+        {!isLoading
+          ? staff.map((member) => (
+              <div key={member.id} className={styles.mobileCard}>
+                <div className={styles.mobileCardHead}>
+                  <span className={styles.employee}>
+                    <span className={styles.avatar} aria-hidden="true">
+                      {member.lastName.charAt(0)}
+                      {member.firstName.charAt(0)}
+                    </span>
+                    <span className={styles.employeeName}>
+                      <span className={styles.fullName}>
+                        {member.lastName} {member.firstName}
+                      </span>
+                      {member.doctorProfile ? (
+                        <span className={styles.experience}>
+                          {t.staff.experienceShort}: {member.doctorProfile.experienceYears}
+                        </span>
+                      ) : null}
+                    </span>
+                  </span>
+                  <Badge color={member.isActive ? 'success' : 'gray'}>
+                    {member.isActive ? t.common.active : t.common.inactive}
+                  </Badge>
+                </div>
+
+                <div className={styles.mobileMeta}>
+                  <div className={styles.mobileMetaItem}>
+                    <span className={styles.mobileMetaLabel}>{t.staff.colRole}</span>
+                    <span className={styles.mobileMetaValue}>
+                      <Badge color={member.role === 'doctor' ? 'primary' : 'gray'}>
+                        {t.roles[member.role]}
+                      </Badge>
+                    </span>
+                  </div>
+                  <div className={styles.mobileMetaItem}>
+                    <span className={styles.mobileMetaLabel}>{t.staff.colContacts}</span>
+                    <span className={styles.mobileMetaValue}>
+                      {member.email}
+                      <br />
+                      {member.phone ?? t.common.dash}
+                    </span>
+                  </div>
+                  <div className={styles.mobileMetaItem}>
+                    <span className={styles.mobileMetaLabel}>{t.staff.colSpecializations}</span>
+                    <span className={styles.mobileMetaValue}>
+                      {member.doctorProfile?.specializations.length
+                        ? member.doctorProfile.specializations.join(', ')
+                        : t.common.dash}
+                    </span>
+                  </div>
+                  <div className={styles.mobileMetaItem}>
+                    <span className={styles.mobileMetaLabel}>{t.staff.colBranch}</span>
+                    <span className={styles.mobileMetaValue}>
+                      {member.doctorProfile?.branchName ?? t.common.dash}
+                    </span>
+                  </div>
+                </div>
+
+                <div className={styles.mobileActions}>
+                  <Button variant="soft" color="gray" onClick={() => onEdit?.(member)}>
+                    {t.common.edit}
+                  </Button>
+                  <Button variant="soft" color="danger" onClick={() => onDelete?.(member)}>
+                    {t.common.delete}
+                  </Button>
+                </div>
+              </div>
+            ))
+          : null}
+      </div>
       {footer ?? null}
     </div>
   );

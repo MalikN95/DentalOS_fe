@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { NotificationBadge } from '@/components/ui';
-import { LogoutIcon, Logo, PanelLeftIcon } from '@/components/icons/icons';
+import { CloseIcon, LogoutIcon, Logo, PanelLeftIcon } from '@/components/icons/icons';
 import styles from './Sidebar.module.css';
 
 export type SidebarItem = {
@@ -21,6 +21,9 @@ type SidebarProps = {
   onToggleCollapse: () => void;
   collapseLabel: string;
   expandLabel: string;
+  isMobileOpen: boolean;
+  onCloseMobile: () => void;
+  closeMenuLabel: string;
   className?: string;
   style?: React.CSSProperties;
   onLogout?: () => void;
@@ -36,62 +39,82 @@ export const Sidebar = ({
   onToggleCollapse,
   collapseLabel,
   expandLabel,
+  isMobileOpen,
+  onCloseMobile,
+  closeMenuLabel,
   className,
   style,
   onLogout,
 }: SidebarProps) => (
-  <aside
-    className={`${styles.sidebar} ${isCollapsed ? styles.sidebarCollapsed : ''} ${className ?? ''}`}
-    style={style}
-  >
-    <div className={styles.logo}>
-      <span className={styles.logoMark}>
-        {logoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element -- presigned S3 URL, arbitrary aspect ratio
-          <img src={logoUrl} alt="" className={styles.logoImage} />
-        ) : (
-          <Logo height={22} />
-        )}
-      </span>
-      {isCollapsed ? null : clinicName}
-    </div>
-
-    <button
-      type="button"
-      className={`${styles.item} ${styles.collapseToggle}`}
-      onClick={onToggleCollapse}
-      aria-label={isCollapsed ? expandLabel : collapseLabel}
-      title={isCollapsed ? expandLabel : collapseLabel}
+  <>
+    <div
+      className={`${styles.overlay} ${isMobileOpen ? styles.overlayVisible : ''}`}
+      onClick={onCloseMobile}
+      aria-hidden="true"
+    />
+    <aside
+      className={`${styles.sidebar} ${isCollapsed ? styles.sidebarCollapsed : ''} ${isMobileOpen ? styles.sidebarOpen : ''} ${className ?? ''}`}
+      style={style}
     >
-      <PanelLeftIcon size={18} />
-      {isCollapsed ? null : <span className={styles.itemLabel}>{collapseLabel}</span>}
-    </button>
-
-    <nav className={styles.nav}>
-      {items.map((item) => (
-        <Link
-          key={item.id}
-          href={item.href}
-          className={`${styles.item} ${item.id === activeId ? styles.itemActive : ''}`}
-          title={isCollapsed ? item.label : undefined}
+      <div className={styles.logo}>
+        <span className={styles.logoMark}>
+          {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- presigned S3 URL, arbitrary aspect ratio
+            <img src={logoUrl} alt="" className={styles.logoImage} />
+          ) : (
+            <Logo height={22} />
+          )}
+        </span>
+        {isCollapsed ? null : clinicName}
+        <button
+          type="button"
+          className={styles.mobileClose}
+          onClick={onCloseMobile}
+          aria-label={closeMenuLabel}
+          title={closeMenuLabel}
         >
-          {item.icon}
-          {isCollapsed ? null : <span className={styles.itemLabel}>{item.label}</span>}
-          {!isCollapsed && item.badgeCount ? <NotificationBadge count={item.badgeCount} /> : null}
-        </Link>
-      ))}
-    </nav>
+          <CloseIcon size={18} />
+        </button>
+      </div>
 
-    <div className={styles.footer}>
       <button
         type="button"
-        className={styles.item}
-        onClick={onLogout}
-        title={isCollapsed ? logoutLabel : undefined}
+        className={`${styles.item} ${styles.collapseToggle}`}
+        onClick={onToggleCollapse}
+        aria-label={isCollapsed ? expandLabel : collapseLabel}
+        title={isCollapsed ? expandLabel : collapseLabel}
       >
-        <LogoutIcon />
-        {isCollapsed ? null : <span className={styles.itemLabel}>{logoutLabel}</span>}
+        <PanelLeftIcon size={18} />
+        {isCollapsed ? null : <span className={styles.itemLabel}>{collapseLabel}</span>}
       </button>
-    </div>
-  </aside>
+
+      <nav className={styles.nav}>
+        {items.map((item) => (
+          <Link
+            key={item.id}
+            href={item.href}
+            className={`${styles.item} ${item.id === activeId ? styles.itemActive : ''}`}
+            title={isCollapsed ? item.label : undefined}
+            onClick={onCloseMobile}
+          >
+            {item.icon}
+            {isCollapsed ? null : <span className={styles.itemLabel}>{item.label}</span>}
+            {!isCollapsed && item.badgeCount ? <NotificationBadge count={item.badgeCount} /> : null}
+          </Link>
+        ))}
+      </nav>
+
+      <div className={styles.footer}>
+        <button
+          type="button"
+          className={styles.item}
+          onClick={onLogout}
+          title={isCollapsed ? logoutLabel : undefined}
+        >
+          <LogoutIcon />
+          {isCollapsed ? null : <span className={styles.itemLabel}>{logoutLabel}</span>}
+        </button>
+      </div>
+    </aside>
+  </>
 );

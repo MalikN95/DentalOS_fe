@@ -104,6 +104,16 @@ export const PanelLeftIcon = createIcon(
   </>,
 );
 
+export const MenuIcon = createIcon(
+  <>
+    <path d="M4 6h16" />
+    <path d="M4 12h16" />
+    <path d="M4 18h16" />
+  </>,
+);
+
+export const CloseIcon = createIcon(<path d="m6 6 12 12M18 6 6 18" />);
+
 export const WalletIcon = createIcon(
   <>
     <path d="M3 7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" />

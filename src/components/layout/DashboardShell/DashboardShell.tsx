@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import type { Dictionary } from '@/common/locale/dictionaries/ru';
 import { useTranslation } from '@/common/locale/LocaleProvider';
@@ -10,6 +11,8 @@ import { Header } from '@/components/layout/Header/Header';
 import { Sidebar } from '@/components/layout/Sidebar/Sidebar';
 import { logoutRequest } from '@/helpers/auth-bridge';
 import { useClinic } from '@/hooks/useClinic';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useMobileSidebar } from '@/hooks/useMobileSidebar';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useSidebarCollapse } from '@/hooks/useSidebarCollapse';
 import { useTodayAppointments } from '@/hooks/useTodayAppointments';
@@ -34,6 +37,17 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   const { data: todayAppointments } = useTodayAppointments();
   const { data: clinic } = useClinic();
   const { isCollapsed, toggle: toggleSidebar } = useSidebarCollapse();
+  const isMobile = useIsMobile();
+  const {
+    isOpen: isMobileMenuOpen,
+    toggle: toggleMobileMenu,
+    close: closeMobileMenu,
+  } = useMobileSidebar();
+
+  // Close the mobile drawer whenever the route changes.
+  useEffect(() => {
+    closeMobileMenu();
+  }, [pathname, closeMobileMenu]);
 
   const activeItem = getNavItemByPathname(pathname);
   const items = NAV_ITEMS.filter(
@@ -68,10 +82,13 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
         clinicName={clinic?.name ?? MOCK_CLINIC_NAME}
         logoUrl={clinic?.logoUrl}
         logoutLabel={t.nav.logout}
-        isCollapsed={isCollapsed}
+        isCollapsed={isCollapsed && !isMobile}
         onToggleCollapse={toggleSidebar}
         collapseLabel={t.nav.collapseSidebar}
         expandLabel={t.nav.expandSidebar}
+        isMobileOpen={isMobileMenuOpen}
+        onCloseMobile={closeMobileMenu}
+        closeMenuLabel={t.nav.closeMenu}
         onLogout={handleLogout}
       />
       <div className={styles.main}>
@@ -81,6 +98,8 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
           userRole={userRole}
           notificationsLabel={t.header.notifications}
           notificationsCount={3}
+          menuLabel={isMobileMenuOpen ? t.nav.closeMenu : t.nav.openMenu}
+          onMenuClick={toggleMobileMenu}
         />
         <main className={styles.content}>{children}</main>
       </div>

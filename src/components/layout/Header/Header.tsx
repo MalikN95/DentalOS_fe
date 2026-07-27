@@ -1,5 +1,5 @@
-import { NotificationBadge, TextField } from '@/components/ui';
-import { BellIcon, SearchIcon } from '@/components/icons/icons';
+import { NotificationBadge } from '@/components/ui';
+import { BellIcon, MenuIcon } from '@/components/icons/icons';
 import styles from './Header.module.css';
 
 type HeaderProps = {
@@ -8,6 +8,8 @@ type HeaderProps = {
   userRole: string;
   notificationsLabel: string;
   notificationsCount?: number;
+  menuLabel: string;
+  onMenuClick: () => void;
   className?: string;
   style?: React.CSSProperties;
   onNotificationsClick?: () => void;
@@ -27,12 +29,24 @@ export const Header = ({
   userRole,
   notificationsLabel,
   notificationsCount = 0,
+  menuLabel,
+  onMenuClick,
   className,
   style,
   onNotificationsClick,
 }: HeaderProps) => (
   <header className={`${styles.header} ${className ?? ''}`} style={style}>
-    <h1 className={styles.title}>{title}</h1>
+    <div className={styles.titleRow}>
+      <button
+        type="button"
+        className={styles.menuButton}
+        aria-label={menuLabel}
+        onClick={onMenuClick}
+      >
+        <MenuIcon size={20} />
+      </button>
+      <h1 className={styles.title}>{title}</h1>
+    </div>
 
     <div className={styles.actions}>
       <button

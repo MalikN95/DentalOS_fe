@@ -26,6 +26,8 @@ export const en: Dictionary = {
     logout: 'Log out',
     collapseSidebar: 'Collapse menu',
     expandSidebar: 'Expand menu',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
   },
   header: {
     searchPatient: 'Search patient...',

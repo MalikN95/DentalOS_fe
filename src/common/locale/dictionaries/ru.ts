@@ -24,6 +24,8 @@ export const ru = {
     logout: 'Выйти',
     collapseSidebar: 'Свернуть меню',
     expandSidebar: 'Развернуть меню',
+    openMenu: 'Открыть меню',
+    closeMenu: 'Закрыть меню',
   },
   header: {
     searchPatient: 'Поиск пациента...',

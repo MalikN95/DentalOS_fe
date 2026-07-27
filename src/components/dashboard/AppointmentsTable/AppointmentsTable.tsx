@@ -49,15 +49,29 @@ export const AppointmentsTable = ({
   const nextAppointmentId = useMemo(() => findNextAppointmentId(appointments), [appointments]);
   const firstUpcomingIndex = useMemo(() => findFirstUpcomingIndex(appointments), [appointments]);
   const nextRowRef = useRef<HTMLTableRowElement | null>(null);
+  const nextCardRef = useRef<HTMLDivElement | null>(null);
   const {
     ref: tableWrapRef,
     isDragging: isTableDragging,
     handlers: dragScrollHandlers,
   } = useDragScroll<HTMLDivElement>();
 
+  const rows = useMemo(
+    () =>
+      appointments.map((appointment, index) => ({
+        appointment,
+        isNext: appointment.id === nextAppointmentId,
+        showUpcomingDivider: index === firstUpcomingIndex,
+      })),
+    [appointments, nextAppointmentId, firstUpcomingIndex],
+  );
+  const showLoading = isLoading;
+  const showEmpty = !isLoading && appointments.length === 0;
+
   useEffect(() => {
     if (nextAppointmentId) {
       nextRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      nextCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [nextAppointmentId]);
 
@@ -126,108 +140,193 @@ export const AppointmentsTable = ({
         {...dragScrollHandlers}
       >
         <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>{t.appointments.colTime}</th>
-            <th>{t.appointments.colPatient}</th>
-            <th>{t.appointments.colService}</th>
-            <th>{t.appointments.colDoctor}</th>
-            <th>{t.appointments.colCabinet}</th>
-            <th>{t.appointments.colStatus}</th>
-            <th>{t.appointments.colActions}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {isLoading ? (
+          <thead>
             <tr>
-              <td className={styles.stateCell} colSpan={7}>
-                {t.appointments.loading}
-              </td>
+              <th>{t.appointments.colTime}</th>
+              <th>{t.appointments.colPatient}</th>
+              <th>{t.appointments.colService}</th>
+              <th>{t.appointments.colDoctor}</th>
+              <th>{t.appointments.colCabinet}</th>
+              <th>{t.appointments.colStatus}</th>
+              <th>{t.appointments.colActions}</th>
             </tr>
-          ) : null}
+          </thead>
+          <tbody>
+            {showLoading ? (
+              <tr>
+                <td className={styles.stateCell} colSpan={7}>
+                  {t.appointments.loading}
+                </td>
+              </tr>
+            ) : null}
 
-          {!isLoading && appointments.length === 0 ? (
-            <tr>
-              <td className={styles.stateCell} colSpan={7}>
-                {t.appointments.empty}
-              </td>
-            </tr>
-          ) : null}
+            {showEmpty ? (
+              <tr>
+                <td className={styles.stateCell} colSpan={7}>
+                  {t.appointments.empty}
+                </td>
+              </tr>
+            ) : null}
 
-          {!isLoading
-            ? appointments.map((appointment, index) => {
-                const isNext = appointment.id === nextAppointmentId;
-
-                return (
-                <Fragment key={appointment.id}>
-                  {index === firstUpcomingIndex ? (
-                    <tr>
-                      <td className={styles.divider} colSpan={7}>
-                        <CalendarIcon size={13} className={styles.dividerIcon} />
-                        {t.appointments.upcomingDivider}
+            {!showLoading
+              ? rows.map(({ appointment, isNext, showUpcomingDivider }) => (
+                  <Fragment key={appointment.id}>
+                    {showUpcomingDivider ? (
+                      <tr>
+                        <td className={styles.divider} colSpan={7}>
+                          <CalendarIcon size={13} className={styles.dividerIcon} />
+                          {t.appointments.upcomingDivider}
+                        </td>
+                      </tr>
+                    ) : null}
+                    <tr
+                      ref={isNext ? nextRowRef : undefined}
+                      className={`${isNext ? styles.rowNext : ''} ${onRowClick ? styles.rowClickable : ''}`}
+                      onClick={onRowClick ? () => onRowClick(appointment) : undefined}
+                    >
+                      <td className={styles.time}>
+                        {appointment.time}
+                        {isNext ? (
+                          <button
+                            type="button"
+                            className={styles.nextHint}
+                            aria-label={t.appointments.nextHint}
+                            title={t.appointments.nextHint}
+                          >
+                            <span className={styles.nextDot} />
+                            <span className={styles.nextTooltip} role="tooltip">
+                              {t.appointments.nextHint}
+                            </span>
+                          </button>
+                        ) : null}
+                      </td>
+                      <td>
+                        <span className={styles.patient}>
+                          <button
+                            type="button"
+                            className={styles.patientName}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              onPatientClick?.(appointment.patientId);
+                            }}
+                          >
+                            {appointment.patientName}
+                          </button>
+                          <span className={styles.patientPhone}>{appointment.patientPhone}</span>
+                        </span>
+                      </td>
+                      <td>{appointment.service}</td>
+                      <td>{appointment.doctorName}</td>
+                      <td>{appointment.cabinet}</td>
+                      <td>
+                        <Badge color={appointmentStatusColor[appointment.status]}>
+                          {t.appointmentStatus[appointment.status]}
+                        </Badge>
+                      </td>
+                      <td>
+                        <Link
+                          href={`/appointments/${appointment.id}`}
+                          className={styles.detailsLink}
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          {t.appointments.viewDetails}
+                        </Link>
                       </td>
                     </tr>
-                  ) : null}
-                  <tr
-                    ref={isNext ? nextRowRef : undefined}
-                    className={`${isNext ? styles.rowNext : ''} ${onRowClick ? styles.rowClickable : ''}`}
-                    onClick={onRowClick ? () => onRowClick(appointment) : undefined}
-                  >
-                  <td className={styles.time}>
-                    {appointment.time}
-                    {isNext ? (
-                      <button
-                        type="button"
-                        className={styles.nextHint}
-                        aria-label={t.appointments.nextHint}
-                        title={t.appointments.nextHint}
-                      >
-                        <span className={styles.nextDot} />
-                        <span className={styles.nextTooltip} role="tooltip">
-                          {t.appointments.nextHint}
-                        </span>
-                      </button>
-                    ) : null}
-                  </td>
-                  <td>
-                    <span className={styles.patient}>
-                      <button
-                        type="button"
-                        className={styles.patientName}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          onPatientClick?.(appointment.patientId);
-                        }}
-                      >
-                        {appointment.patientName}
-                      </button>
-                      <span className={styles.patientPhone}>{appointment.patientPhone}</span>
+                  </Fragment>
+                ))
+              : null}
+          </tbody>
+        </table>
+      </div>
+
+      <div className={styles.mobileList}>
+        {showLoading ? (
+          <div className={styles.mobileStateBlock}>{t.appointments.loading}</div>
+        ) : null}
+        {showEmpty ? <div className={styles.mobileStateBlock}>{t.appointments.empty}</div> : null}
+
+        {!showLoading
+          ? rows.map(({ appointment, isNext, showUpcomingDivider }) => (
+              <Fragment key={appointment.id}>
+                {showUpcomingDivider ? (
+                  <div className={styles.mobileDivider}>
+                    <CalendarIcon size={13} />
+                    {t.appointments.upcomingDivider}
+                  </div>
+                ) : null}
+                <div
+                  ref={isNext ? nextCardRef : undefined}
+                  className={`${styles.mobileCard} ${isNext ? styles.mobileCardNext : ''} ${onRowClick ? styles.mobileCardClickable : ''}`}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => onRowClick?.(appointment)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      onRowClick?.(appointment);
+                    }
+                  }}
+                >
+                  <div className={styles.mobileCardHead}>
+                    <span className={styles.time}>
+                      {appointment.time}
+                      {isNext ? (
+                        <button
+                          type="button"
+                          className={styles.nextHint}
+                          aria-label={t.appointments.nextHint}
+                          title={t.appointments.nextHint}
+                        >
+                          <span className={styles.nextDot} />
+                        </button>
+                      ) : null}
                     </span>
-                  </td>
-                  <td>{appointment.service}</td>
-                  <td>{appointment.doctorName}</td>
-                  <td>{appointment.cabinet}</td>
-                  <td>
                     <Badge color={appointmentStatusColor[appointment.status]}>
                       {t.appointmentStatus[appointment.status]}
                     </Badge>
-                  </td>
-                  <td>
-                    <Link
-                      href={`/appointments/${appointment.id}`}
-                      className={styles.detailsLink}
-                      onClick={(event) => event.stopPropagation()}
+                  </div>
+
+                  <span className={styles.patient}>
+                    <button
+                      type="button"
+                      className={styles.patientName}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onPatientClick?.(appointment.patientId);
+                      }}
                     >
-                      {t.appointments.viewDetails}
-                    </Link>
-                  </td>
-                  </tr>
-                </Fragment>
-                );
-              })
-            : null}
-        </tbody>
-        </table>
+                      {appointment.patientName}
+                    </button>
+                    <span className={styles.patientPhone}>{appointment.patientPhone}</span>
+                  </span>
+
+                  <div className={styles.mobileMeta}>
+                    <div className={styles.mobileMetaItem}>
+                      <span className={styles.mobileMetaLabel}>{t.appointments.colService}</span>
+                      <span className={styles.mobileMetaValue}>{appointment.service}</span>
+                    </div>
+                    <div className={styles.mobileMetaItem}>
+                      <span className={styles.mobileMetaLabel}>{t.appointments.colDoctor}</span>
+                      <span className={styles.mobileMetaValue}>{appointment.doctorName}</span>
+                    </div>
+                    <div className={styles.mobileMetaItem}>
+                      <span className={styles.mobileMetaLabel}>{t.appointments.colCabinet}</span>
+                      <span className={styles.mobileMetaValue}>{appointment.cabinet}</span>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/appointments/${appointment.id}`}
+                    className={styles.detailsLink}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    {t.appointments.viewDetails}
+                  </Link>
+                </div>
+              </Fragment>
+            ))
+          : null}
       </div>
     </div>
   );
