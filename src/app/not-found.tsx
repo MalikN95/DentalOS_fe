@@ -2,16 +2,8 @@
 
 import Link from 'next/link';
 import { useTranslation } from '@/common/locale/LocaleProvider';
+import { ToothIcon } from '@/components/icons/icons';
 import styles from './not-found.module.css';
-
-const ToothIcon = () => (
-  <svg viewBox="0 0 64 64" className={styles.tooth} aria-hidden="true">
-    <path
-      d="M32 6C22 6 18 11 12 11c-5 0-7 5-7 12 0 9 3 14 6 22 2 6 3 13 6 13 4 0 3-12 8-12s4 12 8 12c3 0 4-7 6-13 3-8 6-13 6-22 0-7-2-12-7-12-6 0-10-5-16-5Z"
-      fill="currentColor"
-    />
-  </svg>
-);
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -25,7 +17,7 @@ const NotFound = () => {
         <div className={styles.code}>
           <span className={styles.digit}>4</span>
           <span className={styles.toothWrap}>
-            <ToothIcon />
+            <ToothIcon className={styles.tooth} style={{ fill: 'currentColor', stroke: 'none' }} />
           </span>
           <span className={styles.digit}>4</span>
         </div>

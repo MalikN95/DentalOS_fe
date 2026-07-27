@@ -1,19 +1,13 @@
-'use client';
+import { TreatmentPlansPageContent } from '@/app/(dashboard)/treatment-plans/TreatmentPlansPageContent';
 
-import { useTranslation } from '@/common/locale/LocaleProvider';
-import { ToothIcon } from '@/components/icons/icons';
-import { EmptyState } from '@/components/ui';
+type TreatmentPlansPageProps = {
+  searchParams: Promise<{ patientId?: string }>;
+};
 
-const TreatmentPlansPage = () => {
-  const { t } = useTranslation();
+const TreatmentPlansPage = async ({ searchParams }: TreatmentPlansPageProps) => {
+  const { patientId } = await searchParams;
 
-  return (
-    <EmptyState
-      icon={<ToothIcon size={28} />}
-      title={t.placeholders.treatmentPlansTitle}
-      description={t.placeholders.treatmentPlansDesc}
-    />
-  );
+  return <TreatmentPlansPageContent initialPatientId={patientId ?? null} />;
 };
 
 export default TreatmentPlansPage;

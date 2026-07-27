@@ -13,6 +13,8 @@ import { useCreateAppointmentForm } from '@/hooks/useCreateAppointmentForm';
 import styles from './CreateAppointmentModal.module.css';
 
 type CreateAppointmentModalProps = {
+  /** Pre-selects and locks the patient, e.g. when opened from their profile. */
+  initialPatientId?: string;
   onClose: () => void;
   onSuccess?: () => void;
   className?: string;
@@ -48,6 +50,7 @@ const formatDoctorLabel = (doctor: AppointmentFormDoctor): string =>
   `${doctor.user.firstName} ${doctor.user.lastName}`.trim();
 
 export const CreateAppointmentModal = ({
+  initialPatientId,
   onClose,
   onSuccess,
   className,
@@ -57,6 +60,7 @@ export const CreateAppointmentModal = ({
   const t = dict.appointments;
   const { form, optionsQuery, filteredDoctors, mutation, resetDoctorSelection } =
     useCreateAppointmentForm({
+      initialPatientId,
       onSuccess: () => {
         onSuccess?.();
         onClose();
@@ -80,13 +84,23 @@ export const CreateAppointmentModal = ({
   });
 
   const handleBranchChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    // Modal's onSubmit replays autofill by re-dispatching `change` on every
+    // filled control, including this one with its value unchanged — only
+    // clear the doctor when the branch itself actually changed.
+    const previousBranchId = form.getValues('branchId');
     branchField.onChange(event);
-    resetDoctorSelection();
+
+    if (event.target.value !== previousBranchId) {
+      resetDoctorSelection();
+    }
   };
 
   const branches = optionsQuery.data?.branches ?? [];
   const patients = optionsQuery.data?.patients ?? [];
   const services = optionsQuery.data?.services ?? [];
+  const lockedPatient = initialPatientId
+    ? patients.find((patient) => patient.id === initialPatientId)
+    : undefined;
   const isOptionsLoading = optionsQuery.isLoading;
   const optionsError = optionsQuery.error?.message ?? null;
   const submitError = mutation.error?.message ?? null;
@@ -141,22 +155,31 @@ export const CreateAppointmentModal = ({
             )}
           </SelectField>
 
-          <SelectField label={t.patient} error={errors.patientId?.message}>
-            {(fieldId) => (
-              <select
-                id={fieldId}
-                className={`${styles.select} ${errors.patientId ? styles.selectError : ''}`}
-                {...register('patientId')}
-              >
-                <option value="">{t.selectPatient}</option>
-                {patients.map((patient) => (
-                  <option key={patient.id} value={patient.id}>
-                    {formatPatientLabel(patient)}
-                  </option>
-                ))}
-              </select>
-            )}
-          </SelectField>
+          {initialPatientId ? (
+            <div className={styles.field}>
+              <span className={styles.label}>{t.patient}</span>
+              <div className={styles.staticValue}>
+                {lockedPatient ? formatPatientLabel(lockedPatient) : '…'}
+              </div>
+            </div>
+          ) : (
+            <SelectField label={t.patient} error={errors.patientId?.message}>
+              {(fieldId) => (
+                <select
+                  id={fieldId}
+                  className={`${styles.select} ${errors.patientId ? styles.selectError : ''}`}
+                  {...register('patientId')}
+                >
+                  <option value="">{t.selectPatient}</option>
+                  {patients.map((patient) => (
+                    <option key={patient.id} value={patient.id}>
+                      {formatPatientLabel(patient)}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </SelectField>
+          )}
 
           <SelectField label={t.service} error={errors.serviceId?.message}>
             {(fieldId) => (

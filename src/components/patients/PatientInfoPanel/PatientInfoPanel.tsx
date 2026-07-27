@@ -64,44 +64,48 @@ export const PatientInfoPanel = ({
         </div>
       )}
 
-      <div className={styles.rows}>
-        <Row label={t.patientInfo.phone} value={patient.phone} />
-        <Row label={t.patientInfo.email} value={patient.email ?? dash} />
-        <Row
-          label={t.patientInfo.birthDate}
-          value={patient.birthDate ? formatDate(patient.birthDate) : dash}
-        />
-        <Row
-          label={t.patientInfo.gender}
-          value={patient.gender ? t.gender[patient.gender] : dash}
-        />
-      </div>
-
-      <TagList label={t.patientInfo.allergies} items={patient.allergies} />
-      <TagList label={t.patientInfo.chronic} items={patient.chronicDiseases} />
-
-      <div className={styles.block}>
-        <span className={styles.blockLabel}>{t.patientInfo.insurance}</span>
-        {patient.insurance ? (
-          <div className={styles.rows}>
-            <Row label={t.patientInfo.company} value={patient.insurance.company} />
-            <Row label={t.patientInfo.policy} value={patient.insurance.policyNumber} />
-            <Row
-              label={t.patientInfo.validUntil}
-              value={patient.insurance.validUntil ? formatDate(patient.insurance.validUntil) : dash}
-            />
-          </div>
-        ) : (
-          <span className={styles.muted}>{t.patientInfo.insuranceNone}</span>
-        )}
-      </div>
-
-      {patient.comments ? (
-        <div className={styles.block}>
-          <span className={styles.blockLabel}>{t.patientInfo.comment}</span>
-          <p className={styles.comment}>{patient.comments}</p>
+      <div className={styles.body}>
+        <div className={styles.rows}>
+          <Row label={t.patientInfo.phone} value={patient.phone} />
+          <Row label={t.patientInfo.email} value={patient.email ?? dash} />
+          <Row
+            label={t.patientInfo.birthDate}
+            value={patient.birthDate ? formatDate(patient.birthDate) : dash}
+          />
+          <Row
+            label={t.patientInfo.gender}
+            value={patient.gender ? t.gender[patient.gender] : dash}
+          />
         </div>
-      ) : null}
+
+        <TagList label={t.patientInfo.allergies} items={patient.allergies} />
+        <TagList label={t.patientInfo.chronic} items={patient.chronicDiseases} />
+
+        <div className={styles.block}>
+          <span className={styles.blockLabel}>{t.patientInfo.insurance}</span>
+          {patient.insurance ? (
+            <div className={styles.rows}>
+              <Row label={t.patientInfo.company} value={patient.insurance.company} />
+              <Row label={t.patientInfo.policy} value={patient.insurance.policyNumber} />
+              <Row
+                label={t.patientInfo.validUntil}
+                value={
+                  patient.insurance.validUntil ? formatDate(patient.insurance.validUntil) : dash
+                }
+              />
+            </div>
+          ) : (
+            <span className={styles.muted}>{t.patientInfo.insuranceNone}</span>
+          )}
+        </div>
+
+        {patient.comments ? (
+          <div className={styles.block}>
+            <span className={styles.blockLabel}>{t.patientInfo.comment}</span>
+            <p className={styles.comment}>{patient.comments}</p>
+          </div>
+        ) : null}
+      </div>
     </aside>
   );
 };

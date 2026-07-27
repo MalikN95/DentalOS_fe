@@ -19,6 +19,7 @@ import { useClinic } from '@/hooks/useClinic';
 import { useMedicalRecordForm } from '@/hooks/useMedicalRecordForm';
 import { useAppSelector } from '@/store/hooks';
 import { selectCurrentUser } from '@/store/slices/auth/selectors';
+import { AppointmentTreatmentSection } from './AppointmentTreatmentSection';
 import styles from './AppointmentManagePanel.module.css';
 
 const RECORD_ROLES: StaffRole[] = ['owner', 'admin', 'doctor'];
@@ -298,6 +299,14 @@ export const AppointmentManagePanel = ({
               ))}
           </div>
         ) : null}
+      </div>
+
+      <div className={styles.section}>
+        <span className={styles.sectionTitle}>{t.planSectionTitle}</span>
+        <AppointmentTreatmentSection
+          patientId={appointment.patientId}
+          canEdit={canEditRecord}
+        />
       </div>
 
       <div className={styles.section}>

@@ -14,6 +14,8 @@ type InvoicesTableProps = {
   currency: string;
   isLoading?: boolean;
   errorMessage?: string | null;
+  /** Hide the patient column, e.g. on a single patient's own billing card. */
+  showPatientColumn?: boolean;
   footer?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -25,12 +27,14 @@ export const InvoicesTable = ({
   currency,
   isLoading = false,
   errorMessage = null,
+  showPatientColumn = true,
   footer,
   className,
   style,
   onAppointmentClick,
 }: InvoicesTableProps) => {
   const { t } = useTranslation();
+  const columnCount = showPatientColumn ? 5 : 4;
 
   const {
     ref: tableWrapRef,
@@ -55,7 +59,7 @@ export const InvoicesTable = ({
           <thead>
             <tr>
               <th>{t.finance.colDate}</th>
-              <th>{t.finance.colPatient}</th>
+              {showPatientColumn ? <th>{t.finance.colPatient}</th> : null}
               <th>{t.finance.colNumber}</th>
               <th>{t.finance.colTotal}</th>
               <th>{t.finance.colStatus}</th>
@@ -64,7 +68,7 @@ export const InvoicesTable = ({
           <tbody>
             {isLoading ? (
               <tr>
-                <td className={styles.stateCell} colSpan={5}>
+                <td className={styles.stateCell} colSpan={columnCount}>
                   {t.finance.loading}
                 </td>
               </tr>
@@ -72,7 +76,7 @@ export const InvoicesTable = ({
 
             {!isLoading && invoices.length === 0 ? (
               <tr>
-                <td className={styles.stateCell} colSpan={5}>
+                <td className={styles.stateCell} colSpan={columnCount}>
                   {t.finance.empty}
                 </td>
               </tr>
@@ -90,9 +94,11 @@ export const InvoicesTable = ({
                     }
                   >
                     <td>{formatDate(invoice.createdAt)}</td>
-                    <td>
-                      {invoice.patient.lastName} {invoice.patient.firstName}
-                    </td>
+                    {showPatientColumn ? (
+                      <td>
+                        {invoice.patient.lastName} {invoice.patient.firstName}
+                      </td>
+                    ) : null}
                     <td>{invoice.number}</td>
                     <td>{formatMoney(invoice.total, currency)}</td>
                     <td>

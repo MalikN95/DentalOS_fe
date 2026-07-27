@@ -1,0 +1,357 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heading {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--color-black-700);
+}
+
+.state {
+  padding: 16px;
+  border: 1px dashed var(--color-gray-100);
+  border-radius: 10px;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+  text-align: center;
+}
+
+.body {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.axisWrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.panButton {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  transform: translateY(-50%);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 999px;
+  color: var(--color-black-500);
+  box-shadow: 0 1px 4px rgba(23, 23, 23, 0.08);
+  cursor: pointer;
+}
+
+.panButton:hover {
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.panLeft {
+  left: -2px;
+}
+
+.panRight {
+  right: -2px;
+}
+
+.scrollArea {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  touch-action: pan-x;
+  padding: 0 32px;
+}
+
+.scrollArea.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.scrollArea::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+  background: var(--color-gray-100);
+  border-radius: 999px;
+}
+
+.track {
+  position: relative;
+}
+
+.line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-gray-100);
+}
+
+.monthTick {
+  position: absolute;
+  top: 0;
+  border-left: 1px dashed var(--color-gray-100);
+  pointer-events: none;
+}
+
+.yearTick {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.yearTickMark {
+  width: 1px;
+  height: 10px;
+  background: var(--color-gray-200);
+}
+
+.yearLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-black-500);
+  white-space: nowrap;
+}
+
+.todayMarker {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
+
+.todayLine {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--color-red-200);
+  transform: translateX(-50%);
+}
+
+.todayDot {
+  position: absolute;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-red-500);
+  border: 2px solid var(--color-white);
+  transform: translate(-50%, -50%);
+}
+
+.todayPill {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--color-black-700);
+  color: var(--color-white);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.eventMarker {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.eventMarker:hover,
+.eventMarker:focus-visible,
+.eventMarkerActive {
+  z-index: 2;
+}
+
+.eventMarker:hover .bubble,
+.eventMarker:focus-visible .bubble,
+.eventMarkerActive .bubble {
+  transform: translate(-50%, -50%) scale(1.12);
+  box-shadow: 0 4px 10px rgba(23, 23, 23, 0.18);
+}
+
+.dot {
+  position: absolute;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--color-white);
+  background: var(--tone-color, var(--color-black-500));
+}
+
+.stem {
+  position: absolute;
+  left: 0;
+  width: 2px;
+  background: var(--tone-color, var(--color-gray-200));
+  opacity: 0.5;
+  transform: translateX(-50%);
+}
+
+.bubble {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--color-white);
+  border: 1.5px solid var(--tone-color, var(--color-gray-200));
+  color: var(--tone-color, var(--color-black-500));
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 3px rgba(23, 23, 23, 0.08);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.tone-success {
+  --tone-color: var(--color-green-500);
+}
+
+.tone-pending {
+  --tone-color: var(--color-primary-500);
+}
+
+.tone-cancelled {
+  --tone-color: var(--color-red-500);
+}
+
+.tone-neutral {
+  --tone-color: var(--color-black-500);
+}
+
+.clickTooltip {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 160px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--color-black-700);
+  box-shadow: 0 8px 20px rgba(23, 23, 23, 0.18);
+}
+
+.clickTooltip[data-side='above'] {
+  transform: translate(-50%, -100%);
+}
+
+.clickTooltip[data-side='below'] {
+  transform: translate(-50%, 0);
+}
+
+.tooltipKind {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-gray-200);
+}
+
+.tooltipTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.tooltipSubtitle {
+  font-size: 12px;
+  color: var(--color-gray-100);
+}
+
+.tooltipDate {
+  font-size: 11px;
+  color: var(--color-gray-200);
+}
+
+.zoomControl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  width: 32px;
+}
+
+.zoomButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-black-500);
+  cursor: pointer;
+}
+
+.zoomButton:hover:not(:disabled) {
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.zoomButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.zoomTrack {
+  position: relative;
+  width: 4px;
+  height: 96px;
+  border-radius: 999px;
+  background: var(--color-gray-50);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.zoomFill {
+  width: 100%;
+  background: var(--color-primary-200);
+  border-radius: 999px;
+}

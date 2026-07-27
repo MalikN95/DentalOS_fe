@@ -1,0 +1,246 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.wrapperSmall {
+  gap: 5px;
+}
+
+.jawLabel {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-black-500);
+}
+
+.oval {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 0.82;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-gray-200);
+  background: linear-gradient(180deg, var(--color-white), var(--color-gray-25));
+  box-shadow: 0 8px 24px rgb(51 56 67 / 6%);
+}
+
+.ovalLarge {
+  max-width: 560px;
+}
+
+.ovalSmall {
+  max-width: 230px;
+}
+
+.crossV,
+.crossH {
+  position: absolute;
+  background: var(--color-red-200);
+}
+
+.crossV {
+  left: 50%;
+  top: -2%;
+  bottom: -2%;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+.crossH {
+  top: 50%;
+  left: -2%;
+  right: -2%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.tooth {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-black-600);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 0;
+  box-shadow: 0 1px 2px rgb(51 56 67 / 12%);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+button.tooth {
+  cursor: pointer;
+}
+
+button.tooth:hover:not(:disabled) {
+  z-index: 1;
+  border-color: var(--color-primary-500);
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+button.tooth:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.toothLarge {
+  width: 34px;
+  height: 34px;
+  font-size: 12px;
+}
+
+.toothSmall {
+  width: 17px;
+  height: 17px;
+  font-size: 7.5px;
+}
+
+.toothSelected {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+.caries {
+  border-color: var(--color-red-500);
+  background: var(--color-red-100);
+  color: var(--color-red-600);
+}
+
+.filling {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.crown {
+  border-color: var(--color-orange-500);
+  background: var(--color-orange-100);
+  color: var(--color-orange-600);
+}
+
+.implant {
+  border-color: var(--color-blue-500);
+  background: var(--color-blue-100);
+  color: var(--color-blue-600);
+}
+
+.extracted {
+  border-color: var(--color-gray-200);
+  background: var(--color-gray-50);
+  color: var(--color-black-500);
+  text-decoration: line-through;
+}
+
+.other {
+  border-style: dashed;
+  border-color: var(--color-black-500);
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.toothSelected.caries,
+.toothSelected.filling,
+.toothSelected.crown,
+.toothSelected.implant,
+.toothSelected.extracted,
+.toothSelected.other {
+  background: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+  border-style: solid;
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  margin-top: 4px;
+}
+
+.legendSmall {
+  gap: 4px 10px;
+}
+
+.legendSmall .legendItem {
+  font-size: 11px;
+}
+
+.legendItem {
+  position: relative;
+  padding-left: 14px;
+  font-size: 12px;
+  color: var(--color-black-500);
+}
+
+.legendItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+.legendItem.caries {
+  background: none;
+  border: none;
+  color: var(--color-red-500);
+}
+
+.legendItem.filling {
+  background: none;
+  border: none;
+  color: var(--color-primary-500);
+}
+
+.legendItem.crown {
+  background: none;
+  border: none;
+  color: var(--color-orange-500);
+}
+
+.legendItem.implant {
+  background: none;
+  border: none;
+  color: var(--color-blue-500);
+}
+
+.legendItem.extracted {
+  background: none;
+  border: none;
+  color: var(--color-black-500);
+  text-decoration: none;
+}
+
+.legendItem.other {
+  background: none;
+  border: none;
+  color: var(--color-black-500);
+}
+
+@media (max-width: 360px) {
+  .tooth {
+    width: 18px;
+    height: 18px;
+    font-size: 8px;
+  }
+}

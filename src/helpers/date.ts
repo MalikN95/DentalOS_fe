@@ -21,13 +21,24 @@ export const getMonthIsoRange = (date: Date): { from: string; to: string } => {
 };
 
 export const isSameDay = (a: Date, b: Date): boolean =>
-  a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  a.getFullYear() === b.getFullYear() &&
+  a.getMonth() === b.getMonth() &&
+  a.getDate() === b.getDate();
 
 export const addDays = (date: Date, amount: number): Date => {
   const next = new Date(date);
   next.setDate(next.getDate() + amount);
   return next;
 };
+
+export const startOfDay = (date: Date): Date =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// Whole calendar days between two dates (time-of-day ignored), positive when `to` is later.
+export const daysBetween = (from: Date, to: Date): number =>
+  Math.round((startOfDay(to).getTime() - startOfDay(from).getTime()) / DAY_MS);
 
 // 'YYYY-MM-DD' in local time, for <input type="date"> value/onChange — avoids
 // the UTC-shift bugs that toISOString() would introduce.

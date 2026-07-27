@@ -8,6 +8,7 @@
   padding: 24px;
   background: rgb(51 56 67 / 40%);
   overflow: hidden;
+  animation: overlay-in 0.18s ease;
 }
 
 .dialog {
@@ -21,6 +22,7 @@
   border: 1px solid var(--color-gray-50);
   border-radius: 12px;
   overflow: hidden;
+  animation: dialog-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sizeSm {
@@ -32,7 +34,36 @@
 }
 
 .sizeLg {
-  max-width: 880px;
+  max-width: 960px;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    transform: scale(0.94);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .dialog {
+    animation: none;
+  }
 }
 
 .header {

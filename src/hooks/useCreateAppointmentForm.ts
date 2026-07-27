@@ -20,7 +20,7 @@ const createAppointmentSchema = z.object({
 
 export type CreateAppointmentFormValues = z.infer<typeof createAppointmentSchema>;
 
-const getDefaultFormValues = (): CreateAppointmentFormValues => {
+const getDefaultFormValues = (initialPatientId?: string): CreateAppointmentFormValues => {
   const date = new Date();
   date.setMinutes(0, 0, 0);
   date.setHours(date.getHours() + 1);
@@ -30,7 +30,7 @@ const getDefaultFormValues = (): CreateAppointmentFormValues => {
 
   return {
     branchId: '',
-    patientId: '',
+    patientId: initialPatientId ?? '',
     doctorProfileId: '',
     serviceId: '',
     startsAt: local.toISOString().slice(0, 16),
@@ -39,10 +39,15 @@ const getDefaultFormValues = (): CreateAppointmentFormValues => {
 };
 
 type UseCreateAppointmentFormParams = {
+  /** Pre-selects (and locks) the patient, e.g. when opened from their profile. */
+  initialPatientId?: string;
   onSuccess?: () => void;
 };
 
-export const useCreateAppointmentForm = ({ onSuccess }: UseCreateAppointmentFormParams) => {
+export const useCreateAppointmentForm = ({
+  initialPatientId,
+  onSuccess,
+}: UseCreateAppointmentFormParams) => {
   const accessToken = useAppSelector(selectAccessToken);
 
   const optionsQuery = useQuery({
@@ -59,7 +64,7 @@ export const useCreateAppointmentForm = ({ onSuccess }: UseCreateAppointmentForm
 
   const form = useForm<CreateAppointmentFormValues>({
     resolver: zodResolver(createAppointmentSchema),
-    defaultValues: getDefaultFormValues(),
+    defaultValues: getDefaultFormValues(initialPatientId),
   });
 
   const selectedBranchId = useWatch({
@@ -93,7 +98,7 @@ export const useCreateAppointmentForm = ({ onSuccess }: UseCreateAppointmentForm
       });
     },
     onSuccess: () => {
-      form.reset(getDefaultFormValues());
+      form.reset(getDefaultFormValues(initialPatientId));
       onSuccess?.();
     },
   });

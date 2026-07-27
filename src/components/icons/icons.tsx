@@ -91,6 +91,8 @@ export const LogoutIcon = createIcon(
 
 export const PlusIcon = createIcon(<path d="M12 5v14M5 12h14" />);
 
+export const MinusIcon = createIcon(<path d="M5 12h14" />);
+
 export const ChevronDownIcon = createIcon(<path d="m6 9 6 6 6-6" />);
 
 export const ChevronLeftIcon = createIcon(<path d="m15 6-6 6 6 6" />);
@@ -165,11 +167,34 @@ export const ShieldIcon = createIcon(
   </>,
 );
 
+export const FileTextIcon = createIcon(
+  <>
+    <path d="M7 3h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
+    <path d="M14 3v4h4" />
+    <path d="M8.5 12.5h7M8.5 16h7M8.5 9h3" />
+  </>,
+);
+
 export const ChartIcon = createIcon(
   <>
     <path d="M4 20V4" />
     <path d="M4 20h16" />
     <path d="m8 16 3.5-4.5 3 2.5L20 7" />
+  </>,
+);
+
+export const MessageIcon = createIcon(
+  <path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4v-4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />,
+);
+
+export const ZapIcon = createIcon(<path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z" />);
+
+export const ExpandIcon = createIcon(
+  <>
+    <path d="M9 3H4v5" />
+    <path d="M15 3h5v5" />
+    <path d="M9 21H4v-5" />
+    <path d="M15 21h5v-5" />
   </>,
 );
 

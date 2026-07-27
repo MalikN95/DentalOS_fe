@@ -9,6 +9,8 @@ type PaginationProps = {
   limit: number;
   total: number;
   rowsPerPageOptions?: number[];
+  /** Hide the "rows per page" selector, e.g. inside a compact card widget. */
+  showRowsPerPage?: boolean;
   className?: string;
   style?: React.CSSProperties;
   onPageChange?: (page: number) => void;
@@ -22,6 +24,7 @@ export const Pagination = ({
   limit,
   total,
   rowsPerPageOptions = DEFAULT_OPTIONS,
+  showRowsPerPage = true,
   className,
   style,
   onPageChange,
@@ -39,21 +42,23 @@ export const Pagination = ({
   return (
     <div className={`${styles.wrapper} ${className ?? ''}`} style={style}>
       <div className={styles.rows}>
-        <label className={styles.rowsLabel} htmlFor={selectId}>
-          <span className={styles.label}>{t.pagination.rowsPerPage}</span>
-          <select
-            id={selectId}
-            className={styles.select}
-            value={limit}
-            onChange={(event) => onLimitChange?.(Number(event.target.value))}
-          >
-            {rowsPerPageOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </label>
+        {showRowsPerPage ? (
+          <label className={styles.rowsLabel} htmlFor={selectId}>
+            <span className={styles.label}>{t.pagination.rowsPerPage}</span>
+            <select
+              id={selectId}
+              className={styles.select}
+              value={limit}
+              onChange={(event) => onLimitChange?.(Number(event.target.value))}
+            >
+              {rowsPerPageOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
         <span className={styles.range}>
           {from}–{to} {t.pagination.of} {total}
         </span>
