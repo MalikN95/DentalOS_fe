@@ -96,6 +96,7 @@ export const PatientsPageContent = () => {
       </div>
 
       <PatientsTable
+        className={styles.tableSection}
         patients={patients}
         isLoading={query.isLoading}
         errorMessage={query.error?.message ?? null}

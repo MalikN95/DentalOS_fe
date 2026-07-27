@@ -10,6 +10,13 @@
 .tableWrap {
   width: 100%;
   overflow-x: auto;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.tableWrap.dragging {
+  cursor: grabbing;
+  user-select: none;
 }
 
 .table {

@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment, useEffect, useMemo, useRef } from 'react';
+import Link from 'next/link';
 import { Appointment } from '@/common/types/appointment';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from '@/components/icons/icons';
@@ -11,6 +12,7 @@ import {
   findNextAppointmentId,
 } from '@/helpers/appointment-status';
 import { isSameDay, parseDateInputValue, toDateInputValue } from '@/helpers/date';
+import { useDragScroll } from '@/hooks/useDragScroll';
 import styles from './AppointmentsTable.module.css';
 
 type AppointmentsTableDateNav = {
@@ -27,6 +29,8 @@ type AppointmentsTableProps = {
   className?: string;
   style?: React.CSSProperties;
   onAddClick?: () => void;
+  onPatientClick?: (patientId: string) => void;
+  onRowClick?: (appointment: Appointment) => void;
   dateNav?: AppointmentsTableDateNav;
 };
 
@@ -37,12 +41,19 @@ export const AppointmentsTable = ({
   className,
   style,
   onAddClick,
+  onPatientClick,
+  onRowClick,
   dateNav,
 }: AppointmentsTableProps) => {
   const { t, language } = useTranslation();
   const nextAppointmentId = useMemo(() => findNextAppointmentId(appointments), [appointments]);
   const firstUpcomingIndex = useMemo(() => findFirstUpcomingIndex(appointments), [appointments]);
   const nextRowRef = useRef<HTMLTableRowElement | null>(null);
+  const {
+    ref: tableWrapRef,
+    isDragging: isTableDragging,
+    handlers: dragScrollHandlers,
+  } = useDragScroll<HTMLDivElement>();
 
   useEffect(() => {
     if (nextAppointmentId) {
@@ -109,7 +120,12 @@ export const AppointmentsTable = ({
         </div>
       ) : null}
 
-      <table className={styles.table}>
+      <div
+        ref={tableWrapRef}
+        className={`${styles.tableWrap} ${isTableDragging ? styles.dragging : ''}`}
+        {...dragScrollHandlers}
+      >
+        <table className={styles.table}>
         <thead>
           <tr>
             <th>{t.appointments.colTime}</th>
@@ -118,12 +134,13 @@ export const AppointmentsTable = ({
             <th>{t.appointments.colDoctor}</th>
             <th>{t.appointments.colCabinet}</th>
             <th>{t.appointments.colStatus}</th>
+            <th>{t.appointments.colActions}</th>
           </tr>
         </thead>
         <tbody>
           {isLoading ? (
             <tr>
-              <td className={styles.stateCell} colSpan={6}>
+              <td className={styles.stateCell} colSpan={7}>
                 {t.appointments.loading}
               </td>
             </tr>
@@ -131,7 +148,7 @@ export const AppointmentsTable = ({
 
           {!isLoading && appointments.length === 0 ? (
             <tr>
-              <td className={styles.stateCell} colSpan={6}>
+              <td className={styles.stateCell} colSpan={7}>
                 {t.appointments.empty}
               </td>
             </tr>
@@ -145,7 +162,7 @@ export const AppointmentsTable = ({
                 <Fragment key={appointment.id}>
                   {index === firstUpcomingIndex ? (
                     <tr>
-                      <td className={styles.divider} colSpan={6}>
+                      <td className={styles.divider} colSpan={7}>
                         <CalendarIcon size={13} className={styles.dividerIcon} />
                         {t.appointments.upcomingDivider}
                       </td>
@@ -153,7 +170,8 @@ export const AppointmentsTable = ({
                   ) : null}
                   <tr
                     ref={isNext ? nextRowRef : undefined}
-                    className={isNext ? styles.rowNext : undefined}
+                    className={`${isNext ? styles.rowNext : ''} ${onRowClick ? styles.rowClickable : ''}`}
+                    onClick={onRowClick ? () => onRowClick(appointment) : undefined}
                   >
                   <td className={styles.time}>
                     {appointment.time}
@@ -173,7 +191,16 @@ export const AppointmentsTable = ({
                   </td>
                   <td>
                     <span className={styles.patient}>
-                      <span className={styles.patientName}>{appointment.patientName}</span>
+                      <button
+                        type="button"
+                        className={styles.patientName}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onPatientClick?.(appointment.patientId);
+                        }}
+                      >
+                        {appointment.patientName}
+                      </button>
                       <span className={styles.patientPhone}>{appointment.patientPhone}</span>
                     </span>
                   </td>
@@ -185,13 +212,23 @@ export const AppointmentsTable = ({
                       {t.appointmentStatus[appointment.status]}
                     </Badge>
                   </td>
+                  <td>
+                    <Link
+                      href={`/appointments/${appointment.id}`}
+                      className={styles.detailsLink}
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      {t.appointments.viewDetails}
+                    </Link>
+                  </td>
                   </tr>
                 </Fragment>
                 );
               })
             : null}
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 };

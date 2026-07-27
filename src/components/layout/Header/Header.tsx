@@ -6,7 +6,6 @@ type HeaderProps = {
   title: string;
   userName: string;
   userRole: string;
-  searchPlaceholder: string;
   notificationsLabel: string;
   notificationsCount?: number;
   className?: string;
@@ -26,7 +25,6 @@ export const Header = ({
   title,
   userName,
   userRole,
-  searchPlaceholder,
   notificationsLabel,
   notificationsCount = 0,
   className,
@@ -37,12 +35,6 @@ export const Header = ({
     <h1 className={styles.title}>{title}</h1>
 
     <div className={styles.actions}>
-      <TextField
-        className={styles.search}
-        placeholder={searchPlaceholder}
-        iconLeft={<SearchIcon />}
-      />
-
       <button
         type="button"
         className={styles.bell}

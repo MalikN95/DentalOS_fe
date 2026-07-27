@@ -21,6 +21,12 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     const generatedId = useId();
     const inputId = id ?? generatedId;
 
+    const handleAnimationStart = (event: React.AnimationEvent<HTMLInputElement>) => {
+      if (event.animationName === styles.onAutoFillStart) {
+        inputProps.onChange?.(event as unknown as React.ChangeEvent<HTMLInputElement>);
+      }
+    };
+
     const fieldClassName = [
       styles.field,
       error ? styles.fieldError : '',
@@ -43,6 +49,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             id={inputId}
             className={styles.input}
             disabled={disabled}
+            onAnimationStart={handleAnimationStart}
             {...inputProps}
           />
           {iconRight ? <span className={styles.icon}>{iconRight}</span> : null}

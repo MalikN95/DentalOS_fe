@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import type { Dictionary } from '@/common/locale/dictionaries/ru';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import { getNavItemByPathname, NAV_ITEMS } from '@/common/constants/navigation';
+import type { StaffRole } from '@/common/types/staff';
 import { MOCK_CLINIC_NAME, MOCK_USER } from '@/common/mocks/auth.mock';
 import { Header } from '@/components/layout/Header/Header';
 import { Sidebar } from '@/components/layout/Sidebar/Sidebar';
@@ -35,7 +36,9 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   const { isCollapsed, toggle: toggleSidebar } = useSidebarCollapse();
 
   const activeItem = getNavItemByPathname(pathname);
-  const items = NAV_ITEMS.map((item) => ({
+  const items = NAV_ITEMS.filter(
+    (item) => !item.roles || item.roles.includes(user.role as StaffRole),
+  ).map((item) => ({
     id: item.id,
     href: item.href,
     icon: item.icon,
@@ -76,7 +79,6 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
           title={t.nav[activeItem.labelKey]}
           userName={`${user.firstName} ${user.lastName}`}
           userRole={userRole}
-          searchPlaceholder={t.header.searchPatient}
           notificationsLabel={t.header.notifications}
           notificationsCount={3}
         />

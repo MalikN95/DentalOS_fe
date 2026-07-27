@@ -4,6 +4,7 @@ import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient } from '@/common/types/patient';
 import { Alert, Badge, Button } from '@/components/ui';
 import { formatDate } from '@/helpers/date';
+import { useDragScroll } from '@/hooks/useDragScroll';
 import styles from './PatientsTable.module.css';
 
 type PatientsTableProps = {
@@ -30,6 +31,11 @@ export const PatientsTable = ({
   onDelete,
 }: PatientsTableProps) => {
   const { t } = useTranslation();
+  const {
+    ref: tableWrapRef,
+    isDragging: isTableDragging,
+    handlers: dragScrollHandlers,
+  } = useDragScroll<HTMLDivElement>();
 
   return (
     <div className={`${styles.card} ${className ?? ''}`} style={style}>
@@ -39,7 +45,11 @@ export const PatientsTable = ({
         </div>
       ) : null}
 
-      <div className={styles.tableWrap}>
+      <div
+        ref={tableWrapRef}
+        className={`${styles.tableWrap} ${isTableDragging ? styles.dragging : ''}`}
+        {...dragScrollHandlers}
+      >
         <table className={styles.table}>
           <thead>
             <tr>

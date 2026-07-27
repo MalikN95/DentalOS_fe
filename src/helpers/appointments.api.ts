@@ -2,7 +2,7 @@ import type {
   AppointmentFormOptions,
   CreateAppointmentPayload,
 } from '@/common/types/appointment-form';
-import type { ApiAppointment, Appointment } from '@/common/types/appointment';
+import type { ApiAppointment, Appointment, AppointmentStatus } from '@/common/types/appointment';
 import type { PaginatedResult } from '@/common/types/pagination';
 import { apiFetch } from '@/helpers/api-fetch';
 import { mapApiAppointmentToRow } from '@/helpers/appointments.mapper';
@@ -84,12 +84,40 @@ export const fetchAppointmentFormOptions = async (
   };
 };
 
+export const fetchAppointment = async (
+  accessToken: string,
+  id: string,
+  signal?: AbortSignal,
+): Promise<Appointment> => {
+  const data = await apiFetch<ApiAppointment>(accessToken, `/api/appointments/${id}`, { signal });
+
+  return mapApiAppointmentToRow(data);
+};
+
 export const createAppointment = async (
   accessToken: string,
   payload: CreateAppointmentPayload,
 ): Promise<Appointment> => {
   const data = await apiFetch<ApiAppointment>(accessToken, '/api/appointments', {
     method: 'POST',
+    body: JSON.stringify(payload),
+  });
+
+  return mapApiAppointmentToRow(data);
+};
+
+export type UpdateAppointmentStatusPayload = {
+  status: AppointmentStatus;
+  cancellationReason?: string;
+};
+
+export const updateAppointmentStatus = async (
+  accessToken: string,
+  id: string,
+  payload: UpdateAppointmentStatusPayload,
+): Promise<Appointment> => {
+  const data = await apiFetch<ApiAppointment>(accessToken, `/api/appointments/${id}/status`, {
+    method: 'PATCH',
     body: JSON.stringify(payload),
   });
 

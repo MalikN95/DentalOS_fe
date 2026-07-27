@@ -1,8 +1,12 @@
 .stats {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 10px;
+  padding-bottom: 10px;
+  background: var(--color-gray-25);
 }
 
 @media (max-width: 1200px) {

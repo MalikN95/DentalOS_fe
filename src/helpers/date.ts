@@ -10,6 +10,16 @@ export const getDayIsoRange = (date: Date): { from: string; to: string } => {
 
 export const getTodayIsoRange = (): { from: string; to: string } => getDayIsoRange(new Date());
 
+export const getMonthIsoRange = (date: Date): { from: string; to: string } => {
+  const start = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
+  const end = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
+
+  return {
+    from: start.toISOString(),
+    to: end.toISOString(),
+  };
+};
+
 export const isSameDay = (a: Date, b: Date): boolean =>
   a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 

@@ -9,6 +9,14 @@
   align-self: start;
 }
 
+.cardPlain {
+  composes: card;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  align-self: auto;
+}
+
 .header {
   display: flex;
   flex-direction: column;

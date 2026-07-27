@@ -10,16 +10,21 @@ type BuildDashboardStatsParams = {
   newPatientsCount: number | undefined;
   revenueTotal: number | undefined;
   canViewRevenue: boolean;
+  currency: string;
 };
 
 const buildRevenueValue = ({
   t,
   revenueTotal,
   canViewRevenue,
-}: Pick<BuildDashboardStatsParams, 't' | 'revenueTotal' | 'canViewRevenue'>): string => {
+  currency,
+}: Pick<
+  BuildDashboardStatsParams,
+  't' | 'revenueTotal' | 'canViewRevenue' | 'currency'
+>): string => {
   if (!canViewRevenue) return t.dashboard.stats.noAccess;
   if (revenueTotal === undefined) return t.common.dash;
-  return formatMoney(String(revenueTotal));
+  return formatMoney(String(revenueTotal), currency);
 };
 
 export const buildDashboardStats = ({
@@ -28,6 +33,7 @@ export const buildDashboardStats = ({
   newPatientsCount,
   revenueTotal,
   canViewRevenue,
+  currency,
 }: BuildDashboardStatsParams): DashboardStat[] => {
   const cancellationsCount = appointments.filter((appointment) =>
     CANCELLED_STATUSES.includes(appointment.status),
@@ -47,7 +53,7 @@ export const buildDashboardStats = ({
     {
       id: 'revenue',
       label: t.dashboard.stats.revenueToday,
-      value: buildRevenueValue({ t, revenueTotal, canViewRevenue }),
+      value: buildRevenueValue({ t, revenueTotal, canViewRevenue, currency }),
     },
     {
       id: 'cancellations',

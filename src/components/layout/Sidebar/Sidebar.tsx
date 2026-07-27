@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { NotificationBadge } from '@/components/ui';
-import { ChevronLeftIcon, LogoutIcon, Logo } from '@/components/icons/icons';
+import { LogoutIcon, Logo, PanelLeftIcon } from '@/components/icons/icons';
 import styles from './Sidebar.module.css';
 
 export type SidebarItem = {
@@ -44,16 +44,6 @@ export const Sidebar = ({
     className={`${styles.sidebar} ${isCollapsed ? styles.sidebarCollapsed : ''} ${className ?? ''}`}
     style={style}
   >
-    <button
-      type="button"
-      className={styles.collapseToggle}
-      onClick={onToggleCollapse}
-      aria-label={isCollapsed ? expandLabel : collapseLabel}
-      title={isCollapsed ? expandLabel : collapseLabel}
-    >
-      <ChevronLeftIcon size={14} className={isCollapsed ? styles.collapseIconFlipped : undefined} />
-    </button>
-
     <div className={styles.logo}>
       <span className={styles.logoMark}>
         {logoUrl ? (
@@ -65,6 +55,17 @@ export const Sidebar = ({
       </span>
       {isCollapsed ? null : clinicName}
     </div>
+
+    <button
+      type="button"
+      className={`${styles.item} ${styles.collapseToggle}`}
+      onClick={onToggleCollapse}
+      aria-label={isCollapsed ? expandLabel : collapseLabel}
+      title={isCollapsed ? expandLabel : collapseLabel}
+    >
+      <PanelLeftIcon size={18} />
+      {isCollapsed ? null : <span className={styles.itemLabel}>{collapseLabel}</span>}
+    </button>
 
     <nav className={styles.nav}>
       {items.map((item) => (

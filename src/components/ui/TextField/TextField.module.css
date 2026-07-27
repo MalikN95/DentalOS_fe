@@ -57,6 +57,15 @@
   color: var(--color-gray-400);
 }
 
+.input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+}
+
+@keyframes onAutoFillStart {
+  from {}
+  to {}
+}
+
 .input:disabled {
   color: var(--color-gray-400);
   cursor: not-allowed;

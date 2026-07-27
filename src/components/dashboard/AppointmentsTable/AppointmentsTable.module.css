@@ -88,6 +88,18 @@
   cursor: pointer;
 }
 
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.tableWrap.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -120,8 +132,18 @@
 }
 
 .patientName {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
   font-weight: 500;
-  color: var(--color-black-700);
+  text-align: left;
+  color: var(--color-primary-500);
+  cursor: pointer;
+}
+
+.patientName:hover {
+  text-decoration: underline;
 }
 
 .patientPhone {
@@ -133,6 +155,16 @@
 .time {
   font-weight: 500;
   color: var(--color-black-700);
+}
+
+.detailsLink {
+  font-weight: 500;
+  color: var(--color-primary-500);
+  text-decoration: none;
+}
+
+.detailsLink:hover {
+  text-decoration: underline;
 }
 
 .stateWrap {
@@ -163,6 +195,14 @@
 
 .dividerIcon {
   flex-shrink: 0;
+}
+
+.rowClickable {
+  cursor: pointer;
+}
+
+.rowClickable:hover td {
+  background: var(--color-gray-25);
 }
 
 .rowNext td {

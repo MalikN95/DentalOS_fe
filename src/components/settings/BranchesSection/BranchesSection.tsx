@@ -6,6 +6,7 @@ import type { BranchSettings } from '@/common/types/settings';
 import { Alert, Badge, Button } from '@/components/ui';
 import { CreateBranchModal } from '@/components/settings/CreateBranchModal/CreateBranchModal';
 import { useBranchSettings } from '@/hooks/useBranchSettings';
+import { useDragScroll } from '@/hooks/useDragScroll';
 import styles from './BranchesSection.module.css';
 
 const formatCoordinates = (branch: BranchSettings): string | null => {
@@ -22,6 +23,11 @@ export const BranchesSection = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { branchesQuery, createForm, createMutation, deleteMutation, resetCreateForm } =
     useBranchSettings();
+  const {
+    ref: tableWrapRef,
+    isDragging: isTableDragging,
+    handlers: dragScrollHandlers,
+  } = useDragScroll<HTMLDivElement>();
 
   const handleOpenCreateModal = useCallback(() => {
     setIsCreateModalOpen(true);
@@ -75,6 +81,11 @@ export const BranchesSection = () => {
         {listError ? <Alert color="danger">{listError}</Alert> : null}
         {deleteError ? <Alert color="danger">{deleteError}</Alert> : null}
 
+        <div
+          ref={tableWrapRef}
+          className={`${styles.tableWrap} ${isTableDragging ? styles.dragging : ''}`}
+          {...dragScrollHandlers}
+        >
         <table className={styles.table}>
           <thead>
             <tr>
@@ -138,6 +149,7 @@ export const BranchesSection = () => {
               : null}
           </tbody>
         </table>
+        </div>
       </section>
 
       {isCreateModalOpen ? (

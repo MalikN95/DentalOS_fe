@@ -12,6 +12,33 @@ export const appointmentStatusColor: Record<AppointmentStatus, BadgeColor> = {
   no_show: 'danger',
 };
 
+export type AppointmentStatusAction = 'confirm' | 'arrive' | 'no_show' | 'start' | 'complete' | 'cancel';
+
+// Which actions are offered next for a given current status.
+export const appointmentStatusActions: Record<AppointmentStatus, AppointmentStatusAction[]> = {
+  pending: ['confirm', 'arrive', 'no_show', 'cancel'],
+  confirmed: ['arrive', 'no_show', 'cancel'],
+  arrived: ['start', 'cancel'],
+  in_treatment: ['complete', 'cancel'],
+  completed: [],
+  cancelled: [],
+  no_show: [],
+};
+
+export const actionTargetStatus: Record<AppointmentStatusAction, AppointmentStatus> = {
+  confirm: 'confirmed',
+  arrive: 'arrived',
+  no_show: 'no_show',
+  start: 'in_treatment',
+  complete: 'completed',
+  cancel: 'cancelled',
+};
+
+const TERMINAL_STATUSES: AppointmentStatus[] = ['completed', 'cancelled', 'no_show'];
+
+export const isTerminalStatus = (status: AppointmentStatus): boolean =>
+  TERMINAL_STATUSES.includes(status);
+
 const NOT_STARTED_STATUSES: AppointmentStatus[] = ['pending', 'confirmed'];
 
 // Appointments arrive sorted by time; the next one is the first that hasn't
@@ -32,8 +59,18 @@ const NOT_FINISHED_STATUSES: AppointmentStatus[] = [
 export const findFirstUpcomingIndex = (appointments: Appointment[]): number =>
   appointments.findIndex((appointment) => NOT_FINISHED_STATUSES.includes(appointment.status));
 
-export const formatMoney = (value: string): string => {
+export const formatMoney = (value: string, currency = 'RUB'): string => {
   const amount = Number(value);
-  if (Number.isNaN(amount)) return `${value} ₽`;
-  return `${amount.toLocaleString('ru-RU')} ₽`;
+  if (Number.isNaN(amount)) return value;
+
+  try {
+    return new Intl.NumberFormat('ru-RU', {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    // Unknown/invalid ISO currency code — fall back rather than throw.
+    return `${amount.toLocaleString('ru-RU')} ${currency}`;
+  }
 };

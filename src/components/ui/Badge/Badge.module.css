@@ -34,6 +34,11 @@ button.badge {
   color: var(--color-green-500);
 }
 
+.warning {
+  background: var(--color-orange-100);
+  color: var(--color-orange-600);
+}
+
 .dot {
   display: inline-flex;
   align-items: center;

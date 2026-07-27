@@ -1,8 +1,12 @@
 import styles from './StatCard.module.css';
 
+export type StatCardAccent = 'primary' | 'success' | 'danger';
+
 type StatCardProps = {
   label: string;
   value: string;
+  icon?: React.ReactNode;
+  accent?: StatCardAccent;
   change?: number;
   changeLabel?: string;
   className?: string;
@@ -12,6 +16,8 @@ type StatCardProps = {
 export const StatCard = ({
   label,
   value,
+  icon,
+  accent = 'primary',
   change,
   changeLabel,
   className,
@@ -21,8 +27,13 @@ export const StatCard = ({
 
   return (
     <div className={`${styles.card} ${className ?? ''}`} style={style}>
-      <span className={styles.label}>{label}</span>
-      <span className={styles.value}>{value}</span>
+      <div className={styles.row}>
+        {icon ? <span className={`${styles.iconBadge} ${styles[accent]}`}>{icon}</span> : null}
+        <div className={styles.text}>
+          <span className={styles.label}>{label}</span>
+          <span className={styles.value}>{value}</span>
+        </div>
+      </div>
       {change !== undefined ? (
         <span className={styles.change}>
           <span

@@ -1,0 +1,12 @@
+.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.state {
+  margin: 0;
+  padding: 24px 0;
+  text-align: center;
+  color: var(--color-black-500);
+}

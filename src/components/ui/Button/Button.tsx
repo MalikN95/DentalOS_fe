@@ -1,6 +1,6 @@
 import styles from './Button.module.css';
 
-export type ButtonColor = 'primary' | 'gray' | 'danger' | 'success';
+export type ButtonColor = 'primary' | 'gray' | 'danger' | 'success' | 'warning';
 export type ButtonVariant = 'solid' | 'soft' | 'outline';
 
 type ButtonProps = {
@@ -36,6 +36,11 @@ const variantClass: Record<ButtonColor, Record<ButtonVariant, string>> = {
     solid: styles.successSolid,
     soft: styles.successSoft,
     outline: styles.successOutline,
+  },
+  warning: {
+    solid: styles.warningSolid,
+    soft: styles.warningSoft,
+    outline: styles.warningOutline,
   },
 };
 

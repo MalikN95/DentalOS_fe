@@ -1,4 +1,5 @@
 import type { Dictionary } from '@/common/locale/dictionaries/ru';
+import type { StaffRole } from '@/common/types/staff';
 import {
   CalendarIcon,
   DashboardIcon,
@@ -6,6 +7,7 @@ import {
   SettingsIcon,
   StaffIcon,
   ToothIcon,
+  WalletIcon,
 } from '@/components/icons/icons';
 
 export type NavItem = {
@@ -14,6 +16,8 @@ export type NavItem = {
   href: string;
   icon: React.ReactNode;
   badgeCount?: number;
+  /** Restricts the item to these roles; omit to show it to everyone. */
+  roles?: StaffRole[];
 };
 
 export const NAV_ITEMS: NavItem[] = [
@@ -32,6 +36,13 @@ export const NAV_ITEMS: NavItem[] = [
     icon: <ToothIcon />,
   },
   { id: 'staff', labelKey: 'staff', href: '/staff', icon: <StaffIcon /> },
+  {
+    id: 'finance',
+    labelKey: 'finance',
+    href: '/finance',
+    icon: <WalletIcon />,
+    roles: ['owner', 'admin', 'accountant'],
+  },
   { id: 'settings', labelKey: 'settings', href: '/settings', icon: <SettingsIcon /> },
 ];
 

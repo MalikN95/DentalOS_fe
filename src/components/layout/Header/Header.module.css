@@ -4,22 +4,22 @@
   justify-content: space-between;
   gap: 24px;
   flex-shrink: 0;
-  padding: 16px 32px;
+  padding: 10px 24px;
   background: var(--color-white);
   border-bottom: 1px solid var(--color-gray-50);
 }
 
 .title {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 30px;
+  line-height: 24px;
   color: var(--color-black-700);
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .search {
@@ -31,8 +31,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--color-gray-100);
   border-radius: var(--radius-control);
   background: var(--color-white);
@@ -47,26 +47,26 @@
 
 .bellBadge {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -4px;
+  right: -4px;
 }
 
 .user {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .avatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--color-primary-100);
   color: var(--color-primary-600);
-  font-size: var(--text-m-size);
+  font-size: 12px;
   font-weight: 500;
 }
 

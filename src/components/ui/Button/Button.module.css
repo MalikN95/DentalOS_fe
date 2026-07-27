@@ -138,3 +138,29 @@
 .successOutline:hover:not(:disabled) {
   background: var(--color-green-100);
 }
+
+/* Warning */
+.warningSolid {
+  background: var(--color-orange-500);
+  color: var(--color-white);
+}
+.warningSolid:hover:not(:disabled) {
+  background: var(--color-orange-600);
+}
+
+.warningSoft {
+  background: var(--color-orange-100);
+  color: var(--color-orange-600);
+}
+.warningSoft:hover:not(:disabled) {
+  background: var(--color-orange-200);
+}
+
+.warningOutline {
+  background: transparent;
+  border-color: var(--color-orange-500);
+  color: var(--color-orange-600);
+}
+.warningOutline:hover:not(:disabled) {
+  background: var(--color-orange-100);
+}

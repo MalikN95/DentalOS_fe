@@ -1,0 +1,100 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 12px;
+}
+
+.header {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  color: var(--color-black-700);
+}
+
+.subtitle {
+  margin: 2px 0 0;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.dateRange {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.dateField,
+.statusField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dateLabel {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--color-black-500);
+}
+
+.dateInput,
+.statusSelect {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+}
+
+.dateInput:focus,
+.statusSelect:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.stats {
+  display: grid;
+  flex-shrink: 0;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.toolbar {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.tableSection {
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 720px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

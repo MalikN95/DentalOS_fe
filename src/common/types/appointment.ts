@@ -4,15 +4,19 @@ export type AppointmentStatus =
 export type Appointment = {
   id: string;
   time: string;
+  patientId: string;
   patientName: string;
   patientPhone: string;
+  doctorProfileId: string;
   doctorName: string;
   cabinet: string;
   service: string;
+  price: string;
   status: AppointmentStatus;
 };
 
 export type ApiAppointmentPatient = {
+  id: string;
   firstName: string;
   lastName: string;
   phone: string | null;
@@ -24,6 +28,7 @@ export type ApiAppointmentDoctorUser = {
 };
 
 export type ApiAppointmentDoctorProfile = {
+  id: string;
   user: ApiAppointmentDoctorUser;
 };
 
@@ -40,6 +45,7 @@ export type ApiAppointment = {
   startsAt: string;
   endsAt: string;
   status: AppointmentStatus;
+  price: string;
   patient: ApiAppointmentPatient;
   doctorProfile: ApiAppointmentDoctorProfile;
   service: ApiAppointmentService;

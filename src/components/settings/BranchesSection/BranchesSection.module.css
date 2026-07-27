@@ -29,6 +29,18 @@
   color: var(--color-black-500);
 }
 
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.tableWrap.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;

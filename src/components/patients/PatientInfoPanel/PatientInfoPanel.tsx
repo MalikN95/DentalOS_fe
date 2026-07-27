@@ -8,6 +8,10 @@ import styles from './PatientInfoPanel.module.css';
 
 type PatientInfoPanelProps = {
   patient: Patient;
+  /** Hide the name+status header, e.g. when it's already shown elsewhere (modal title). */
+  hideHeader?: boolean;
+  /** Render without the card border/padding, e.g. when already inside a modal/card. */
+  bordered?: boolean;
   className?: string;
   style?: React.CSSProperties;
 };
@@ -36,20 +40,29 @@ const TagList = ({ label, items }: { label: string; items: string[] }) => (
   </div>
 );
 
-export const PatientInfoPanel = ({ patient, className, style }: PatientInfoPanelProps) => {
+export const PatientInfoPanel = ({
+  patient,
+  hideHeader = false,
+  bordered = true,
+  className,
+  style,
+}: PatientInfoPanelProps) => {
   const { t } = useTranslation();
   const { dash } = t.common;
+  const cardClassName = bordered ? styles.card : styles.cardPlain;
 
   return (
-    <aside className={`${styles.card} ${className ?? ''}`} style={style}>
-      <div className={styles.header}>
-        <span className={styles.name}>
-          {patient.lastName} {patient.firstName}
-        </span>
-        <Badge color={patient.isActive ? 'success' : 'gray'}>
-          {patient.isActive ? t.common.active : t.common.inactive}
-        </Badge>
-      </div>
+    <aside className={`${cardClassName} ${className ?? ''}`} style={style}>
+      {hideHeader ? null : (
+        <div className={styles.header}>
+          <span className={styles.name}>
+            {patient.lastName} {patient.firstName}
+          </span>
+          <Badge color={patient.isActive ? 'success' : 'gray'}>
+            {patient.isActive ? t.common.active : t.common.inactive}
+          </Badge>
+        </div>
+      )}
 
       <div className={styles.rows}>
         <Row label={t.patientInfo.phone} value={patient.phone} />

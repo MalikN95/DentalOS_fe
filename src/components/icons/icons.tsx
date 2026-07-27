@@ -97,6 +97,27 @@ export const ChevronLeftIcon = createIcon(<path d="m15 6-6 6 6 6" />);
 
 export const ChevronRightIcon = createIcon(<path d="m9 6 6 6-6 6" />);
 
+export const PanelLeftIcon = createIcon(
+  <>
+    <rect x="3" y="4" width="18" height="16" rx="2.5" />
+    <path d="M9.5 4v16" />
+  </>,
+);
+
+export const WalletIcon = createIcon(
+  <>
+    <path d="M3 7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" />
+    <path d="M16 13.5h.01" />
+  </>,
+);
+
+export const XCircleIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="m9.5 9.5 5 5M14.5 9.5l-5 5" />
+  </>,
+);
+
 export const EyeIcon = createIcon(
   <>
     <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
