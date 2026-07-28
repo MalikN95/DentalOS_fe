@@ -86,51 +86,38 @@ export const ClinicSettingsForm = () => {
 
   return (
     <section className={styles.section}>
-      <div>
-        <h2 className={styles.title}>{t.clinicTitle}</h2>
-        <p className={styles.description}>{t.clinicSubtitle}</p>
-      </div>
+      <p className={styles.description}>{t.clinicSubtitle}</p>
 
       {logoMutation.error ? <Alert color="danger">{logoMutation.error.message}</Alert> : null}
 
+      <div className={styles.identity}>
+        <div className={styles.logoPreview}>
+          {clinic?.logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- presigned S3 URL
+            <img src={clinic.logoUrl} alt={t.uploadLogo} className={styles.logoImage} />
+          ) : (
+            <span className={styles.logoPlaceholder}>{t.noLogo}</span>
+          )}
+        </div>
+        <span className={styles.identityName}>{clinic?.name ?? '—'}</span>
+        <button
+          type="button"
+          className={styles.logoLink}
+          disabled={logoMutation.isPending}
+          onClick={handleLogoButtonClick}
+        >
+          {logoMutation.isPending ? t.uploading : t.uploadLogo}
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className={styles.hiddenInput}
+          onChange={handleLogoChange}
+        />
+      </div>
+
       <div className={styles.grid}>
-        <div className={styles.readonlyRow}>
-          <span className={styles.readonlyLabel}>{t.name}</span>
-          <span className={styles.readonlyValue}>{clinic?.name ?? '—'}</span>
-        </div>
-        <div className={styles.readonlyRow}>
-          <span className={styles.readonlyLabel}>{t.subdomain}</span>
-          <span className={styles.readonlyValue}>{clinic?.subdomain ?? '—'}</span>
-        </div>
-
-        <div className={`${styles.logoRow} ${styles.gridFull}`}>
-          <div className={styles.logoPreview}>
-            {clinic?.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element -- presigned S3 URL
-              <img src={clinic.logoUrl} alt={t.uploadLogo} className={styles.logoImage} />
-            ) : (
-              <span className={styles.logoPlaceholder}>{t.noLogo}</span>
-            )}
-          </div>
-          <div>
-            <Button
-              type="button"
-              variant="soft"
-              disabled={logoMutation.isPending}
-              onClick={handleLogoButtonClick}
-            >
-              {logoMutation.isPending ? t.uploading : t.uploadLogo}
-            </Button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className={styles.hiddenInput}
-              onChange={handleLogoChange}
-            />
-          </div>
-        </div>
-
         <TextField label={t.address} error={errors.address?.message} {...register('address')} />
         <TextField label={t.phone} error={errors.phone?.message} {...register('phone')} />
         <TextField
@@ -195,7 +182,7 @@ export const ClinicSettingsForm = () => {
         </div>
 
         <div className={styles.gridFull}>
-          <span className={styles.readonlyLabel}>{t.workingHours}</span>
+          <span className={styles.fieldLabel}>{t.workingHours}</span>
           <WorkingHoursEditor
             value={workingHours}
             onChange={handleWorkingHoursChange}

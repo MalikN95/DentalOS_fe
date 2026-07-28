@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { LocaleProvider } from '@/common/locale/LocaleProvider';
 import { registerAuthStore } from '@/helpers/auth-bridge';
 import { makeStore } from '@/store';
+import { ToastProvider } from './ToastProvider';
 
 type AppProvidersProps = {
   children: React.ReactNode;
@@ -35,7 +36,9 @@ export const AppProviders = ({ children }: AppProvidersProps) => {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <LocaleProvider>{children}</LocaleProvider>
+        <LocaleProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </LocaleProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </Provider>

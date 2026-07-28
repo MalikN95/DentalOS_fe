@@ -1,25 +1,20 @@
 .wrapper {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 12px;
-  padding: 16px;
+  padding: 12px;
   background: var(--color-white);
   border: 1px solid var(--color-gray-50);
   border-radius: 12px;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .headerIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
   border-radius: 999px;
   background: var(--color-primary-100);
@@ -27,27 +22,32 @@
 }
 
 .heading {
+  flex-shrink: 0;
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 22px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
   color: var(--color-black-700);
+  white-space: nowrap;
 }
 
 .buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
 .iconButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1 1 0;
-  min-width: 0;
-  aspect-ratio: 1;
+  gap: 6px;
+  padding: 7px 14px;
   border: none;
   border-radius: var(--radius-control);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
   cursor: pointer;
   transition:
     transform 0.15s ease,
@@ -56,11 +56,11 @@
 }
 
 .iconButton:hover {
-  transform: translateY(-2px) scale(1.06);
+  transform: translateY(-1px);
 }
 
 .iconButton:active {
-  transform: translateY(0) scale(0.97);
+  transform: translateY(0) scale(0.98);
 }
 
 .appointmentButton {

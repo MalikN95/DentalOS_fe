@@ -23,40 +23,35 @@ export const PatientActions = ({
 
   return (
     <section className={`${styles.wrapper} ${className ?? ''}`} style={style}>
-      <div className={styles.header}>
-        <span className={styles.headerIcon}>
-          <ZapIcon size={18} />
-        </span>
-        <h2 className={styles.heading}>{t.patientActions.title}</h2>
-      </div>
+      <span className={styles.headerIcon}>
+        <ZapIcon size={13} />
+      </span>
+      <h2 className={styles.heading}>{t.patientActions.title}</h2>
 
       <div className={styles.buttons}>
         <button
           type="button"
           className={`${styles.iconButton} ${styles.appointmentButton}`}
-          title={t.patientActions.newAppointment}
-          aria-label={t.patientActions.newAppointment}
           onClick={onAddAppointment}
         >
-          <PlusIcon size={28} />
+          <PlusIcon size={14} />
+          {t.patientActions.newAppointment}
         </button>
         <button
           type="button"
           className={`${styles.iconButton} ${styles.smsButton}`}
-          title={t.patientActions.sendSms}
-          aria-label={t.patientActions.sendSms}
           onClick={onSendSms}
         >
-          <MessageIcon size={28} />
+          <MessageIcon size={14} />
+          {t.patientActions.sendSms}
         </button>
         <button
           type="button"
           className={`${styles.iconButton} ${styles.emailButton}`}
-          title={t.patientActions.sendEmail}
-          aria-label={t.patientActions.sendEmail}
           onClick={onSendEmail}
         >
-          <MailIcon size={28} />
+          <MailIcon size={14} />
+          {t.patientActions.sendEmail}
         </button>
       </div>
     </section>

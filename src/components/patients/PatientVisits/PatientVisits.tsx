@@ -72,7 +72,7 @@ export const PatientVisits = ({
       <div className={styles.toolbar}>
         <div className={styles.headingRow}>
           <span className={styles.headerIcon}>
-            <CalendarIcon size={18} />
+            <CalendarIcon size={13} />
           </span>
           <h2 className={styles.heading}>{t.visits.heading}</h2>
         </div>

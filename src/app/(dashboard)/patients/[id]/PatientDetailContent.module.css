@@ -11,6 +11,41 @@
   align-items: stretch;
 }
 
+/* Billing / treatment-plans row gets a shared cap (20% shorter than the
+   profile row) so both cards match height; whichever has more content
+   scrolls internally instead of stretching the row. */
+.rowTwo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  height: 360px;
+}
+
+.actionsRow {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.actionsSlot {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.documentsSlot {
+  display: flex;
+  flex: 0 0 25%;
+  min-width: 0;
+}
+
+.actionsSlot > *,
+.documentsSlot > * {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 /* Row 1 (profile / dental chart / visits) gets a shared cap so the three
    cards read as equal height; any card whose content is taller scrolls
    internally instead of stretching the whole row. */
@@ -35,11 +70,21 @@
 }
 
 @media (max-width: 700px) {
-  .row {
+  .row,
+  .rowTwo {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .profileRow {
+  .actionsRow {
+    flex-direction: column;
+  }
+
+  .documentsSlot {
+    flex-basis: auto;
+  }
+
+  .profileRow,
+  .rowTwo {
     height: auto;
   }
 }

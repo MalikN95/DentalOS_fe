@@ -37,12 +37,13 @@ export const PatientBilling = ({
     <section className={`${styles.wrapper} ${className ?? ''}`} style={style}>
       <div className={styles.header}>
         <span className={styles.headerIcon}>
-          <WalletIcon size={18} />
+          <WalletIcon size={13} />
         </span>
         <h2 className={styles.heading}>{t.patientBilling.title}</h2>
       </div>
 
       <InvoicesTable
+        className={styles.table}
         invoices={pageInvoices}
         currency={currency}
         isLoading={isLoading}

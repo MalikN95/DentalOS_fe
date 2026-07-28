@@ -17,16 +17,16 @@
 
 .title {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 26px;
+  line-height: 22px;
   color: var(--color-black-700);
 }
 
 .subtitle {
-  margin: 2px 0 0;
-  font-size: var(--text-m-size);
-  line-height: var(--text-m-line);
+  margin: 1px 0 0;
+  font-size: 12px;
+  line-height: 16px;
   color: var(--color-black-500);
 }
 
@@ -52,14 +52,14 @@
 
 .dateInput,
 .statusSelect {
-  height: 36px;
+  height: 32px;
   padding: 0 10px;
   border: 1px solid var(--color-gray-100);
   border-radius: var(--radius-control);
   background: var(--color-white);
   color: var(--color-black-700);
-  font-size: var(--text-m-size);
-  line-height: var(--text-m-line);
+  font-size: 13px;
+  line-height: 18px;
 }
 
 .dateInput:focus,

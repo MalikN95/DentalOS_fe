@@ -43,7 +43,7 @@ export const PatientTreatmentPlans = ({
     <section className={`${styles.wrapper} ${className ?? ''}`} style={style}>
       <div className={styles.header}>
         <span className={styles.headerIcon}>
-          <FileTextIcon size={18} />
+          <FileTextIcon size={13} />
         </span>
         <h2 className={styles.heading}>{t.treatmentPlans.title}</h2>
         {canEdit ? (

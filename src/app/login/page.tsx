@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import { MOCK_CLINIC_NAME } from '@/common/mocks/auth.mock';
 import {
@@ -17,6 +18,8 @@ import {
 import { Alert, Button, TextField } from '@/components/ui';
 import { useClinicSubdomain } from '@/hooks/useClinicSubdomain';
 import { useLoginForm } from '@/hooks/useLoginForm';
+import { useAppSelector } from '@/store/hooks';
+import { selectIsAuthenticated } from '@/store/slices/auth/selectors';
 import styles from './page.module.css';
 
 const LoginPage = () => {
@@ -24,11 +27,23 @@ const LoginPage = () => {
   const { form, onSubmit, serverError } = useLoginForm();
   const clinicSubdomain = useClinicSubdomain();
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/');
+    }
+  }, [isAuthenticated, router]);
 
   const {
     register,
     formState: { errors, isSubmitting },
   } = form;
+
+  if (isAuthenticated) {
+    return null;
+  }
 
   const features = [
     { Icon: CalendarIcon, text: t.login.featureSchedule },

@@ -1,6 +1,7 @@
 'use client';
 
 import { useId } from 'react';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient } from '@/common/types/patient';
 import { Alert, Button, Modal, SwitchToggle, TextField } from '@/components/ui';
@@ -36,11 +37,11 @@ export const PatientFormModal = ({
   });
 
   const {
-    register,
+    control,
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = form;
 
   const handleFormSubmit = handleSubmit((values) => {
@@ -78,69 +79,183 @@ export const PatientFormModal = ({
       {submitError ? <Alert color="danger">{submitError}</Alert> : null}
 
       <div className={styles.grid}>
-        <TextField
-          label={t.firstName}
-          error={errors.firstName?.message}
-          {...register('firstName')}
+        <Controller
+          control={control}
+          name="firstName"
+          render={({ field, fieldState }) => (
+            <TextField
+              label={t.firstName}
+              error={fieldState.error?.message}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
         />
-        <TextField label={t.lastName} error={errors.lastName?.message} {...register('lastName')} />
-        <TextField
-          label={t.phone}
-          placeholder="+79001234567"
-          error={errors.phone?.message}
-          {...register('phone')}
+        <Controller
+          control={control}
+          name="lastName"
+          render={({ field, fieldState }) => (
+            <TextField
+              label={t.lastName}
+              error={fieldState.error?.message}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
         />
-        <TextField
-          label={t.email}
-          type="email"
-          placeholder="patient@example.com"
-          error={errors.email?.message}
-          {...register('email')}
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field, fieldState }) => (
+            <TextField
+              label={t.phone}
+              placeholder="+79001234567"
+              error={fieldState.error?.message}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
         />
-        <TextField
-          label={t.birthDate}
-          type="date"
-          error={errors.birthDate?.message}
-          {...register('birthDate')}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field, fieldState }) => (
+            <TextField
+              label={t.email}
+              type="email"
+              placeholder="patient@example.com"
+              error={fieldState.error?.message}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="birthDate"
+          render={({ field, fieldState }) => (
+            <TextField
+              label={t.birthDate}
+              type="date"
+              error={fieldState.error?.message}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
         />
         <label className={styles.field} htmlFor={genderFieldId}>
           <span className={styles.label}>{t.gender}</span>
-          <select id={genderFieldId} className={styles.select} {...register('gender')}>
-            <option value="">{dict.gender.notSet}</option>
-            <option value="male">{dict.gender.male}</option>
-            <option value="female">{dict.gender.female}</option>
-            <option value="other">{dict.gender.other}</option>
-          </select>
+          <Controller
+            control={control}
+            name="gender"
+            render={({ field }) => (
+              <select
+                id={genderFieldId}
+                className={styles.select}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              >
+                <option value="">{dict.gender.notSet}</option>
+                <option value="male">{dict.gender.male}</option>
+                <option value="female">{dict.gender.female}</option>
+                <option value="other">{dict.gender.other}</option>
+              </select>
+            )}
+          />
         </label>
       </div>
 
-      <TextField
-        label={t.allergies}
-        placeholder={t.allergiesPlaceholder}
-        {...register('allergies')}
+      <Controller
+        control={control}
+        name="allergies"
+        render={({ field }) => (
+          <TextField
+            label={t.allergies}
+            placeholder={t.allergiesPlaceholder}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+          />
+        )}
       />
-      <TextField
-        label={t.chronic}
-        placeholder={t.chronicPlaceholder}
-        {...register('chronicDiseases')}
+      <Controller
+        control={control}
+        name="chronicDiseases"
+        render={({ field }) => (
+          <TextField
+            label={t.chronic}
+            placeholder={t.chronicPlaceholder}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+          />
+        )}
       />
 
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>{t.insurance}</legend>
         <div className={styles.grid}>
-          <TextField label={t.company} {...register('insuranceCompany')} />
-          <TextField label={t.policy} {...register('insurancePolicyNumber')} />
-          <TextField label={t.validUntil} type="date" {...register('insuranceValidUntil')} />
+          <Controller
+            control={control}
+            name="insuranceCompany"
+            render={({ field }) => (
+              <TextField
+                label={t.company}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="insurancePolicyNumber"
+            render={({ field }) => (
+              <TextField
+                label={t.policy}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="insuranceValidUntil"
+            render={({ field }) => (
+              <TextField
+                label={t.validUntil}
+                type="date"
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              />
+            )}
+          />
         </div>
       </fieldset>
 
       <label className={styles.field} htmlFor={commentsFieldId}>
         <span className={styles.label}>{t.comment}</span>
-        <textarea
-          id={commentsFieldId}
-          className={styles.textarea}
-          placeholder={t.commentPlaceholder}
-          {...register('comments')}
+        <Controller
+          control={control}
+          name="comments"
+          render={({ field }) => (
+            <textarea
+              id={commentsFieldId}
+              className={styles.textarea}
+              placeholder={t.commentPlaceholder}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
         />
       </label>
 

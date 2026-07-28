@@ -86,46 +86,50 @@ export const TreatmentPlansPageContent = ({
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <div>
+      <div className={styles.headerRow}>
+        <div className={styles.titleBlock}>
           <h1 className={styles.title}>{t.title}</h1>
           <p className={styles.subtitle}>{t.description}</p>
         </div>
-        {canEdit ? <Button onClick={() => setIsCreateOpen(true)}>{t.newPlan}</Button> : null}
-      </div>
 
-      <div className={styles.filters}>
-        <SearchSelect
-          className={styles.patientFilter}
-          label={t.patientLabel}
-          value={patientId}
-          options={patientOptions}
-          placeholder={t.selectPatientPlaceholder}
-          searchPlaceholder={t.searchPatientPlaceholder}
-          onChange={handlePatientChange}
-        />
-
-        <label className={styles.dateField} htmlFor={dateFromFieldId}>
-          <span className={styles.dateLabel}>{t.dateFrom}</span>
-          <input
-            id={dateFromFieldId}
-            type="date"
-            className={styles.dateInput}
-            value={dateFromInput}
-            onChange={(event) => setDateFromInput(event.target.value)}
+        <div className={styles.filters}>
+          <SearchSelect
+            className={styles.patientFilter}
+            value={patientId}
+            options={patientOptions}
+            placeholder={t.selectPatientPlaceholder}
+            searchPlaceholder={t.searchPatientPlaceholder}
+            onChange={handlePatientChange}
           />
-        </label>
 
-        <label className={styles.dateField} htmlFor={dateToFieldId}>
-          <span className={styles.dateLabel}>{t.dateTo}</span>
-          <input
-            id={dateToFieldId}
-            type="date"
-            className={styles.dateInput}
-            value={dateToInput}
-            onChange={(event) => setDateToInput(event.target.value)}
-          />
-        </label>
+          <label className={styles.dateField} htmlFor={dateFromFieldId}>
+            <span className={styles.dateLabel}>{t.dateFrom}</span>
+            <input
+              id={dateFromFieldId}
+              type="date"
+              className={styles.dateInput}
+              value={dateFromInput}
+              onChange={(event) => setDateFromInput(event.target.value)}
+            />
+          </label>
+
+          <label className={styles.dateField} htmlFor={dateToFieldId}>
+            <span className={styles.dateLabel}>{t.dateTo}</span>
+            <input
+              id={dateToFieldId}
+              type="date"
+              className={styles.dateInput}
+              value={dateToInput}
+              onChange={(event) => setDateToInput(event.target.value)}
+            />
+          </label>
+        </div>
+
+        {canEdit ? (
+          <Button className={styles.newButton} onClick={() => setIsCreateOpen(true)}>
+            {t.newPlan}
+          </Button>
+        ) : null}
       </div>
 
       {errorMessage ? <Alert color="danger">{errorMessage}</Alert> : null}

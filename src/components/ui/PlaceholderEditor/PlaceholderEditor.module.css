@@ -1,0 +1,98 @@
+.editor {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-family: inherit;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: auto;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.editor:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-gray-400);
+}
+
+.editor:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.error {
+  border-color: var(--color-red-500);
+}
+
+.disabled {
+  background: var(--color-gray-25);
+  color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+.singleLine {
+  overflow: hidden;
+  resize: none;
+}
+
+.token {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 1px;
+  padding: 1px 5px 1px 8px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.92em;
+  line-height: 1.6;
+  white-space: nowrap;
+  user-select: none;
+  vertical-align: baseline;
+}
+
+.tokenRemove {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.65;
+}
+
+.tokenRemove:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.token0 {
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.token1 {
+  background: var(--color-blue-100);
+  color: var(--color-blue-600);
+}
+
+.token2 {
+  background: var(--color-green-100);
+  color: var(--color-green-600);
+}
+
+.token3 {
+  background: var(--color-orange-100);
+  color: var(--color-orange-600);
+}

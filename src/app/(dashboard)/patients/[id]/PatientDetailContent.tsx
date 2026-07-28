@@ -7,16 +7,19 @@ import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointment
 import { PatientActions } from '@/components/patients/PatientActions/PatientActions';
 import { PatientBilling } from '@/components/patients/PatientBilling/PatientBilling';
 import { PatientDentalChart } from '@/components/patients/PatientDentalChart/PatientDentalChart';
+import { PatientDocuments } from '@/components/patients/PatientDocuments/PatientDocuments';
 import { PatientFormModal } from '@/components/patients/PatientFormModal/PatientFormModal';
 import { PatientInfoPanel } from '@/components/patients/PatientInfoPanel/PatientInfoPanel';
 import { PatientTimeline } from '@/components/patients/PatientTimeline/PatientTimeline';
 import { PatientTreatmentPlans } from '@/components/patients/PatientTreatmentPlans/PatientTreatmentPlans';
 import { PatientVisits } from '@/components/patients/PatientVisits/PatientVisits';
+import { SendEmailModal } from '@/components/patients/SendEmailModal/SendEmailModal';
 import { Alert } from '@/components/ui';
 import { buildPatientTimeline } from '@/helpers/patient-timeline';
 import { useClinic } from '@/hooks/useClinic';
 import { PATIENT_DETAIL_QUERY_KEY, usePatientDetail } from '@/hooks/usePatientDetail';
 import { PATIENT_INVOICES_QUERY_KEY, usePatientInvoices } from '@/hooks/usePatientInvoices';
+import { PATIENTS_QUERY_KEY } from '@/hooks/usePatients';
 import styles from './PatientDetailContent.module.css';
 
 type PatientDetailContentProps = {
@@ -28,6 +31,7 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
   const queryClient = useQueryClient();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isSendEmailOpen, setIsSendEmailOpen] = useState(false);
   const { patient, upcoming, past, isLoading, isVisitsLoading, errorMessage } =
     usePatientDetail(patientId);
   const { data: clinic } = useClinic();
@@ -56,6 +60,7 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
     queryClient
       .invalidateQueries({ queryKey: [PATIENT_DETAIL_QUERY_KEY, patientId] })
       .catch(() => undefined);
+    queryClient.invalidateQueries({ queryKey: [PATIENTS_QUERY_KEY] }).catch(() => undefined);
   }, [queryClient, patientId]);
 
   return (
@@ -77,15 +82,26 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
             />
           </div>
 
-          <div className={styles.row}>
+          <div className={styles.rowTwo}>
             <PatientBilling
               invoices={invoices}
               currency={currency}
               isLoading={isInvoicesLoading}
               errorMessage={invoicesErrorMessage}
             />
-            <PatientActions onAddAppointment={() => setIsCreateOpen(true)} />
             <PatientTreatmentPlans patientId={patientId} currency={currency} />
+          </div>
+
+          <div className={styles.actionsRow}>
+            <div className={styles.actionsSlot}>
+              <PatientActions
+                onAddAppointment={() => setIsCreateOpen(true)}
+                onSendEmail={() => setIsSendEmailOpen(true)}
+              />
+            </div>
+            <div className={styles.documentsSlot}>
+              <PatientDocuments patientId={patientId} />
+            </div>
           </div>
 
           <PatientTimeline
@@ -110,6 +126,10 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
           onClose={() => setIsEditOpen(false)}
           onSuccess={handlePatientUpdated}
         />
+      ) : null}
+
+      {isSendEmailOpen && patient ? (
+        <SendEmailModal patient={patient} onClose={() => setIsSendEmailOpen(false)} />
       ) : null}
     </div>
   );

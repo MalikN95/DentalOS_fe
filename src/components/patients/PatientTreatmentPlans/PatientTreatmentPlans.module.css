@@ -1,21 +1,26 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  min-height: 0;
+  padding: 12px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
 }
 
 .header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .headerIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
   border-radius: 999px;
   background: var(--color-primary-100);
@@ -25,21 +30,25 @@
 .heading {
   flex: 1;
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 22px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
   color: var(--color-black-700);
 }
 
 .addButton {
   flex-shrink: 0;
+  padding: 6px 10px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .state {
   display: flex;
+  flex: 1;
+  min-height: 0;
   align-items: center;
   justify-content: center;
-  min-height: 280px;
   padding: 12px;
   border: 1px dashed var(--color-gray-100);
   border-radius: 10px;
@@ -51,10 +60,10 @@
 
 .list {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 8px;
-  min-height: 280px;
-  max-height: 380px;
+  min-height: 0;
   overflow-y: auto;
   padding-right: 4px;
 }

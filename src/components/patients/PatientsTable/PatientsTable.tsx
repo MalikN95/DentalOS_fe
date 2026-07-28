@@ -90,6 +90,7 @@ type ActionLabels = {
   addAppointment: string;
   sendSms: string;
   sendEmail: string;
+  sendEmailNoEmail: string;
   treatmentPlan: string;
   recordPayment: string;
 };
@@ -160,8 +161,9 @@ const PatientRowActions = ({
     <button
       type="button"
       className={styles.actionButton}
-      title={labels.sendEmail}
-      aria-label={labels.sendEmail}
+      title={patient.email ? labels.sendEmail : labels.sendEmailNoEmail}
+      aria-label={patient.email ? labels.sendEmail : labels.sendEmailNoEmail}
+      disabled={!patient.email}
       onClick={() => onSendEmail?.(patient)}
     >
       <MailIcon size={16} />
@@ -212,6 +214,7 @@ export const PatientsTable = ({
     addAppointment: t.patients.actionAddAppointment,
     sendSms: t.patients.actionSendSms,
     sendEmail: t.patients.actionSendEmail,
+    sendEmailNoEmail: t.patients.actionSendEmailNoEmail,
     treatmentPlan: t.patients.actionTreatmentPlan,
     recordPayment: t.patients.actionRecordPayment,
   };

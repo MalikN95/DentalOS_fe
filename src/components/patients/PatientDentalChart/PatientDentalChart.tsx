@@ -43,7 +43,7 @@ export const PatientDentalChart = ({
     <section className={`${styles.card} ${className ?? ''}`} style={style}>
       <div className={styles.headingRow}>
         <span className={styles.headerIcon}>
-          <ToothIcon size={18} />
+          <ToothIcon size={13} />
         </span>
         <h2 className={styles.heading}>{t.dentalChart.title}</h2>
         <button
@@ -53,7 +53,7 @@ export const PatientDentalChart = ({
           aria-label={t.dentalChart.expand}
           onClick={() => setIsEditorOpen(true)}
         >
-          <ExpandIcon size={16} />
+          <ExpandIcon size={12} />
         </button>
       </div>
 

@@ -69,10 +69,7 @@ export const BranchesSection = () => {
     <>
       <section className={styles.card}>
         <div className={styles.header}>
-          <div>
-            <h2 className={styles.title}>{t.title}</h2>
-            <p className={styles.description}>{t.description}</p>
-          </div>
+          <p className={styles.description}>{t.description}</p>
           <Button variant="soft" onClick={handleOpenCreateModal}>
             {t.add}
           </Button>

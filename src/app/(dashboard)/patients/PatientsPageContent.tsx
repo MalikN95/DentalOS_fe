@@ -11,6 +11,7 @@ import { PatientFormModal } from '@/components/patients/PatientFormModal/Patient
 import { PatientPaymentModal } from '@/components/patients/PatientPaymentModal/PatientPaymentModal';
 import { PatientTagFilter } from '@/components/patients/PatientTagFilter/PatientTagFilter';
 import { PatientsTable } from '@/components/patients/PatientsTable/PatientsTable';
+import { SendEmailModal } from '@/components/patients/SendEmailModal/SendEmailModal';
 import { CreateTreatmentPlanModal } from '@/components/treatment-plans/CreateTreatmentPlanModal/CreateTreatmentPlanModal';
 import { Button, type ButtonColor, Pagination, TextField } from '@/components/ui';
 import { useClinic } from '@/hooks/useClinic';
@@ -57,6 +58,7 @@ export const PatientsPageContent = () => {
   const [appointmentPatient, setAppointmentPatient] = useState<Patient | null>(null);
   const [treatmentPlanPatient, setTreatmentPlanPatient] = useState<Patient | null>(null);
   const [paymentPatient, setPaymentPatient] = useState<Patient | null>(null);
+  const [emailPatient, setEmailPatient] = useState<Patient | null>(null);
 
   const invalidatePatients = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: [PATIENTS_QUERY_KEY] }).catch(() => undefined);
@@ -111,6 +113,7 @@ export const PatientsPageContent = () => {
         errorMessage={query.error?.message ?? null}
         onRowClick={(patient) => router.push(`/patients/${patient.id}`)}
         onAddAppointment={setAppointmentPatient}
+        onSendEmail={setEmailPatient}
         onTreatmentPlan={setTreatmentPlanPatient}
         onRecordPayment={setPaymentPatient}
         footer={
@@ -149,6 +152,10 @@ export const PatientsPageContent = () => {
           currency={currency}
           onClose={() => setPaymentPatient(null)}
         />
+      ) : null}
+
+      {emailPatient ? (
+        <SendEmailModal patient={emailPatient} onClose={() => setEmailPatient(null)} />
       ) : null}
     </div>
   );

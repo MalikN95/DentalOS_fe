@@ -69,53 +69,58 @@ export const StaffPageContent = () => {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <div>
+      <div className={styles.headerRow}>
+        <div className={styles.titleBlock}>
           <h1 className={styles.title}>{t.staff.title}</h1>
           <p className={styles.subtitle}>
             {t.staff.total}: {total}
           </p>
         </div>
-        <Button onClick={() => setIsCreateOpen(true)}>{t.staff.newEmployee}</Button>
-      </div>
 
-      <div className={styles.toolbar}>
-        <TextField
-          className={styles.search}
-          placeholder={t.staff.searchPlaceholder}
-          iconLeft={<SearchIcon size={18} />}
-          value={searchInput}
-          onChange={(event) => setSearchInput(event.target.value)}
-        />
+        <div className={styles.toolbar}>
+          <TextField
+            className={styles.search}
+            size="sm"
+            placeholder={t.staff.searchPlaceholder}
+            iconLeft={<SearchIcon size={16} />}
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
+          />
 
-        <div className={styles.controls}>
-          <select
-            className={styles.roleSelect}
-            aria-label={t.staff.roleFilter}
-            value={role ?? ''}
-            onChange={(event) => handleRoleSelect(event.target.value)}
-          >
-            <option value="">{t.staff.roleFilterAll}</option>
-            {STAFF_ROLES.map((value) => (
-              <option key={value} value={value}>
-                {t.roles[value]}
-              </option>
-            ))}
-          </select>
+          <div className={styles.controls}>
+            <select
+              className={styles.roleSelect}
+              aria-label={t.staff.roleFilter}
+              value={role ?? ''}
+              onChange={(event) => handleRoleSelect(event.target.value)}
+            >
+              <option value="">{t.staff.roleFilterAll}</option>
+              {STAFF_ROLES.map((value) => (
+                <option key={value} value={value}>
+                  {t.roles[value]}
+                </option>
+              ))}
+            </select>
 
-          <div className={styles.filters}>
-            {FILTER_VALUES.map((value) => (
-              <Button
-                key={value}
-                variant={filter === value ? 'solid' : 'soft'}
-                color={filter === value ? 'primary' : 'gray'}
-                onClick={() => setFilter(value)}
-              >
-                {filterLabels[value]}
-              </Button>
-            ))}
+            <div className={styles.filters}>
+              {FILTER_VALUES.map((value) => (
+                <Button
+                  key={value}
+                  className={styles.filterButton}
+                  variant={filter === value ? 'solid' : 'soft'}
+                  color={filter === value ? 'primary' : 'gray'}
+                  onClick={() => setFilter(value)}
+                >
+                  {filterLabels[value]}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
+
+        <Button className={styles.newButton} onClick={() => setIsCreateOpen(true)}>
+          {t.staff.newEmployee}
+        </Button>
       </div>
 
       <StaffTable

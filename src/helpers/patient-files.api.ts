@@ -1,5 +1,6 @@
 import type {
   ApiPatientFile,
+  PatientDocumentType,
   PatientFilesPage,
   PatientFileType,
 } from '@/common/types/patient-file';
@@ -45,6 +46,8 @@ type ConfirmUploadPayload = {
   mimeType: string;
   sizeBytes: number;
   type: PatientFileType;
+  documentType?: PatientDocumentType;
+  note?: string;
   toothNumber?: number;
 };
 
