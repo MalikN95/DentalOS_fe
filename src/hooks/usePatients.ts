@@ -26,6 +26,7 @@ export const usePatients = () => {
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<PatientsFilter>('all');
+  const [tagIds, setTagIdsState] = useState<string[]>([]);
 
   // Debounce the search input, resetting to the first page on every change.
   useEffect(() => {
@@ -40,13 +41,13 @@ export const usePatients = () => {
   const isActive = filterToIsActive(filter);
 
   const query = useQuery({
-    queryKey: [PATIENTS_QUERY_KEY, 'list', { page, limit, search, isActive }],
+    queryKey: [PATIENTS_QUERY_KEY, 'list', { page, limit, search, isActive, tagIds }],
     queryFn: ({ signal }) => {
       if (!accessToken) {
         throw new Error('Not authenticated');
       }
 
-      return fetchPatients(accessToken, { page, limit, search, isActive }, signal);
+      return fetchPatients(accessToken, { page, limit, search, isActive, tagIds }, signal);
     },
     enabled: Boolean(accessToken),
     placeholderData: keepPreviousData,
@@ -64,6 +65,11 @@ export const usePatients = () => {
     setPage(1);
   }, []);
 
+  const handleTagIdsChange = useCallback((next: string[]) => {
+    setTagIdsState(next);
+    setPage(1);
+  }, []);
+
   return {
     query,
     patients: query.data?.items ?? [],
@@ -71,10 +77,12 @@ export const usePatients = () => {
     page,
     limit,
     filter,
+    tagIds,
     searchInput,
     setSearchInput,
     setPage,
     setLimit: handleLimitChange,
     setFilter: handleFilterChange,
+    setTagIds: handleTagIdsChange,
   };
 };

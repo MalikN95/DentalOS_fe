@@ -9,13 +9,27 @@ type TextFieldProps = {
   error?: string;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
+  /** 'sm' renders a more compact field, e.g. in a toolbar search bar. */
+  size?: 'md' | 'sm';
   className?: string;
   style?: React.CSSProperties;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className' | 'style'>;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className' | 'style' | 'size'>;
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   (
-    { label, hint, error, iconLeft, iconRight, className, style, id, disabled, ...inputProps },
+    {
+      label,
+      hint,
+      error,
+      iconLeft,
+      iconRight,
+      size = 'md',
+      className,
+      style,
+      id,
+      disabled,
+      ...inputProps
+    },
     ref,
   ) => {
     const generatedId = useId();
@@ -29,6 +43,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 
     const fieldClassName = [
       styles.field,
+      size === 'sm' ? styles.fieldSm : '',
       error ? styles.fieldError : '',
       disabled ? styles.fieldDisabled : '',
     ]
@@ -43,7 +58,11 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           </label>
         ) : null}
         <div className={fieldClassName}>
-          {iconLeft ? <span className={styles.icon}>{iconLeft}</span> : null}
+          {iconLeft ? (
+            <span className={`${styles.icon} ${size === 'sm' ? styles.iconSm : ''}`}>
+              {iconLeft}
+            </span>
+          ) : null}
           <input
             ref={ref}
             id={inputId}

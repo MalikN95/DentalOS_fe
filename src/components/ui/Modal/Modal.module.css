@@ -72,15 +72,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 20px 24px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--color-gray-50);
   background: var(--color-white);
 }
 
 .title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  line-height: 24px;
+  line-height: 20px;
   color: var(--color-black-700);
 }
 
@@ -88,14 +88,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: none;
   border-radius: 8px;
   background: transparent;
   color: var(--color-black-500);
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1;
   cursor: pointer;
 }
@@ -237,9 +237,12 @@
     padding: 12px;
   }
 
-  .content,
-  .header {
+  .content {
     padding: 16px;
+  }
+
+  .header {
+    padding: 12px 16px;
   }
 
   .footer {

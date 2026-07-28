@@ -1,3 +1,5 @@
+import type { PatientTag } from './patient-tag';
+
 export type Gender = 'male' | 'female' | 'other';
 
 export type PatientInsurance = {
@@ -19,6 +21,7 @@ export type Patient = {
   chronicDiseases: string[];
   comments: string | null;
   isActive: boolean;
+  tags: PatientTag[];
   createdAt: string;
   updatedAt: string;
 };
@@ -49,4 +52,5 @@ export type ListPatientsParams = {
   isActive?: boolean;
   createdFrom?: string;
   createdTo?: string;
+  tagIds?: string[];
 };

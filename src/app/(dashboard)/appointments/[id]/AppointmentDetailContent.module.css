@@ -37,6 +37,12 @@
   align-items: start;
 }
 
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .panel {
   display: flex;
   flex-direction: column;

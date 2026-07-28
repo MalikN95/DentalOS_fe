@@ -15,6 +15,7 @@ const buildListQuery = ({
   isActive,
   createdFrom,
   createdTo,
+  tagIds,
 }: ListPatientsParams): string => {
   const params = new URLSearchParams({ page: String(page), limit: String(limit) });
 
@@ -33,6 +34,10 @@ const buildListQuery = ({
 
   if (createdTo) {
     params.set('createdTo', createdTo);
+  }
+
+  if (tagIds && tagIds.length > 0) {
+    params.set('tagIds', tagIds.join(','));
   }
 
   return params.toString();
@@ -66,9 +71,6 @@ export const updatePatient = (
     body: JSON.stringify(payload),
   });
 
-export const deletePatient = (accessToken: string, id: string): Promise<void> =>
-  apiFetch<void>(accessToken, `/api/patients/${id}`, { method: 'DELETE' });
-
 export const fetchPatient = (
   accessToken: string,
   id: string,
@@ -86,6 +88,24 @@ export const fetchPatientHistory = (
     `/api/patients/${id}/history?page=1&limit=${limit}`,
     { signal },
   );
+
+export const assignPatientTag = (
+  accessToken: string,
+  patientId: string,
+  tagId: string,
+): Promise<Patient> =>
+  apiFetch<Patient>(accessToken, `/api/patients/${patientId}/tags/${tagId}`, {
+    method: 'POST',
+  });
+
+export const unassignPatientTag = (
+  accessToken: string,
+  patientId: string,
+  tagId: string,
+): Promise<Patient> =>
+  apiFetch<Patient>(accessToken, `/api/patients/${patientId}/tags/${tagId}`, {
+    method: 'DELETE',
+  });
 
 export const fetchPatientMedicalRecords = (
   accessToken: string,

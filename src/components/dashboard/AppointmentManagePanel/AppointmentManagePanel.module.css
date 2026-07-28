@@ -157,6 +157,11 @@
   gap: 8px;
 }
 
+.compactButton {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
 @media (max-width: 560px) {
   .summary {
     grid-template-columns: minmax(0, 1fr);

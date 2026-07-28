@@ -123,7 +123,7 @@ export const AppointmentsTable = ({
         ) : (
           <span className={styles.cardTitle}>{t.appointments.todayTitle}</span>
         )}
-        <Button variant="soft" onClick={onAddClick}>
+        <Button variant="soft" className={styles.addButton} onClick={onAddClick}>
           {t.appointments.newAppointment}
         </Button>
       </div>

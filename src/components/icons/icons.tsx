@@ -198,6 +198,39 @@ export const ExpandIcon = createIcon(
   </>,
 );
 
+export const EditIcon = createIcon(
+  <>
+    <path d="M12 20h9" />
+    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+  </>,
+);
+
+export const RefreshIcon = createIcon(
+  <>
+    <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+    <path d="M21 3v5h-5" />
+    <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+    <path d="M3 21v-5h5" />
+  </>,
+);
+
+export const CheckIcon = createIcon(<path d="M20 6 9 17l-5-5" />);
+
+export const TagIcon = createIcon(
+  <>
+    <path d="M12.59 2.59 3 12.17V21h8.83l9.58-9.59a2 2 0 0 0 0-2.82l-6.4-6.4a2 2 0 0 0-2.42 0Z" />
+    <circle cx="8.5" cy="8.5" r="1.5" />
+  </>,
+);
+
+export const InfoIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 11v5" />
+    <path d="M12 8h.01" />
+  </>,
+);
+
 type LogoProps = {
   height?: number;
   className?: string;

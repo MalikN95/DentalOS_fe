@@ -264,12 +264,19 @@ export const AppointmentManagePanel = ({
               }}
             />
             <div className={styles.actions}>
-              <Button type="button" variant="soft" color="gray" onClick={handleCancelBack}>
+              <Button
+                type="button"
+                variant="soft"
+                color="gray"
+                className={styles.compactButton}
+                onClick={handleCancelBack}
+              >
                 {t.cancelBack}
               </Button>
               <Button
                 type="button"
                 color="danger"
+                className={styles.compactButton}
                 disabled={statusMutation.isPending}
                 onClick={handleConfirmCancel}
               >
@@ -291,6 +298,7 @@ export const AppointmentManagePanel = ({
                   type="button"
                   variant={action === 'cancel' ? 'soft' : 'solid'}
                   color={actionColors[action]}
+                  className={styles.compactButton}
                   disabled={statusMutation.isPending}
                   onClick={() => handleAction(action)}
                 >
@@ -363,6 +371,7 @@ export const AppointmentManagePanel = ({
             <div className={styles.actions}>
               <Button
                 type="button"
+                className={styles.compactButton}
                 disabled={paymentMutation.isPending}
                 onClick={handleRecordPayment}
               >
@@ -402,6 +411,7 @@ export const AppointmentManagePanel = ({
                 type="button"
                 variant="soft"
                 color="gray"
+                className={styles.compactButton}
                 disabled={recordMutation.isPending}
                 onClick={handleSaveRecord}
               >
@@ -411,6 +421,7 @@ export const AppointmentManagePanel = ({
               {status === 'in_treatment' ? (
                 <Button
                   type="button"
+                  className={styles.compactButton}
                   disabled={recordMutation.isPending || statusMutation.isPending}
                   onClick={handleCompleteTreatment}
                 >

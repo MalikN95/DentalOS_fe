@@ -52,10 +52,6 @@
   white-space: nowrap;
 }
 
-.actionsHead {
-  text-align: right;
-}
-
 .patient {
   display: flex;
   flex-direction: column;
@@ -83,10 +79,148 @@
   color: var(--color-black-500);
 }
 
+.tagsCell {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.tagsMoreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 20px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid var(--color-gray-100);
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-black-500);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tagsMoreButton:hover {
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.tagsPopover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+  margin-top: 4px;
+  padding: 8px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  box-shadow: 0 12px 28px rgb(51 56 67 / 16%);
+}
+
+.actionsHead {
+  text-align: right;
+}
+
+.actionsHeadLabel {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.helpTrigger {
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-gray-400);
+  cursor: help;
+}
+
+.helpTrigger:hover,
+.helpTrigger:focus-visible {
+  color: var(--color-primary-500);
+}
+
+.helpTooltip {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 220px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--color-black-700);
+  box-shadow: 0 12px 28px rgb(51 56 67 / 20%);
+  text-transform: none;
+  letter-spacing: normal;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.helpTrigger:hover .helpTooltip,
+.helpTrigger:focus-visible .helpTooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.helpRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.helpRow svg {
+  flex-shrink: 0;
+  color: var(--color-gray-200);
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 3px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.actionButton:hover {
+  background: var(--color-gray-25);
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
 }
 
 .stateWrap {
@@ -152,12 +286,6 @@
   line-height: var(--text-m-line);
   color: var(--color-black-600);
   overflow-wrap: break-word;
-}
-
-.mobileActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
 }
 
 @media (max-width: 768px) {

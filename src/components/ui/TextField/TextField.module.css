@@ -29,6 +29,16 @@
   box-shadow: var(--control-focus-ring);
 }
 
+.fieldSm {
+  padding: 6px 10px;
+  gap: 6px;
+}
+
+.fieldSm .input {
+  font-size: 13px;
+  line-height: 18px;
+}
+
 .fieldError {
   border-color: var(--color-red-500);
 }
@@ -79,6 +89,11 @@
   justify-content: center;
   flex-shrink: 0;
   color: var(--color-gray-400);
+}
+
+.iconSm {
+  width: 16px;
+  height: 16px;
 }
 
 .hint {

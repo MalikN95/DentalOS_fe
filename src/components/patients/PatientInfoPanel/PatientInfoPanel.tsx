@@ -2,6 +2,8 @@
 
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient } from '@/common/types/patient';
+import { EditIcon } from '@/components/icons/icons';
+import { PatientTagsField } from '@/components/patients/PatientTagsField/PatientTagsField';
 import { Badge } from '@/components/ui';
 import { formatDate } from '@/helpers/date';
 import styles from './PatientInfoPanel.module.css';
@@ -12,6 +14,8 @@ type PatientInfoPanelProps = {
   hideHeader?: boolean;
   /** Render without the card border/padding, e.g. when already inside a modal/card. */
   bordered?: boolean;
+  /** Shows an edit button next to the name, e.g. on the patient's own profile page. */
+  onEdit?: () => void;
   className?: string;
   style?: React.CSSProperties;
 };
@@ -44,6 +48,7 @@ export const PatientInfoPanel = ({
   patient,
   hideHeader = false,
   bordered = true,
+  onEdit,
   className,
   style,
 }: PatientInfoPanelProps) => {
@@ -55,9 +60,22 @@ export const PatientInfoPanel = ({
     <aside className={`${cardClassName} ${className ?? ''}`} style={style}>
       {hideHeader ? null : (
         <div className={styles.header}>
-          <span className={styles.name}>
-            {patient.lastName} {patient.firstName}
-          </span>
+          <div className={styles.nameRow}>
+            <span className={styles.name}>
+              {patient.lastName} {patient.firstName}
+            </span>
+            {onEdit ? (
+              <button
+                type="button"
+                className={styles.editButton}
+                title={t.common.edit}
+                aria-label={t.common.edit}
+                onClick={onEdit}
+              >
+                <EditIcon size={15} />
+              </button>
+            ) : null}
+          </div>
           <Badge color={patient.isActive ? 'success' : 'gray'}>
             {patient.isActive ? t.common.active : t.common.inactive}
           </Badge>
@@ -98,6 +116,8 @@ export const PatientInfoPanel = ({
             <span className={styles.muted}>{t.patientInfo.insuranceNone}</span>
           )}
         </div>
+
+        <PatientTagsField patient={patient} />
 
         {patient.comments ? (
           <div className={styles.block}>

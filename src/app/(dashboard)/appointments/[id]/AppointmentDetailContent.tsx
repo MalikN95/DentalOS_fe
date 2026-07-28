@@ -5,10 +5,12 @@ import Link from 'next/link';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { AppointmentStatus } from '@/common/types/appointment';
 import { AppointmentManagePanel } from '@/components/dashboard/AppointmentManagePanel/AppointmentManagePanel';
+import { PatientDentalChart } from '@/components/patients/PatientDentalChart/PatientDentalChart';
 import { PatientInfoPanel } from '@/components/patients/PatientInfoPanel/PatientInfoPanel';
 import { Alert, Badge } from '@/components/ui';
 import { appointmentStatusColor } from '@/helpers/appointment-status';
 import { useAppointment } from '@/hooks/useAppointment';
+import { useClinic } from '@/hooks/useClinic';
 import { usePatient } from '@/hooks/usePatient';
 import styles from './AppointmentDetailContent.module.css';
 
@@ -26,6 +28,8 @@ export const AppointmentDetailContent = ({ appointmentId }: AppointmentDetailCon
   const [status, setStatus] = useState<AppointmentStatus | null>(null);
 
   const { patient, isLoading: isPatientLoading } = usePatient(appointment?.patientId ?? '');
+  const { data: clinic } = useClinic();
+  const currency = clinic?.currency ?? 'RUB';
 
   const isLoading = isAppointmentLoading || (Boolean(appointment) && isPatientLoading);
   const displayStatus = status ?? appointment?.status;
@@ -58,7 +62,12 @@ export const AppointmentDetailContent = ({ appointmentId }: AppointmentDetailCon
           </div>
 
           <div className={styles.layout}>
-            {patient ? <PatientInfoPanel patient={patient} /> : null}
+            {patient ? (
+              <div className={styles.sidebar}>
+                <PatientInfoPanel patient={patient} />
+                <PatientDentalChart patientId={patient.id} currency={currency} />
+              </div>
+            ) : null}
             <AppointmentManagePanel
               appointment={appointment}
               className={styles.panel}

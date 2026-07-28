@@ -7,6 +7,7 @@ import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointment
 import { PatientActions } from '@/components/patients/PatientActions/PatientActions';
 import { PatientBilling } from '@/components/patients/PatientBilling/PatientBilling';
 import { PatientDentalChart } from '@/components/patients/PatientDentalChart/PatientDentalChart';
+import { PatientFormModal } from '@/components/patients/PatientFormModal/PatientFormModal';
 import { PatientInfoPanel } from '@/components/patients/PatientInfoPanel/PatientInfoPanel';
 import { PatientTimeline } from '@/components/patients/PatientTimeline/PatientTimeline';
 import { PatientTreatmentPlans } from '@/components/patients/PatientTreatmentPlans/PatientTreatmentPlans';
@@ -26,6 +27,7 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const { patient, upcoming, past, isLoading, isVisitsLoading, errorMessage } =
     usePatientDetail(patientId);
   const { data: clinic } = useClinic();
@@ -50,6 +52,12 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
       .catch(() => undefined);
   }, [queryClient, patientId]);
 
+  const handlePatientUpdated = useCallback(() => {
+    queryClient
+      .invalidateQueries({ queryKey: [PATIENT_DETAIL_QUERY_KEY, patientId] })
+      .catch(() => undefined);
+  }, [queryClient, patientId]);
+
   return (
     <div className={styles.page}>
       {errorMessage ? <Alert color="danger">{errorMessage}</Alert> : null}
@@ -59,7 +67,7 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
       {!isLoading && patient ? (
         <>
           <div className={`${styles.row} ${styles.profileRow}`}>
-            <PatientInfoPanel patient={patient} />
+            <PatientInfoPanel patient={patient} onEdit={() => setIsEditOpen(true)} />
             <PatientDentalChart patientId={patientId} currency={currency} />
             <PatientVisits
               upcoming={upcoming}
@@ -93,6 +101,14 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
           initialPatientId={patientId}
           onClose={() => setIsCreateOpen(false)}
           onSuccess={handleAppointmentCreated}
+        />
+      ) : null}
+
+      {isEditOpen && patient ? (
+        <PatientFormModal
+          patient={patient}
+          onClose={() => setIsEditOpen(false)}
+          onSuccess={handlePatientUpdated}
         />
       ) : null}
     </div>
