@@ -52,6 +52,21 @@ export const fetchServiceOptions = async (
   return services.items;
 };
 
+export type CreateServiceOptionPayload = {
+  name: string;
+  price: string;
+  durationMinutes: number;
+};
+
+export const createServiceOption = (
+  accessToken: string,
+  payload: CreateServiceOptionPayload,
+): Promise<ApiServiceOption> =>
+  apiFetch<ApiServiceOption>(accessToken, '/api/services', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+
 export const fetchTreatmentPlanFormOptions = async (
   accessToken: string,
   signal?: AbortSignal,

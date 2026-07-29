@@ -1,0 +1,181 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--color-black-700);
+}
+
+.addButton {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.dateNav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.navButton:hover {
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.dateLabel {
+  min-width: 88px;
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  color: var(--color-black-700);
+}
+
+.calendarTrigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  color: var(--color-black-500);
+}
+
+.calendarIcon {
+  pointer-events: none;
+}
+
+.calendarInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color-scheme: light;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.stateWrap {
+  padding: 0 14px 12px;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  padding-left: 14px;
+}
+
+.board {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 4px 14px 14px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-200) transparent;
+}
+
+.board::-webkit-scrollbar {
+  width: 6px;
+}
+
+.board::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--color-gray-200);
+}
+
+.stateBlock {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--color-black-500);
+}
+
+.hourRow {
+  padding-top: 10px;
+}
+
+.hourDivider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hourLabel {
+  flex-shrink: 0;
+  min-width: 48px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-black-500);
+}
+
+.hourLine {
+  flex: 1;
+  height: 1px;
+  background: var(--color-gray-100);
+}
+
+.hourCards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  padding-left: 58px;
+}
+
+@media (max-width: 900px) {
+  .body {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .board {
+    overflow-y: visible;
+  }
+}
+
+@media (max-width: 640px) {
+  .hourCards {
+    padding-left: 0;
+  }
+}

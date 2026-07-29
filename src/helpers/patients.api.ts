@@ -77,6 +77,18 @@ export const fetchPatient = (
   signal?: AbortSignal,
 ): Promise<Patient> => apiFetch<Patient>(accessToken, `/api/patients/${id}`, { signal });
 
+export const fetchAllergiesCatalog = (
+  accessToken: string,
+  signal?: AbortSignal,
+): Promise<string[]> =>
+  apiFetch<string[]>(accessToken, '/api/patients/catalog/allergies', { signal });
+
+export const fetchChronicDiseasesCatalog = (
+  accessToken: string,
+  signal?: AbortSignal,
+): Promise<string[]> =>
+  apiFetch<string[]>(accessToken, '/api/patients/catalog/chronic-diseases', { signal });
+
 export const fetchPatientHistory = (
   accessToken: string,
   id: string,

@@ -4,6 +4,8 @@ export type AppointmentStatus =
 export type Appointment = {
   id: string;
   time: string;
+  endTime: string;
+  durationMinutes: number;
   patientId: string;
   patientName: string;
   patientPhone: string;

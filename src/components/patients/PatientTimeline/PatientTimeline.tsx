@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { TimelinePoint } from '@/common/types/timeline';
 import {
@@ -12,7 +12,7 @@ import {
   PlusIcon,
   WalletIcon,
 } from '@/components/icons/icons';
-import { addDays, daysBetween, formatDate, startOfDay } from '@/helpers/date';
+import { addDays, daysBetween, formatDate, formatMonthLabel, startOfDay } from '@/helpers/date';
 import {
   getTimelineEventKindLabel,
   getTimelineEventSubtitle,
@@ -28,18 +28,49 @@ const PADDING_DAYS = 21;
 const ZOOM_LEVELS = [2.5, 4, 7, 11, 18, 30, 50];
 const DEFAULT_ZOOM_INDEX = 3;
 const MIN_TRACK_WIDTH = 640;
-const BUBBLE_OFFSET = 58;
-const BUBBLE_RADIUS = 17;
-// Two events closer than this (px) would visually touch, so they're pushed
-// into separate stacking lanes instead of drawn on top of each other.
-const MIN_EVENT_GAP = BUBBLE_RADIUS * 2 + 10;
-const LANE_STEP = 40;
 const MAX_LANE = 1;
-// Just enough headroom for the farthest lane's bubble on each side.
-const LINE_Y = BUBBLE_OFFSET + MAX_LANE * LANE_STEP + 20;
-const TRACK_HEIGHT = LINE_Y * 2;
-// Gap between a bubble's edge and its click-to-open detail card.
-const TOOLTIP_GAP = BUBBLE_RADIUS + 10;
+// Gap (px) in the center line at each month boundary.
+const MONTH_LINE_GAP = 10;
+
+// The whole vertical scale (bubble offset/radius, lane spacing, track height,
+// tooltip gap) moves together as one unit depending on `compact` — the inline
+// row embedded in an appointment card vs. the full patient-profile size.
+const buildSizeConfig = (
+  bubbleOffset: number,
+  bubbleRadius: number,
+  laneStep: number,
+  headroom: number,
+  iconSize: number,
+) => {
+  // Just enough headroom for the farthest lane's bubble on each side.
+  const lineY = bubbleOffset + MAX_LANE * laneStep + headroom;
+
+  return {
+    bubbleOffset,
+    bubbleRadius,
+    laneStep,
+    lineY,
+    trackHeight: lineY * 2,
+    // Gap between a bubble's edge and its click-to-open detail card.
+    tooltipGap: bubbleRadius + 10,
+    // Two events closer than this (px) would visually touch, so they're
+    // pushed into separate stacking lanes instead of drawn on top of each other.
+    minEventGap: bubbleRadius * 2 + 10,
+    iconSize,
+  };
+};
+
+const SIZE_CONFIG = {
+  default: buildSizeConfig(58, 17, 40, 20, 16),
+  compact: buildSizeConfig(26, 10, 20, 10, 10),
+};
+// Accumulated deltaY (px) before a wheel gesture steps the zoom once —
+// keeps a single mouse-wheel notch from jumping more than one level while
+// still feeling responsive.
+const WHEEL_ZOOM_THRESHOLD = 50;
+// How long the px-per-day value takes to ease into a new zoom level.
+const ZOOM_ANIMATION_MS = 250;
+const easeOutCubic = (t: number): number => 1 - (1 - t) ** 3;
 
 type EventSide = 'above' | 'below';
 
@@ -49,13 +80,14 @@ type EventSide = 'above' | 'below';
 const layoutEvents = <T,>(
   items: T[],
   getX: (item: T) => number,
+  minEventGap: number,
 ): { item: T; x: number; side: EventSide; lane: number }[] => {
   const laneLastX: Record<EventSide, number[]> = { above: [], below: [] };
 
   const findLane = (side: EventSide, x: number) => {
     const lastX = laneLastX[side];
     for (let lane = 0; lane <= MAX_LANE; lane += 1) {
-      if (lastX[lane] === undefined || x - lastX[lane] >= MIN_EVENT_GAP) return lane;
+      if (lastX[lane] === undefined || x - lastX[lane] >= minEventGap) return lane;
     }
     return MAX_LANE;
   };
@@ -115,6 +147,8 @@ type PatientTimelineProps = {
   events: TimelinePoint[];
   currency?: string;
   isLoading?: boolean;
+  /** Shrinks the whole axis for embedding in a narrow row (e.g. an appointment card) and hides the heading. */
+  compact?: boolean;
   className?: string;
   style?: React.CSSProperties;
 };
@@ -123,14 +157,34 @@ export const PatientTimeline = ({
   events,
   currency = 'RUB',
   isLoading = false,
+  compact = false,
   className,
   style,
 }: PatientTimelineProps) => {
   const { t } = useTranslation();
-  const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX);
+  const size = compact ? SIZE_CONFIG.compact : SIZE_CONFIG.default;
+  // Compact (board) instances open at max zoom — the most detail in the
+  // least width, since the card itself is already narrow.
+  const initialZoomIndex = compact ? ZOOM_LEVELS.length - 1 : DEFAULT_ZOOM_INDEX;
+  const [zoomIndex, setZoomIndex] = useState(initialZoomIndex);
+  // The actual px-per-day used for layout, eased towards ZOOM_LEVELS[zoomIndex]
+  // by the animation effect below — this is what makes zoom changes glide
+  // instead of snap. pxPerDayRef mirrors it (kept in sync inside that same
+  // effect, not during render) so a new animation can read the live value —
+  // wherever the previous one currently is — as its start point.
+  const [pxPerDay, setPxPerDay] = useState(() => ZOOM_LEVELS[initialZoomIndex]);
+  const pxPerDayRef = useRef(pxPerDay);
+  // The date (as a day-offset from rangeStart) and screen position that must
+  // stay put while pxPerDay animates — under the cursor for wheel-zoom, at
+  // the viewport's own center for the +/- buttons. Cleared once the eased
+  // pxPerDay reaches its target, so an unrelated resize doesn't reapply it.
+  const zoomAnchorRef = useRef<{ dayOffset: number; viewportOffset: number } | null>(null);
+  const hasCenteredOnceRef = useRef(false);
   const { ref: scrollRef, isDragging, handlers } = useDragScroll<HTMLDivElement>();
   const trackRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const bodyRef = useRef<HTMLDivElement | null>(null);
+  const wheelDeltaRef = useRef(0);
   // Captured once so the "today" marker and range padding don't shift on re-render.
   const [today] = useState(() => new Date());
   // So the track (and its line) fills a wide viewport instead of stopping
@@ -171,7 +225,7 @@ export const PatientTimeline = ({
     };
   }, [events, today]);
 
-  const pxPerDay = ZOOM_LEVELS[zoomIndex];
+  const targetPxPerDay = ZOOM_LEVELS[zoomIndex];
   const totalDays = Math.max(daysBetween(rangeStart, rangeEnd), 1);
   const contentWidth = totalDays * pxPerDay;
   const trackWidth = Math.max(contentWidth, MIN_TRACK_WIDTH, containerWidth);
@@ -185,23 +239,106 @@ export const PatientTimeline = ({
   const yearTicks = useMemo(() => buildYearTicks(rangeStart, rangeEnd), [rangeStart, rangeEnd]);
   const monthTicks = useMemo(() => buildMonthTicks(rangeStart, rangeEnd), [rangeStart, rangeEnd]);
 
-  const positionedEvents = useMemo(
+  // One line segment per calendar month, with a small gap at each month
+  // boundary — so the center line breaks exactly on months, not on a fixed
+  // pixel pattern that would drift out of sync with them.
+  const monthSegments = useMemo(() => {
+    const boundaries = [rangeStart, ...monthTicks, rangeEnd];
+    const toX = (date: Date) => offsetX + daysBetween(rangeStart, date) * pxPerDay;
+
+    return boundaries.slice(0, -1).map((start, index) => {
+      const end = boundaries[index + 1];
+      const isFirst = index === 0;
+      const isLast = index === boundaries.length - 2;
+      const left = toX(start) + (isFirst ? 0 : MONTH_LINE_GAP / 2);
+      const right = toX(end) - (isLast ? 0 : MONTH_LINE_GAP / 2);
+
+      return {
+        key: start.getTime(),
+        left,
+        width: Math.max(right - left, 0),
+        // The first/last segments are partial fragments from the range's
+        // padding, not a real calendar month, so they stay unlabeled.
+        isFullMonth: !isFirst && !isLast,
+        monthStart: start,
+      };
+    });
+  }, [rangeStart, rangeEnd, monthTicks, offsetX, pxPerDay]);
+
+  // Centered inside its own segment (not pinned to the segment's left edge),
+  // so the name reads as "this label belongs to this month's stretch of line".
+  const monthLabels = useMemo(
     () =>
-      layoutEvents(events, (event) => daysBetween(rangeStart, new Date(event.date)) * pxPerDay).map(
-        ({ item, x, side, lane }) => ({ event: item, x: x + offsetX, side, lane }),
-      ),
-    [events, rangeStart, pxPerDay, offsetX],
+      monthSegments
+        .filter((segment) => segment.isFullMonth)
+        .map((segment) => ({
+          key: segment.key,
+          x: segment.left + segment.width / 2,
+          text: formatMonthLabel(segment.monthStart),
+        })),
+    [monthSegments],
   );
 
-  // Center the viewport on "today" once the track is measured, and again
-  // whenever zoom changes, so zooming stays anchored on "now" instead of drifting.
+  const positionedEvents = useMemo(
+    () =>
+      layoutEvents(
+        events,
+        (event) => daysBetween(rangeStart, new Date(event.date)) * pxPerDay,
+        size.minEventGap,
+      ).map(({ item, x, side, lane }) => ({ event: item, x: x + offsetX, side, lane })),
+    [events, rangeStart, pxPerDay, offsetX, size],
+  );
+
+  // Eases pxPerDay from wherever it currently is towards the target zoom
+  // level. Restarting mid-flight (rapid clicks/wheel steps) resumes from the
+  // live value via pxPerDayRef instead of the old target, so it never jumps.
   useEffect(() => {
+    if (pxPerDayRef.current === targetPxPerDay) return undefined;
+
+    const startValue = pxPerDayRef.current;
+    const startTime = performance.now();
+    let frameId: number;
+
+    const tick = (now: number) => {
+      const progress = Math.min((now - startTime) / ZOOM_ANIMATION_MS, 1);
+      const value = startValue + (targetPxPerDay - startValue) * easeOutCubic(progress);
+      pxPerDayRef.current = value;
+      setPxPerDay(value);
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(tick);
+      } else {
+        zoomAnchorRef.current = null;
+      }
+    };
+
+    frameId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameId);
+  }, [targetPxPerDay]);
+
+  // Keeps whichever point was captured as the zoom anchor (cursor position
+  // for wheel-zoom, viewport center for the +/- buttons) stationary on screen
+  // on every step of the pxPerDay animation above — this is what makes zoom
+  // feel like it scales around that point instead of jumping to re-center.
+  // Falls back to centering on "today", but only once, on mount.
+  useLayoutEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollLeft = Math.max(todayX - el.clientWidth / 2, 0);
-    // scrollRef is a stable ref object; todayX is derived from pxPerDay/trackWidth.
+
+    const anchor = zoomAnchorRef.current;
+    if (anchor) {
+      const anchorX = offsetX + anchor.dayOffset * pxPerDay;
+      el.scrollLeft = Math.max(anchorX - anchor.viewportOffset, 0);
+      return;
+    }
+
+    if (!hasCenteredOnceRef.current) {
+      hasCenteredOnceRef.current = true;
+      el.scrollLeft = Math.max(todayX - el.clientWidth / 2, 0);
+    }
+    // scrollRef is a stable ref object; todayX derives from offsetX/pxPerDay/rangeStart.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pxPerDay, trackWidth]);
+  }, [offsetX, pxPerDay, trackWidth, todayX]);
 
   // Closes the click-to-open detail card on outside click, Escape, or when
   // the timeline scrolls (its fixed position would otherwise go stale).
@@ -251,16 +388,81 @@ export const PatientTimeline = ({
     el.scrollBy({ left: direction * el.clientWidth * 0.6, behavior: 'smooth' });
   };
 
-  const handleZoomIn = () => setZoomIndex((prev) => Math.min(prev + 1, ZOOM_LEVELS.length - 1));
-  const handleZoomOut = () => setZoomIndex((prev) => Math.max(prev - 1, 0));
+  // Remembers which date is at `trackX` (in un-scrolled track pixels) and
+  // where on screen (`viewportOffset`, relative to the scroll container) it
+  // must stay — read back by the animation-driven scroll effect above.
+  const captureZoomAnchor = (trackX: number, viewportOffset: number) => {
+    zoomAnchorRef.current = { dayOffset: (trackX - offsetX) / pxPerDay, viewportOffset };
+  };
+
+  const handleZoomIn = () => {
+    const el = scrollRef.current;
+    if (el) {
+      const viewportOffset = el.clientWidth / 2;
+      captureZoomAnchor(el.scrollLeft + viewportOffset, viewportOffset);
+    }
+    setZoomIndex((prev) => Math.min(prev + 1, ZOOM_LEVELS.length - 1));
+  };
+
+  const handleZoomOut = () => {
+    const el = scrollRef.current;
+    if (el) {
+      const viewportOffset = el.clientWidth / 2;
+      captureZoomAnchor(el.scrollLeft + viewportOffset, viewportOffset);
+    }
+    setZoomIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  // Lets the mouse wheel zoom the timeline instead of scrolling the page.
+  // Uses a native (non-passive) listener because React's onWheel is passive
+  // by default, so preventDefault() there wouldn't actually stop the page
+  // from scrolling. Skipped in compact mode — there, the card sits inside a
+  // long scrollable list, and hijacking the wheel would block page scroll
+  // every time the cursor happened to be over one of its many timelines.
+  useEffect(() => {
+    if (compact) return undefined;
+
+    const el = bodyRef.current;
+    if (!el) return undefined;
+
+    const handleWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      event.preventDefault();
+
+      wheelDeltaRef.current += event.deltaY;
+      if (Math.abs(wheelDeltaRef.current) < WHEEL_ZOOM_THRESHOLD) return;
+
+      const direction = wheelDeltaRef.current > 0 ? -1 : 1;
+      wheelDeltaRef.current = 0;
+
+      const scrollEl = scrollRef.current;
+      if (scrollEl) {
+        const viewportOffset = event.clientX - scrollEl.getBoundingClientRect().left;
+        captureZoomAnchor(scrollEl.scrollLeft + viewportOffset, viewportOffset);
+      }
+
+      setZoomIndex((prev) => Math.min(Math.max(prev + direction, 0), ZOOM_LEVELS.length - 1));
+    };
+
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => el.removeEventListener('wheel', handleWheel);
+    // captureZoomAnchor closes over offsetX/pxPerDay, listed below so the
+    // listener is re-subscribed (with a fresh closure) whenever they change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [compact, offsetX, pxPerDay]);
 
   const showAxis = !isLoading && events.length > 0;
 
   return (
-    <section className={`${styles.card} ${className ?? ''}`} style={style}>
-      <div className={styles.header}>
-        <h2 className={styles.heading}>{t.timeline.title}</h2>
-      </div>
+    <section
+      className={`${styles.card} ${compact ? styles.compact : ''} ${className ?? ''}`}
+      style={style}
+    >
+      {compact ? null : (
+        <div className={styles.header}>
+          <h2 className={styles.heading}>{t.timeline.title}</h2>
+        </div>
+      )}
 
       {isLoading ? <span className={styles.state}>{t.timeline.loading}</span> : null}
       {!isLoading && events.length === 0 ? (
@@ -268,7 +470,7 @@ export const PatientTimeline = ({
       ) : null}
 
       {showAxis ? (
-        <div className={styles.body}>
+        <div className={styles.body} ref={bodyRef}>
           <div className={styles.axisWrap}>
             <button
               type="button"
@@ -276,7 +478,7 @@ export const PatientTimeline = ({
               aria-label={t.timeline.scrollPrev}
               onClick={() => handlePan(-1)}
             >
-              <ChevronLeftIcon size={16} />
+              <ChevronLeftIcon size={compact ? 12 : 16} />
             </button>
 
             <div
@@ -287,23 +489,31 @@ export const PatientTimeline = ({
               <div
                 ref={trackRef}
                 className={styles.track}
-                style={{ width: trackWidth, height: TRACK_HEIGHT }}
+                style={{ width: trackWidth, height: size.trackHeight }}
               >
-                <span className={styles.line} style={{ top: LINE_Y }} />
-
-                {monthTicks.map((date) => (
+                {monthSegments.map((segment) => (
                   <span
-                    key={date.getTime()}
-                    className={styles.monthTick}
-                    style={{ left: dateToX(date), height: TRACK_HEIGHT }}
+                    key={segment.key}
+                    className={styles.line}
+                    style={{ top: size.lineY, left: segment.left, width: segment.width }}
                   />
+                ))}
+
+                {monthLabels.map((label) => (
+                  <span
+                    key={label.key}
+                    className={styles.monthLabel}
+                    style={{ left: label.x, top: size.lineY }}
+                  >
+                    {label.text}
+                  </span>
                 ))}
 
                 {yearTicks.map((tick) => (
                   <span
                     key={tick.year}
                     className={styles.yearTick}
-                    style={{ left: dateToX(tick.date), top: LINE_Y }}
+                    style={{ left: dateToX(tick.date), top: size.lineY }}
                   >
                     <span className={styles.yearTickMark} />
                     <span className={styles.yearLabel}>{tick.year}</span>
@@ -312,21 +522,21 @@ export const PatientTimeline = ({
 
                 <span className={styles.todayMarker} style={{ left: todayX }}>
                   <span className={styles.todayPill}>{t.timeline.today}</span>
-                  <span className={styles.todayLine} style={{ height: TRACK_HEIGHT }} />
-                  <span className={styles.todayDot} style={{ top: LINE_Y }} />
+                  <span className={styles.todayLine} style={{ height: size.trackHeight }} />
+                  <span className={styles.todayDot} style={{ top: size.lineY }} />
                 </span>
 
                 {positionedEvents.map(({ event, x, side, lane }) => {
                   const Icon = EVENT_ICON[event.type];
-                  const offset = BUBBLE_OFFSET + lane * LANE_STEP;
-                  const bubbleTop = side === 'above' ? LINE_Y - offset : LINE_Y + offset;
+                  const offset = size.bubbleOffset + lane * size.laneStep;
+                  const bubbleTop = side === 'above' ? size.lineY - offset : size.lineY + offset;
                   const stemStyle =
                     side === 'above'
                       ? {
-                          top: bubbleTop + BUBBLE_RADIUS,
-                          height: LINE_Y - (bubbleTop + BUBBLE_RADIUS),
+                          top: bubbleTop + size.bubbleRadius,
+                          height: size.lineY - (bubbleTop + size.bubbleRadius),
                         }
-                      : { top: LINE_Y, height: bubbleTop - BUBBLE_RADIUS - LINE_Y };
+                      : { top: size.lineY, height: bubbleTop - size.bubbleRadius - size.lineY };
                   const isActive = activeEvent?.event.id === event.id;
 
                   return (
@@ -341,10 +551,10 @@ export const PatientTimeline = ({
                       style={{ left: x }}
                       onClick={handleEventClick(event, bubbleTop, x, side)}
                     >
-                      <span className={styles.dot} style={{ top: LINE_Y }} />
+                      <span className={styles.dot} style={{ top: size.lineY }} />
                       <span className={styles.stem} style={stemStyle} />
                       <span className={styles.bubble} style={{ top: bubbleTop }}>
-                        <Icon size={16} />
+                        <Icon size={size.iconSize} />
                       </span>
                     </button>
                   );
@@ -358,7 +568,7 @@ export const PatientTimeline = ({
               aria-label={t.timeline.scrollNext}
               onClick={() => handlePan(1)}
             >
-              <ChevronRightIcon size={16} />
+              <ChevronRightIcon size={compact ? 12 : 16} />
             </button>
           </div>
 
@@ -370,7 +580,7 @@ export const PatientTimeline = ({
               disabled={zoomIndex >= ZOOM_LEVELS.length - 1}
               onClick={handleZoomIn}
             >
-              <PlusIcon size={14} />
+              <PlusIcon size={compact ? 11 : 14} />
             </button>
             <div className={styles.zoomTrack}>
               <div
@@ -385,7 +595,7 @@ export const PatientTimeline = ({
               disabled={zoomIndex <= 0}
               onClick={handleZoomOut}
             >
-              <MinusIcon size={14} />
+              <MinusIcon size={compact ? 11 : 14} />
             </button>
           </div>
         </div>
@@ -399,8 +609,8 @@ export const PatientTimeline = ({
           style={{
             top:
               activeEvent.side === 'above'
-                ? activeEvent.top - TOOLTIP_GAP
-                : activeEvent.top + TOOLTIP_GAP,
+                ? activeEvent.top - size.tooltipGap
+                : activeEvent.top + size.tooltipGap,
             left: activeEvent.left,
           }}
         >

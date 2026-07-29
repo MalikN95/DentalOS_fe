@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient, PatientsFilter } from '@/common/types/patient';
 import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointmentModal/CreateAppointmentModal';
@@ -29,6 +29,7 @@ const FILTER_COLORS: Record<PatientsFilter, ButtonColor> = {
 export const PatientsPageContent = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { data: clinic } = useClinic();
   const currency = clinic?.currency ?? 'RUB';
@@ -52,9 +53,11 @@ export const PatientsPageContent = () => {
     setLimit,
     setFilter,
     setTagIds,
-  } = usePatients();
+  } = usePatients(searchParams.get('search') ?? '');
 
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  // Opens the create-patient modal when arriving from the top-nav "+ New
+  // patient" shortcut (`/patients?new=1`).
+  const [isCreateOpen, setIsCreateOpen] = useState(() => searchParams.get('new') === '1');
   const [appointmentPatient, setAppointmentPatient] = useState<Patient | null>(null);
   const [treatmentPlanPatient, setTreatmentPlanPatient] = useState<Patient | null>(null);
   const [paymentPatient, setPaymentPatient] = useState<Patient | null>(null);
@@ -63,6 +66,18 @@ export const PatientsPageContent = () => {
   const invalidatePatients = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: [PATIENTS_QUERY_KEY] }).catch(() => undefined);
   }, [queryClient]);
+
+  // Strips the one-shot `new` flag from the URL so a refresh or the back
+  // button doesn't reopen the modal.
+  useEffect(() => {
+    if (searchParams.get('new') !== '1') return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('new');
+    router.replace(params.toString() ? `/patients?${params.toString()}` : '/patients');
+    // Runs once on mount to consume the one-shot URL flag.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.page}>

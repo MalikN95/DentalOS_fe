@@ -6,6 +6,7 @@ import type { Appointment } from '@/common/types/appointment';
 import type { PaymentMethod } from '@/common/types/finance';
 import { createInvoice, fetchInvoice, fetchPatientInvoices } from '@/helpers/invoices.api';
 import { createPayment } from '@/helpers/payments.api';
+import { PATIENT_INVOICES_QUERY_KEY } from '@/hooks/usePatientInvoices';
 import { useAppSelector } from '@/store/hooks';
 import { selectAccessToken } from '@/store/slices/auth/selectors';
 
@@ -85,6 +86,13 @@ export const useAppointmentPayment = ({ appointment, onPaid }: UseAppointmentPay
       // query (invoiceId-keyed, holding the actual payments[]/totalPaid) don't
       // share a prefix, so both need refetching after a payment is recorded.
       queryClient.invalidateQueries({ queryKey: [INVOICE_QUERY_KEY] }).catch(() => undefined);
+      // This hook fetches the patient's invoices under its own key instead of
+      // reusing usePatientInvoices' cache, so anything reading THAT cache
+      // (the appointments board's payment status, PatientBilling, the patient
+      // timeline) needs its own invalidation too, or it'd show stale data.
+      queryClient
+        .invalidateQueries({ queryKey: [PATIENT_INVOICES_QUERY_KEY] })
+        .catch(() => undefined);
       onPaid?.();
     },
   });

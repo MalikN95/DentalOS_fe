@@ -18,13 +18,13 @@ const filterToIsActive = (filter: PatientsFilter): boolean | undefined => {
   return undefined;
 };
 
-export const usePatients = () => {
+export const usePatients = (initialSearch = '') => {
   const accessToken = useAppSelector(selectAccessToken);
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
-  const [searchInput, setSearchInput] = useState('');
-  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState(initialSearch);
+  const [search, setSearch] = useState(initialSearch);
   const [filter, setFilter] = useState<PatientsFilter>('all');
   const [tagIds, setTagIdsState] = useState<string[]>([]);
 

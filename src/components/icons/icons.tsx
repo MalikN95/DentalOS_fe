@@ -231,6 +231,26 @@ export const InfoIcon = createIcon(
   </>,
 );
 
+export const PhoneIcon = createIcon(
+  <path d="M6.6 10.8a15.6 15.6 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.36 2.28.56 3.5.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.22.2 2.4.56 3.5a1 1 0 0 1-.25 1L6.6 10.8Z" />,
+);
+
+export const UserPlusIcon = createIcon(
+  <>
+    <circle cx="9" cy="8" r="3.5" />
+    <path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5" />
+    <path d="M19 8v5M16.5 10.5h5" />
+  </>,
+);
+
+export const AlertTriangleIcon = createIcon(
+  <>
+    <path d="M12 3.5 2.5 20h19L12 3.5Z" />
+    <path d="M12 10v4" />
+    <path d="M12 17h.01" />
+  </>,
+);
+
 export const TrashIcon = createIcon(
   <>
     <path d="M3 6h18" />

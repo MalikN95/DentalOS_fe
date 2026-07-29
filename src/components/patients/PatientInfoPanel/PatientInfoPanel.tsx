@@ -1,11 +1,12 @@
 'use client';
 
-import { useTranslation } from '@/common/locale/LocaleProvider';
+import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient } from '@/common/types/patient';
 import { EditIcon } from '@/components/icons/icons';
 import { PatientTagsField } from '@/components/patients/PatientTagsField/PatientTagsField';
-import { Badge } from '@/components/ui';
+import { Badge, PatientAvatar } from '@/components/ui';
 import { formatDate } from '@/helpers/date';
+import { deriveTagHue, tagBackground, tagForeground } from '@/helpers/tag-color';
 import styles from './PatientInfoPanel.module.css';
 
 type PatientInfoPanelProps = {
@@ -32,11 +33,18 @@ const TagList = ({ label, items }: { label: string; items: string[] }) => (
     <span className={styles.blockLabel}>{label}</span>
     {items.length > 0 ? (
       <div className={styles.tags}>
-        {items.map((item) => (
-          <span key={item} className={styles.tag}>
-            {item}
-          </span>
-        ))}
+        {items.map((item) => {
+          const hue = deriveTagHue(item);
+          return (
+            <span
+              key={item}
+              className={styles.tag}
+              style={{ background: tagBackground(hue), color: tagForeground(hue) }}
+            >
+              {item}
+            </span>
+          );
+        })}
       </div>
     ) : (
       <span className={styles.muted}>—</span>
@@ -60,21 +68,30 @@ export const PatientInfoPanel = ({
     <aside className={`${cardClassName} ${className ?? ''}`} style={style}>
       {hideHeader ? null : (
         <div className={styles.header}>
-          <div className={styles.nameRow}>
-            <span className={styles.name}>
-              {patient.lastName} {patient.firstName}
-            </span>
-            {onEdit ? (
-              <button
-                type="button"
-                className={styles.editButton}
-                title={t.common.edit}
-                aria-label={t.common.edit}
-                onClick={onEdit}
-              >
-                <EditIcon size={15} />
-              </button>
-            ) : null}
+          <div className={styles.topRow}>
+            <PatientAvatar
+              name={`${patient.firstName} ${patient.lastName}`}
+              hasWarning={patient.allergies.length > 0}
+              warningLabel={format(t.patientInfo.hasAllergiesWarning, {
+                list: patient.allergies.join(', '),
+              })}
+            />
+            <div className={styles.nameRow}>
+              <span className={styles.name}>
+                {patient.lastName} {patient.firstName}
+              </span>
+              {onEdit ? (
+                <button
+                  type="button"
+                  className={styles.editButton}
+                  title={t.common.edit}
+                  aria-label={t.common.edit}
+                  onClick={onEdit}
+                >
+                  <EditIcon size={15} />
+                </button>
+              ) : null}
+            </div>
           </div>
           <Badge color={patient.isActive ? 'success' : 'gray'}>
             {patient.isActive ? t.common.active : t.common.inactive}

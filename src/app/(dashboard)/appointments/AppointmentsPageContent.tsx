@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import type { Appointment } from '@/common/types/appointment';
 import { AppointmentManageModal } from '@/components/dashboard/AppointmentManageModal/AppointmentManageModal';
-import { AppointmentsTable } from '@/components/dashboard/AppointmentsTable/AppointmentsTable';
+import { AppointmentsBoard } from '@/components/dashboard/AppointmentsBoard/AppointmentsBoard';
 import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointmentModal/CreateAppointmentModal';
 import { PatientQuickViewModal } from '@/components/patients/PatientQuickViewModal/PatientQuickViewModal';
 import { addDays } from '@/helpers/date';
@@ -12,6 +12,7 @@ import {
   APPOINTMENTS_BY_DATE_QUERY_KEY,
   useAppointmentsByDate,
 } from '@/hooks/useAppointmentsByDate';
+import { useClinic } from '@/hooks/useClinic';
 import styles from './page.module.css';
 
 export const AppointmentsPageContent = () => {
@@ -21,6 +22,8 @@ export const AppointmentsPageContent = () => {
   const [viewingPatientId, setViewingPatientId] = useState<string | null>(null);
   const [managingAppointment, setManagingAppointment] = useState<Appointment | null>(null);
   const { data, isLoading, error } = useAppointmentsByDate(selectedDate);
+  const { data: clinic } = useClinic();
+  const currency = clinic?.currency ?? 'RUB';
 
   const handleOpenCreateModal = useCallback(() => {
     setIsCreateModalOpen(true);
@@ -46,9 +49,10 @@ export const AppointmentsPageContent = () => {
 
   return (
     <div className={styles.page}>
-      <AppointmentsTable
+      <AppointmentsBoard
         className={styles.tableSection}
         appointments={data ?? []}
+        currency={currency}
         isLoading={isLoading}
         errorMessage={error?.message ?? null}
         onAddClick={handleOpenCreateModal}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointmentModal/CreateAppointmentModal';
@@ -15,10 +15,10 @@ import { PatientTreatmentPlans } from '@/components/patients/PatientTreatmentPla
 import { PatientVisits } from '@/components/patients/PatientVisits/PatientVisits';
 import { SendEmailModal } from '@/components/patients/SendEmailModal/SendEmailModal';
 import { Alert } from '@/components/ui';
-import { buildPatientTimeline } from '@/helpers/patient-timeline';
 import { useClinic } from '@/hooks/useClinic';
 import { PATIENT_DETAIL_QUERY_KEY, usePatientDetail } from '@/hooks/usePatientDetail';
 import { PATIENT_INVOICES_QUERY_KEY, usePatientInvoices } from '@/hooks/usePatientInvoices';
+import { usePatientTimeline } from '@/hooks/usePatientTimeline';
 import { PATIENTS_QUERY_KEY } from '@/hooks/usePatients';
 import styles from './PatientDetailContent.module.css';
 
@@ -41,11 +41,7 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
     isLoading: isInvoicesLoading,
     errorMessage: invoicesErrorMessage,
   } = usePatientInvoices(patientId);
-
-  const timelineEvents = useMemo(
-    () => buildPatientTimeline({ visits: [...upcoming, ...past], invoices }),
-    [upcoming, past, invoices],
-  );
+  const { events: timelineEvents, isLoading: isTimelineLoading } = usePatientTimeline(patientId);
 
   const handleAppointmentCreated = useCallback(() => {
     queryClient
@@ -104,11 +100,7 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
             </div>
           </div>
 
-          <PatientTimeline
-            events={timelineEvents}
-            currency={currency}
-            isLoading={isVisitsLoading || isInvoicesLoading}
-          />
+          <PatientTimeline events={timelineEvents} currency={currency} isLoading={isTimelineLoading} />
         </>
       ) : null}
 

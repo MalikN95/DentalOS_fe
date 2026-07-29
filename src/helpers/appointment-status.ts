@@ -39,7 +39,7 @@ const TERMINAL_STATUSES: AppointmentStatus[] = ['completed', 'cancelled', 'no_sh
 export const isTerminalStatus = (status: AppointmentStatus): boolean =>
   TERMINAL_STATUSES.includes(status);
 
-const NOT_STARTED_STATUSES: AppointmentStatus[] = ['pending', 'confirmed'];
+export const NOT_STARTED_STATUSES: AppointmentStatus[] = ['pending', 'confirmed'];
 
 // Appointments arrive sorted by time; the next one is the first that hasn't
 // started yet (arrived/in_treatment/completed/cancelled/no_show are already past).

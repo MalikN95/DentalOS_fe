@@ -1,0 +1,51 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+  font-weight: 600;
+}
+
+.sm .circle {
+  width: 28px;
+  height: 28px;
+  font-size: 11px;
+}
+
+.md .circle {
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
+}
+
+.warning {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--color-white);
+  border-radius: 50%;
+  background: var(--color-red-500);
+  color: var(--color-white);
+  cursor: default;
+}
+
+.sm .warning {
+  width: 14px;
+  height: 14px;
+}
+
+.md .warning {
+  width: 16px;
+  height: 16px;
+}

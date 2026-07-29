@@ -1,0 +1,44 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.bubble {
+  position: absolute;
+  left: 50%;
+  z-index: 20;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--color-black-700);
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 2px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  pointer-events: none;
+}
+
+.bubble[data-side='top'] {
+  bottom: 100%;
+  margin-bottom: 6px;
+  transform: translate(-50%, 2px);
+}
+
+.bubble[data-side='bottom'] {
+  top: 100%;
+  margin-top: 6px;
+  transform: translate(-50%, -2px);
+}
+
+.wrap:hover .bubble,
+.wrap:focus-within .bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}

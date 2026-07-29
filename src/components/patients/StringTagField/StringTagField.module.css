@@ -1,0 +1,211 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  font-weight: 500;
+  color: var(--color-black-700);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+}
+
+.muted {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.pillLabel {
+  overflow: hidden;
+  max-width: 200px;
+  text-overflow: ellipsis;
+}
+
+.removeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  opacity: 1;
+}
+
+.moreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 20px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid var(--color-gray-100);
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-black-500);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.moreButton:hover {
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 1px dashed var(--color-gray-200);
+  border-radius: 50%;
+  background: none;
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.addButton:hover {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+}
+
+/* Both portaled to <body> and positioned in JS (StringTagField.tsx) — fixed
+   so they can never be clipped by a card's (or any ancestor's) overflow, and
+   a z-index above the Modal overlay (100) so they render on top of it. */
+.morePopover {
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 280px;
+  padding: 8px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  box-shadow: 0 12px 28px rgb(51 56 67 / 16%);
+}
+
+.popover {
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 260px;
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  box-shadow: 0 12px 28px rgb(51 56 67 / 16%);
+}
+
+.search {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: 13px;
+}
+
+.search:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.options {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 6px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: none;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--color-gray-25);
+}
+
+.checkIcon {
+  flex-shrink: 0;
+  color: var(--color-primary-500);
+}
+
+.createOption {
+  flex-shrink: 0;
+  padding: 7px 8px;
+  border: 1px dashed var(--color-gray-200);
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--color-primary-600);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.createOption:hover {
+  background: var(--color-gray-25);
+}

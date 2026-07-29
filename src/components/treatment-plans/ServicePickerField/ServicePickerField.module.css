@@ -1,0 +1,225 @@
+.wrapper {
+  width: 100%;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.triggerLabel {
+  overflow: hidden;
+  min-width: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.placeholder {
+  color: var(--color-black-500);
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--color-black-500);
+}
+
+.popover {
+  /* Portaled to <body> and positioned in JS (ServicePickerField.tsx) — fixed
+     so it can never be clipped by the modal's (or any ancestor's) overflow,
+     and a z-index above the Modal overlay (100) so it renders on top of it. */
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  box-shadow: 0 12px 28px rgb(51 56 67 / 16%);
+}
+
+.search {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: 13px;
+}
+
+.search:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.options {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 8px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--color-black-700);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--color-gray-25);
+}
+
+.optionName {
+  overflow: hidden;
+  min-width: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.optionPrice {
+  flex-shrink: 0;
+  color: var(--color-black-500);
+}
+
+.empty {
+  padding: 7px 8px;
+  color: var(--color-black-500);
+  font-size: 13px;
+  text-align: center;
+}
+
+.createOption {
+  flex-shrink: 0;
+  padding: 7px 8px;
+  border: 1px dashed var(--color-gray-200);
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--color-primary-600);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.createOption:hover {
+  background: var(--color-gray-25);
+}
+
+.createForm {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border: 1px dashed var(--color-gray-200);
+  border-radius: var(--radius-control);
+}
+
+.createFormTitle {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-black-700);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.createFormRow {
+  display: flex;
+  gap: 8px;
+}
+
+.createFormInput {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: 13px;
+}
+
+.createFormInput:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.createFormError {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-red-600);
+}
+
+.createFormActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.createFormCancel {
+  border: none;
+  background: none;
+  padding: 4px 8px;
+  color: var(--color-black-500);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.createFormCancel:hover {
+  color: var(--color-black-700);
+}
+
+.createFormSubmit {
+  padding: 5px 12px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: var(--color-primary-500);
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.createFormSubmit:hover:not(:disabled) {
+  background: var(--color-primary-600);
+}
+
+.createFormSubmit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

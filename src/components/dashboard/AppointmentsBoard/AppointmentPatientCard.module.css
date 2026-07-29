@@ -1,0 +1,236 @@
+.card {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+}
+
+.accentBar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  border-radius: 12px 0 0 12px;
+}
+
+.accentBar[data-tone='first'] {
+  background: var(--color-blue-500);
+}
+
+.accentBar[data-tone='cancelled'] {
+  background: var(--color-orange-500);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 240px;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 12px 0 0 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.info:hover {
+  background: var(--color-gray-25);
+}
+
+.info:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: -2px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.name {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-primary-500);
+  cursor: pointer;
+  text-align: left;
+}
+
+.name:hover {
+  text-decoration: underline;
+}
+
+.age {
+  font-size: 11px;
+  color: var(--color-black-500);
+}
+
+.meta {
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--color-black-500);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timeRange {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-black-700);
+}
+
+.timeDuration {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-black-500);
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.paymentDot {
+  color: var(--color-gray-200);
+}
+
+.paymentText {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.paymentText[data-color='primary'] {
+  color: var(--color-primary-500);
+}
+
+.paymentText[data-color='gray'] {
+  color: var(--color-black-500);
+}
+
+.paymentText[data-color='danger'] {
+  color: var(--color-red-500);
+}
+
+.paymentText[data-color='success'] {
+  color: var(--color-green-500);
+}
+
+.paymentText[data-color='warning'] {
+  color: var(--color-orange-600);
+}
+
+.code {
+  margin-top: 1px;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--color-black-500);
+}
+
+.quickActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 4px;
+  padding: 6px 4px;
+  border-left: 1px solid var(--color-gray-50);
+  border-right: 1px solid var(--color-gray-50);
+}
+
+.quickActionsLate {
+  background: var(--color-red-100);
+  border-left-color: var(--color-red-200);
+  border-right-color: var(--color-red-200);
+}
+
+.lateWarning {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--color-red-600);
+  cursor: default;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.actionButton:hover {
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.actionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.actionButton:disabled:hover {
+  background: var(--color-white);
+  color: var(--color-black-500);
+}
+
+.timelineWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .card {
+    flex-wrap: wrap;
+  }
+
+  .info {
+    width: auto;
+  }
+
+  .timelineWrap {
+    flex-basis: 100%;
+  }
+}

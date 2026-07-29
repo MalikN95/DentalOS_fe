@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useTranslation } from '@/common/locale/LocaleProvider';
-import { Alert, Badge, Button, Modal } from '@/components/ui';
+import { format, useTranslation } from '@/common/locale/LocaleProvider';
+import { Alert, Badge, Button, Modal, PatientAvatar } from '@/components/ui';
 import { usePatient } from '@/hooks/usePatient';
 import { PatientInfoPanel } from '@/components/patients/PatientInfoPanel/PatientInfoPanel';
 import styles from './PatientQuickViewModal.module.css';
@@ -31,6 +31,14 @@ export const PatientQuickViewModal = ({
 
   const title = patient ? (
     <span className={styles.title}>
+      <PatientAvatar
+        size="sm"
+        name={`${patient.firstName} ${patient.lastName}`}
+        hasWarning={patient.allergies.length > 0}
+        warningLabel={format(t.patientInfo.hasAllergiesWarning, {
+          list: patient.allergies.join(', '),
+        })}
+      />
       {patient.lastName} {patient.firstName}
       <Badge color={patient.isActive ? 'success' : 'gray'}>
         {patient.isActive ? t.common.active : t.common.inactive}

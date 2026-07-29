@@ -7,14 +7,11 @@ import { useTranslation } from '@/common/locale/LocaleProvider';
 import { getNavItemByPathname, NAV_ITEMS } from '@/common/constants/navigation';
 import type { StaffRole } from '@/common/types/staff';
 import { MOCK_CLINIC_NAME, MOCK_USER } from '@/common/mocks/auth.mock';
-import { Header } from '@/components/layout/Header/Header';
-import { Sidebar } from '@/components/layout/Sidebar/Sidebar';
+import { TopNav } from '@/components/layout/TopNav/TopNav';
 import { logoutRequest } from '@/helpers/auth-bridge';
 import { useClinic } from '@/hooks/useClinic';
-import { useIsMobile } from '@/hooks/useIsMobile';
-import { useMobileSidebar } from '@/hooks/useMobileSidebar';
+import { useMobileNav } from '@/hooks/useMobileNav';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
-import { useSidebarCollapse } from '@/hooks/useSidebarCollapse';
 import { useTodayAppointments } from '@/hooks/useTodayAppointments';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/slices/auth/auth.slice';
@@ -36,18 +33,12 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   const accessToken = useAppSelector(selectAccessToken);
   const { data: todayAppointments } = useTodayAppointments();
   const { data: clinic } = useClinic();
-  const { isCollapsed, toggle: toggleSidebar } = useSidebarCollapse();
-  const isMobile = useIsMobile();
-  const {
-    isOpen: isMobileMenuOpen,
-    toggle: toggleMobileMenu,
-    close: closeMobileMenu,
-  } = useMobileSidebar();
+  const { isOpen: isMobileNavOpen, toggle: toggleMobileNav, close: closeMobileNav } = useMobileNav();
 
-  // Close the mobile drawer whenever the route changes.
+  // Close the mobile nav panel whenever the route changes.
   useEffect(() => {
-    closeMobileMenu();
-  }, [pathname, closeMobileMenu]);
+    closeMobileNav();
+  }, [pathname, closeMobileNav]);
 
   const activeItem = getNavItemByPathname(pathname);
   const items = NAV_ITEMS.filter(
@@ -69,6 +60,11 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
     router.push('/login');
   };
 
+  const handleSearchSubmit = (value: string) => {
+    router.push(`/patients?search=${encodeURIComponent(value)}`);
+    closeMobileNav();
+  };
+
   // Block dashboard rendering for unauthenticated users (redirect handled by the guard).
   if (!isAuthenticated) {
     return null;
@@ -76,33 +72,28 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
 
   return (
     <div className={styles.shell}>
-      <Sidebar
+      <TopNav
         items={items}
         activeId={activeItem.id}
         clinicName={clinic?.name ?? MOCK_CLINIC_NAME}
         logoUrl={clinic?.logoUrl}
+        newPatientHref="/patients?new=1"
+        newPatientLabel={t.patients.newPatient}
+        searchPlaceholder={t.header.searchPatient}
+        onSearchSubmit={handleSearchSubmit}
+        userName={`${user.firstName} ${user.lastName}`}
+        userRole={userRole}
+        notificationsLabel={t.header.notifications}
+        notificationsCount={3}
         logoutLabel={t.nav.logout}
-        isCollapsed={isCollapsed && !isMobile}
-        onToggleCollapse={toggleSidebar}
-        collapseLabel={t.nav.collapseSidebar}
-        expandLabel={t.nav.expandSidebar}
-        isMobileOpen={isMobileMenuOpen}
-        onCloseMobile={closeMobileMenu}
-        closeMenuLabel={t.nav.closeMenu}
         onLogout={handleLogout}
+        isMobileOpen={isMobileNavOpen}
+        onToggleMobile={toggleMobileNav}
+        onCloseMobile={closeMobileNav}
+        openMenuLabel={t.nav.openMenu}
+        closeMenuLabel={t.nav.closeMenu}
       />
-      <div className={styles.main}>
-        <Header
-          title={t.nav[activeItem.labelKey]}
-          userName={`${user.firstName} ${user.lastName}`}
-          userRole={userRole}
-          notificationsLabel={t.header.notifications}
-          notificationsCount={3}
-          menuLabel={isMobileMenuOpen ? t.nav.closeMenu : t.nav.openMenu}
-          onMenuClick={toggleMobileMenu}
-        />
-        <main className={styles.content}>{children}</main>
-      </div>
+      <main className={styles.content}>{children}</main>
     </div>
   );
 };

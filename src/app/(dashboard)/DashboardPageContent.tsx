@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Appointment } from '@/common/types/appointment';
 import { AppointmentManageModal } from '@/components/dashboard/AppointmentManageModal/AppointmentManageModal';
-import { AppointmentsTable } from '@/components/dashboard/AppointmentsTable/AppointmentsTable';
+import { AppointmentsBoard } from '@/components/dashboard/AppointmentsBoard/AppointmentsBoard';
 import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointmentModal/CreateAppointmentModal';
 import { StatCard, type StatCardAccent } from '@/components/dashboard/StatCard/StatCard';
 import { CalendarIcon, PatientsIcon, WalletIcon, XCircleIcon } from '@/components/icons/icons';
@@ -85,9 +85,10 @@ export const DashboardPageContent = () => {
         ))}
       </div>
 
-      <AppointmentsTable
+      <AppointmentsBoard
         className={styles.tableSection}
         appointments={appointments ?? []}
+        currency={currency}
         isLoading={isLoading}
         errorMessage={error?.message ?? null}
         onAddClick={handleOpenCreateModal}

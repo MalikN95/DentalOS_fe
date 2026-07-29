@@ -66,3 +66,26 @@ export const formatDate = (isoDate: string): string =>
     month: '2-digit',
     year: 'numeric',
   });
+
+// Whole years since birthDate ('YYYY-MM-DD'), null when there's nothing to compute.
+export const calculateAge = (birthDate: string | null): number | null => {
+  if (!birthDate) return null;
+
+  const birth = new Date(birthDate);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const hasHadBirthdayThisYear =
+    today.getMonth() > birth.getMonth() ||
+    (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate());
+
+  if (!hasHadBirthdayThisYear) age -= 1;
+
+  return age;
+};
+
+// Short, capitalized month name (e.g. "Янв", "Март") for compact axis labels —
+// Intl's own 'short' style trails a period ("янв.") that reads oddly that small.
+export const formatMonthLabel = (date: Date): string => {
+  const short = date.toLocaleDateString('ru-RU', { month: 'short' }).replace('.', '');
+  return short.charAt(0).toUpperCase() + short.slice(1);
+};

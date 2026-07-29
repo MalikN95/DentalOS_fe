@@ -6,6 +6,7 @@ import { MOCK_USER } from '@/common/mocks/auth.mock';
 import type { StaffRole } from '@/common/types/staff';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import { Alert, Button, TextField, type ButtonColor } from '@/components/ui';
+import { getAppointmentCode } from '@/helpers/appointment-code';
 import {
   actionTargetStatus,
   appointmentStatusActions,
@@ -197,6 +198,10 @@ export const AppointmentManagePanel = ({
   return (
     <div className={className} style={style}>
       <div className={styles.summary}>
+        <div className={styles.field}>
+          <span className={styles.label}>{t.codeLabel}</span>
+          <span className={styles.readonlyValue}>{getAppointmentCode(appointment.id)}</span>
+        </div>
         <div className={styles.field}>
           <span className={styles.label}>{t.colPatient}</span>
           <span className={styles.readonlyValue}>{appointment.patientName}</span>

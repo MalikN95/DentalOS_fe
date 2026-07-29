@@ -4,7 +4,9 @@ import { useId } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient } from '@/common/types/patient';
+import { StringTagField } from '@/components/patients/StringTagField/StringTagField';
 import { Alert, Button, Modal, SwitchToggle, TextField } from '@/components/ui';
+import { useAllergiesCatalog, useChronicDiseasesCatalog } from '@/hooks/usePatientClinicalCatalog';
 import { usePatientForm } from '@/hooks/usePatientForm';
 import styles from './PatientFormModal.module.css';
 
@@ -27,6 +29,8 @@ export const PatientFormModal = ({
   const t = dict.patients.form;
   const genderFieldId = useId();
   const commentsFieldId = useId();
+  const { options: allergyOptions } = useAllergiesCatalog();
+  const { options: chronicOptions } = useChronicDiseasesCatalog();
 
   const { form, mutation, isEditMode } = usePatientForm({
     patient,
@@ -175,12 +179,15 @@ export const PatientFormModal = ({
         control={control}
         name="allergies"
         render={({ field }) => (
-          <TextField
+          <StringTagField
             label={t.allergies}
-            placeholder={t.allergiesPlaceholder}
             value={field.value}
             onChange={field.onChange}
-            onBlur={field.onBlur}
+            options={allergyOptions}
+            emptyLabel={t.allergiesEmpty}
+            addLabel={t.allergiesAdd}
+            searchPlaceholder={t.allergiesSearchPlaceholder}
+            createLabelTemplate={dict.patientInfo.createTag}
           />
         )}
       />
@@ -188,12 +195,15 @@ export const PatientFormModal = ({
         control={control}
         name="chronicDiseases"
         render={({ field }) => (
-          <TextField
+          <StringTagField
             label={t.chronic}
-            placeholder={t.chronicPlaceholder}
             value={field.value}
             onChange={field.onChange}
-            onBlur={field.onBlur}
+            options={chronicOptions}
+            emptyLabel={t.chronicEmpty}
+            addLabel={t.chronicAdd}
+            searchPlaceholder={t.chronicSearchPlaceholder}
+            createLabelTemplate={dict.patientInfo.createTag}
           />
         )}
       />

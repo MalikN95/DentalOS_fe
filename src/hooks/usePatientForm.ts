@@ -17,8 +17,8 @@ const patientFormSchema = z.object({
   email: z.union([z.literal(''), z.email('Некорректный email')]),
   birthDate: z.string(),
   gender: z.union([z.literal(''), z.enum(['male', 'female', 'other'])]),
-  allergies: z.string(),
-  chronicDiseases: z.string(),
+  allergies: z.array(z.string()),
+  chronicDiseases: z.array(z.string()),
   comments: z.string(),
   insuranceCompany: z.string(),
   insurancePolicyNumber: z.string(),
@@ -35,22 +35,14 @@ const EMPTY_VALUES: PatientFormValues = {
   email: '',
   birthDate: '',
   gender: '',
-  allergies: '',
-  chronicDiseases: '',
+  allergies: [],
+  chronicDiseases: [],
   comments: '',
   insuranceCompany: '',
   insurancePolicyNumber: '',
   insuranceValidUntil: '',
   isActive: true,
 };
-
-const splitList = (value: string): string[] =>
-  value
-    .split(/[\n,]/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-
-const joinList = (value: string[] | null | undefined): string => (value ?? []).join(', ');
 
 const patientToValues = (patient: Patient): PatientFormValues => ({
   firstName: patient.firstName,
@@ -59,8 +51,8 @@ const patientToValues = (patient: Patient): PatientFormValues => ({
   email: patient.email ?? '',
   birthDate: patient.birthDate ?? '',
   gender: patient.gender ?? '',
-  allergies: joinList(patient.allergies),
-  chronicDiseases: joinList(patient.chronicDiseases),
+  allergies: patient.allergies ?? [],
+  chronicDiseases: patient.chronicDiseases ?? [],
   comments: patient.comments ?? '',
   insuranceCompany: patient.insurance?.company ?? '',
   insurancePolicyNumber: patient.insurance?.policyNumber ?? '',
@@ -80,8 +72,8 @@ const valuesToPayload = (values: PatientFormValues): CreatePatientPayload => {
     email: values.email.trim() || undefined,
     birthDate: values.birthDate || undefined,
     gender: values.gender || undefined,
-    allergies: splitList(values.allergies),
-    chronicDiseases: splitList(values.chronicDiseases),
+    allergies: values.allergies,
+    chronicDiseases: values.chronicDiseases,
     comments: values.comments.trim() || undefined,
     insurance: hasInsurance
       ? {

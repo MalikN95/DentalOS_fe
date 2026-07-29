@@ -1,7 +1,8 @@
 'use client';
 
 import { useId } from 'react';
-import { useTranslation } from '@/common/locale/LocaleProvider';
+import { useWatch } from 'react-hook-form';
+import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type {
   AppointmentFormBranch,
   AppointmentFormDoctor,
@@ -9,7 +10,13 @@ import type {
   AppointmentFormService,
 } from '@/common/types/appointment-form';
 import { Alert, Button, Modal, TextField } from '@/components/ui';
-import { useCreateAppointmentForm } from '@/hooks/useCreateAppointmentForm';
+import {
+  APPOINTMENT_DURATION_PRESETS,
+  APPOINTMENT_DURATION_STEP,
+  MAX_APPOINTMENT_DURATION,
+  MIN_APPOINTMENT_DURATION,
+  useCreateAppointmentForm,
+} from '@/hooks/useCreateAppointmentForm';
 import styles from './CreateAppointmentModal.module.css';
 
 type CreateAppointmentModalProps = {
@@ -73,6 +80,7 @@ export const CreateAppointmentModal = ({
     formState: { errors, isSubmitting },
   } = form;
 
+  const durationMinutes = useWatch({ control: form.control, name: 'durationMinutes' });
   const branchField = register('branchId');
 
   const handleCloseClick = () => {
@@ -221,6 +229,43 @@ export const CreateAppointmentModal = ({
             error={errors.startsAt?.message}
             {...register('startsAt')}
           />
+
+          <div className={styles.field}>
+            <span className={styles.label}>{t.duration}</span>
+            <div className={styles.durationRow}>
+              {APPOINTMENT_DURATION_PRESETS.map((minutes) => (
+                <button
+                  key={minutes}
+                  type="button"
+                  className={`${styles.durationChip} ${
+                    durationMinutes === minutes ? styles.durationChipActive : ''
+                  }`}
+                  onClick={() =>
+                    form.setValue('durationMinutes', minutes, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    })
+                  }
+                >
+                  {format(t.durationMinutesShort, { minutes })}
+                </button>
+              ))}
+              <input
+                type="number"
+                inputMode="numeric"
+                className={`${styles.durationInput} ${errors.durationMinutes ? styles.selectError : ''}`}
+                aria-label={t.durationCustom}
+                title={t.durationCustom}
+                min={MIN_APPOINTMENT_DURATION}
+                max={MAX_APPOINTMENT_DURATION}
+                step={APPOINTMENT_DURATION_STEP}
+                {...register('durationMinutes', { valueAsNumber: true })}
+              />
+            </div>
+            {errors.durationMinutes ? (
+              <span className={styles.errorText}>{errors.durationMinutes.message}</span>
+            ) : null}
+          </div>
 
           <SelectField label={t.comment}>
             {(fieldId) => (

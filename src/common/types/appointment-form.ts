@@ -17,6 +17,7 @@ export type AppointmentFormDoctor = {
 export type AppointmentFormService = {
   id: string;
   name: string;
+  durationMinutes: number;
 };
 
 export type AppointmentFormBranch = {
@@ -37,5 +38,6 @@ export type CreateAppointmentPayload = {
   serviceId: string;
   branchId: string;
   startsAt: string;
+  durationMinutes: number;
   comment?: string;
 };
