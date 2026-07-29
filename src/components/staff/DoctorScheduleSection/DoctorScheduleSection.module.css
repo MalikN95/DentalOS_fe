@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hint {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px dashed var(--color-gray-100);
+  border-radius: var(--radius-control);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-black-500);
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

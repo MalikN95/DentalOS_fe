@@ -4,6 +4,7 @@ import { useId } from 'react';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { StaffMember } from '@/common/types/staff';
 import { STAFF_ROLES } from '@/common/types/staff';
+import { DoctorScheduleSection } from '@/components/staff/DoctorScheduleSection/DoctorScheduleSection';
 import { Alert, Button, Modal, SwitchToggle, TextField } from '@/components/ui';
 import { useBranchOptions } from '@/hooks/useBranchOptions';
 import { useStaffForm } from '@/hooks/useStaffForm';
@@ -166,6 +167,16 @@ export const StaffFormModal = ({
               {...register('description')}
             />
           </label>
+        </fieldset>
+      ) : null}
+
+      {isDoctor && member?.doctorProfile ? (
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>{dict.doctorSchedule.title}</legend>
+          <DoctorScheduleSection
+            doctorProfileId={member.doctorProfile.id}
+            branchId={watch('branchId') || null}
+          />
         </fieldset>
       ) : null}
 

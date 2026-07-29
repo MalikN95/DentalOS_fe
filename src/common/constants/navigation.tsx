@@ -37,6 +37,13 @@ export const NAV_ITEMS: NavItem[] = [
   },
   { id: 'staff', labelKey: 'staff', href: '/staff', icon: <StaffIcon /> },
   {
+    id: 'my-schedule',
+    labelKey: 'mySchedule',
+    href: '/my-schedule',
+    icon: <CalendarIcon />,
+    roles: ['doctor'],
+  },
+  {
     id: 'finance',
     labelKey: 'finance',
     href: '/finance',

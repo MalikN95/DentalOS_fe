@@ -2,7 +2,8 @@
 
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { StaffMember } from '@/common/types/staff';
-import { Alert, Badge, Button } from '@/components/ui';
+import { EditIcon, TrashIcon } from '@/components/icons/icons';
+import { Alert, Badge } from '@/components/ui';
 import { useDragScroll } from '@/hooks/useDragScroll';
 import styles from './StaffTable.module.css';
 
@@ -13,6 +14,7 @@ type StaffTableProps = {
   footer?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  onNameClick?: (member: StaffMember) => void;
   onEdit?: (member: StaffMember) => void;
   onDelete?: (member: StaffMember) => void;
 };
@@ -24,6 +26,7 @@ export const StaffTable = ({
   footer,
   className,
   style,
+  onNameClick,
   onEdit,
   onDelete,
 }: StaffTableProps) => {
@@ -86,9 +89,13 @@ export const StaffTable = ({
                           {member.firstName.charAt(0)}
                         </span>
                         <span className={styles.employeeName}>
-                          <span className={styles.fullName}>
+                          <button
+                            type="button"
+                            className={styles.fullName}
+                            onClick={() => onNameClick?.(member)}
+                          >
                             {member.lastName} {member.firstName}
-                          </span>
+                          </button>
                           {member.doctorProfile ? (
                             <span className={styles.experience}>
                               {t.staff.experienceShort}: {member.doctorProfile.experienceYears}
@@ -121,12 +128,24 @@ export const StaffTable = ({
                     </td>
                     <td>
                       <div className={styles.actions}>
-                        <Button variant="soft" color="gray" onClick={() => onEdit?.(member)}>
-                          {t.common.edit}
-                        </Button>
-                        <Button variant="soft" color="danger" onClick={() => onDelete?.(member)}>
-                          {t.common.delete}
-                        </Button>
+                        <button
+                          type="button"
+                          className={styles.actionButton}
+                          title={t.common.edit}
+                          aria-label={t.common.edit}
+                          onClick={() => onEdit?.(member)}
+                        >
+                          <EditIcon size={16} />
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.actionButton}
+                          title={t.common.delete}
+                          aria-label={t.common.delete}
+                          onClick={() => onDelete?.(member)}
+                        >
+                          <TrashIcon size={16} />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -152,9 +171,13 @@ export const StaffTable = ({
                       {member.firstName.charAt(0)}
                     </span>
                     <span className={styles.employeeName}>
-                      <span className={styles.fullName}>
+                      <button
+                        type="button"
+                        className={styles.fullName}
+                        onClick={() => onNameClick?.(member)}
+                      >
                         {member.lastName} {member.firstName}
-                      </span>
+                      </button>
                       {member.doctorProfile ? (
                         <span className={styles.experience}>
                           {t.staff.experienceShort}: {member.doctorProfile.experienceYears}
@@ -201,12 +224,24 @@ export const StaffTable = ({
                 </div>
 
                 <div className={styles.mobileActions}>
-                  <Button variant="soft" color="gray" onClick={() => onEdit?.(member)}>
-                    {t.common.edit}
-                  </Button>
-                  <Button variant="soft" color="danger" onClick={() => onDelete?.(member)}>
-                    {t.common.delete}
-                  </Button>
+                  <button
+                    type="button"
+                    className={styles.actionButton}
+                    title={t.common.edit}
+                    aria-label={t.common.edit}
+                    onClick={() => onEdit?.(member)}
+                  >
+                    <EditIcon size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.actionButton}
+                    title={t.common.delete}
+                    aria-label={t.common.delete}
+                    onClick={() => onDelete?.(member)}
+                  >
+                    <TrashIcon size={16} />
+                  </button>
                 </div>
               </div>
             ))

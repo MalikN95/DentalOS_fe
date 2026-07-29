@@ -21,6 +21,7 @@ export const ky: Dictionary = {
     patients: 'Бейтаптар',
     treatmentPlans: 'Дарылоо пландары',
     staff: 'Кызматкерлер',
+    mySchedule: 'Менин графигим',
     finance: 'Эсептер жана төлөмдөр',
     settings: 'Жөндөөлөр',
     logout: 'Чыгуу',
@@ -269,6 +270,15 @@ export const ky: Dictionary = {
       text: '{name} бейтабы өчүрүлөт. Бул аракетти артка кайтарууга болбойт.',
       deleting: 'Өчүрүлүүдө...',
     },
+  },
+  doctorSchedule: {
+    title: 'Иш графиги',
+    branchRequired: 'График түзүү үчүн дарыгерге негизги филиалды дайындаңыз',
+    save: 'Графикти сактоо',
+    saving: 'Сакталып жатат...',
+    saved: 'График сакталды',
+    saveError: 'Графикти сактап болбоду',
+    noProfile: 'Сизде дарыгер профили жок',
   },
   staff: {
     title: 'Кызматкерлер',

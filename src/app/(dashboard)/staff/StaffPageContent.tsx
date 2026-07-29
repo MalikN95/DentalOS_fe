@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { StaffFilter, StaffMember, StaffRole } from '@/common/types/staff';
 import { STAFF_ROLES } from '@/common/types/staff';
@@ -18,6 +19,7 @@ const FILTER_VALUES: StaffFilter[] = ['all', 'active', 'inactive'];
 
 export const StaffPageContent = () => {
   const { t } = useTranslation();
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const {
@@ -124,9 +126,11 @@ export const StaffPageContent = () => {
       </div>
 
       <StaffTable
+        className={styles.tableSection}
         staff={staff}
         isLoading={query.isLoading}
         errorMessage={query.error?.message ?? null}
+        onNameClick={(member) => router.push(`/staff/${member.id}`)}
         onEdit={setEditingMember}
         onDelete={setDeletingMember}
         footer={

@@ -21,6 +21,7 @@ export const en: Dictionary = {
     patients: 'Patients',
     treatmentPlans: 'Treatment plans',
     staff: 'Staff',
+    mySchedule: 'My schedule',
     finance: 'Invoices & payments',
     settings: 'Settings',
     logout: 'Log out',
@@ -269,6 +270,15 @@ export const en: Dictionary = {
       text: 'Patient {name} will be deleted. This action cannot be undone.',
       deleting: 'Deleting...',
     },
+  },
+  doctorSchedule: {
+    title: 'Working hours',
+    branchRequired: 'Assign a primary branch to the doctor to set up a schedule',
+    save: 'Save schedule',
+    saving: 'Saving...',
+    saved: 'Schedule saved',
+    saveError: 'Failed to save the schedule',
+    noProfile: "You don't have a doctor profile",
   },
   staff: {
     title: 'Staff',

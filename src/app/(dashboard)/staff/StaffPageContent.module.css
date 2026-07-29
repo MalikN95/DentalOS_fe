@@ -1,11 +1,14 @@
 .page {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
   gap: 12px;
 }
 
 .headerRow {
   display: flex;
+  flex-shrink: 0;
   flex-wrap: wrap;
   align-items: center;
   gap: 16px;
@@ -87,4 +90,9 @@
   padding: 6px 12px;
   font-size: 13px;
   line-height: 18px;
+}
+
+.tableSection {
+  flex: 1;
+  min-height: 0;
 }

@@ -1,6 +1,7 @@
 .card {
   display: flex;
   flex-direction: column;
+  min-height: 0;
   background: var(--color-white);
   border: 1px solid var(--color-gray-50);
   border-radius: 12px;
@@ -9,7 +10,9 @@
 
 .tableWrap {
   width: 100%;
-  overflow-x: auto;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   cursor: grab;
   touch-action: pan-y;
 }
@@ -25,7 +28,7 @@
 }
 
 .table th {
-  padding: 12px 20px;
+  padding: 8px 16px;
   background: var(--color-gray-25);
   font-size: 12px;
   font-weight: 500;
@@ -38,7 +41,7 @@
 }
 
 .table td {
-  padding: 14px 20px;
+  padding: 9px 16px;
   border-top: 1px solid var(--color-gray-50);
   font-size: var(--text-m-size);
   line-height: var(--text-m-line);
@@ -60,20 +63,20 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: 12px;
+  gap: 10px;
 }
 
 .avatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   border-radius: 50%;
   background: var(--color-primary-100);
   color: var(--color-primary-600);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -85,8 +88,18 @@
 }
 
 .fullName {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
   font-weight: 500;
-  color: var(--color-black-700);
+  text-align: left;
+  color: var(--color-primary-500);
+  cursor: pointer;
+}
+
+.fullName:hover {
+  text-decoration: underline;
 }
 
 .experience {
@@ -109,7 +122,31 @@
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 3px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.actionButton:hover {
+  background: var(--color-gray-25);
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
 }
 
 .stateWrap {
@@ -180,7 +217,7 @@
 .mobileActions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 3px;
 }
 
 @media (max-width: 768px) {
@@ -191,7 +228,10 @@
   .mobileList {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-height: 0;
     gap: 8px;
-    padding: 12px;
+    padding: 10px 12px 12px;
+    overflow-y: auto;
   }
 }

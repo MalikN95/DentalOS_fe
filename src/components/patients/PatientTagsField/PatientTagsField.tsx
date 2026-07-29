@@ -11,6 +11,8 @@ import { useAssignPatientTag } from '@/hooks/useAssignPatientTag';
 import { usePatientTagCatalog } from '@/hooks/usePatientTagCatalog';
 import styles from './PatientTagsField.module.css';
 
+const MAX_VISIBLE_TAGS = 3;
+
 type PatientTagsFieldProps = {
   patient: Patient;
 };
@@ -19,25 +21,30 @@ export const PatientTagsField = ({ patient }: PatientTagsFieldProps) => {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [colorEditId, setColorEditId] = useState<string | null>(null);
 
   const { tags: catalog, createMutation, updateMutation } = usePatientTagCatalog();
   const { addMutation, removeMutation } = useAssignPatientTag(patient.id);
 
+  const visibleTags = patient.tags.slice(0, MAX_VISIBLE_TAGS);
+  const overflowTags = patient.tags.slice(MAX_VISIBLE_TAGS);
+
   useEffect(() => {
-    if (!isOpen) return undefined;
+    if (!isOpen && !isMoreOpen) return undefined;
 
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        setIsMoreOpen(false);
         setColorEditId(null);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen]);
+  }, [isOpen, isMoreOpen]);
 
   const assignedIds = new Set(patient.tags.map((tag) => tag.id));
   const normalizedQuery = query.trim().toLowerCase();
@@ -86,10 +93,20 @@ export const PatientTagsField = ({ patient }: PatientTagsFieldProps) => {
         {patient.tags.length === 0 ? (
           <span className={styles.muted}>{t.patientInfo.noTags}</span>
         ) : (
-          patient.tags.map((tag) => (
+          visibleTags.map((tag) => (
             <TagPill key={tag.id} tag={tag} onRemove={() => removeMutation.mutate(tag.id)} />
           ))
         )}
+
+        {overflowTags.length > 0 ? (
+          <button
+            type="button"
+            className={styles.moreButton}
+            onClick={() => setIsMoreOpen((prev) => !prev)}
+          >
+            •••
+          </button>
+        ) : null}
 
         <button
           type="button"
@@ -101,6 +118,14 @@ export const PatientTagsField = ({ patient }: PatientTagsFieldProps) => {
           <PlusIcon size={13} />
         </button>
       </div>
+
+      {isMoreOpen ? (
+        <div className={styles.morePopover}>
+          {overflowTags.map((tag) => (
+            <TagPill key={tag.id} tag={tag} onRemove={() => removeMutation.mutate(tag.id)} />
+          ))}
+        </div>
+      ) : null}
 
       {isOpen ? (
         <div className={styles.popover}>

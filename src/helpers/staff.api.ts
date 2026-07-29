@@ -35,6 +35,12 @@ export const fetchStaff = (
     signal,
   });
 
+export const fetchStaffMember = (
+  accessToken: string,
+  id: string,
+  signal?: AbortSignal,
+): Promise<StaffMember> => apiFetch<StaffMember>(accessToken, `/api/staff/${id}`, { signal });
+
 export const createStaff = (
   accessToken: string,
   payload: CreateStaffPayload,
