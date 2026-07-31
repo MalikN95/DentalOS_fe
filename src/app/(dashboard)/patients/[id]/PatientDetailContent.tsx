@@ -10,6 +10,7 @@ import { PatientDentalChart } from '@/components/patients/PatientDentalChart/Pat
 import { PatientDocuments } from '@/components/patients/PatientDocuments/PatientDocuments';
 import { PatientFormModal } from '@/components/patients/PatientFormModal/PatientFormModal';
 import { PatientInfoPanel } from '@/components/patients/PatientInfoPanel/PatientInfoPanel';
+import { PatientNotes } from '@/components/patients/PatientNotes/PatientNotes';
 import { PatientTimeline } from '@/components/patients/PatientTimeline/PatientTimeline';
 import { PatientTreatmentPlans } from '@/components/patients/PatientTreatmentPlans/PatientTreatmentPlans';
 import { PatientVisits } from '@/components/patients/PatientVisits/PatientVisits';
@@ -86,6 +87,7 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
               errorMessage={invoicesErrorMessage}
             />
             <PatientTreatmentPlans patientId={patientId} currency={currency} />
+            <PatientNotes patientId={patientId} />
           </div>
 
           <div className={styles.actionsRow}>

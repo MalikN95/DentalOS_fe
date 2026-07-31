@@ -4,22 +4,38 @@ import { buildRequestHeaders } from '@/helpers/build-request-headers';
 
 type ApiErrorBody = {
   message?: string | string[];
+  /** Machine-readable reason (e.g. "OUTSIDE_WORKING_HOURS") for errors the UI needs to branch on. */
+  code?: string;
+};
+
+type ParsedApiError = {
+  message: string;
+  code?: string;
 };
 
 export class ApiRequestError extends Error {
-  constructor(message: string) {
+  readonly status?: number;
+
+  readonly code?: string;
+
+  constructor(message: string, status?: number, code?: string) {
     super(message);
     this.name = 'ApiRequestError';
+    this.status = status;
+    this.code = code;
   }
 }
 
-export const parseApiError = async (response: Response): Promise<string> => {
+export const parseApiError = async (response: Response): Promise<ParsedApiError> => {
   const errorBody = (await response.json().catch(() => null)) as ApiErrorBody | null;
   const message = Array.isArray(errorBody?.message)
     ? errorBody.message.join(', ')
     : errorBody?.message;
 
-  return message ?? `Request failed (${response.status})`;
+  return {
+    message: message ?? `Request failed (${response.status})`,
+    code: errorBody?.code,
+  };
 };
 
 export const apiFetch = async <T>(
@@ -46,7 +62,8 @@ export const apiFetch = async <T>(
   }
 
   if (response.ok === false) {
-    throw new ApiRequestError(await parseApiError(response));
+    const { message, code } = await parseApiError(response);
+    throw new ApiRequestError(message, response.status, code);
   }
 
   if (response.status === 204) {

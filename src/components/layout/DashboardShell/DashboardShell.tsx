@@ -41,9 +41,10 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   }, [pathname, closeMobileNav]);
 
   const activeItem = getNavItemByPathname(pathname);
-  const items = NAV_ITEMS.filter(
+  const accessibleNavItems = NAV_ITEMS.filter(
     (item) => !item.roles || item.roles.includes(user.role as StaffRole),
-  ).map((item) => ({
+  );
+  const items = accessibleNavItems.map((item) => ({
     id: item.id,
     href: item.href,
     icon: item.icon,
@@ -52,6 +53,19 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   }));
   const roleKey = user.role as keyof Dictionary['roles'];
   const userRole = t.roles[roleKey] ?? user.role;
+
+  const isRoleBlocked = Boolean(
+    activeItem.roles && !activeItem.roles.includes(user.role as StaffRole),
+  );
+  const fallbackHref = accessibleNavItems[0]?.href ?? '/login';
+
+  // The nav only hides links the role can't use — a direct URL still has to
+  // be turned away, so redirect to the first section this role can reach.
+  useEffect(() => {
+    if (isRoleBlocked) {
+      router.replace(fallbackHref);
+    }
+  }, [isRoleBlocked, fallbackHref, router]);
 
   const handleLogout = () => {
     // Fire-and-forget: the request already carries the current token.
@@ -65,8 +79,9 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
     closeMobileNav();
   };
 
-  // Block dashboard rendering for unauthenticated users (redirect handled by the guard).
-  if (!isAuthenticated) {
+  // Block rendering for unauthenticated users or a role-blocked route
+  // (redirects are handled by the effects above).
+  if (!isAuthenticated || isRoleBlocked) {
     return null;
   }
 

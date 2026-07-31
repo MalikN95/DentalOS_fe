@@ -135,6 +135,11 @@
   position: absolute;
   top: -4px;
   right: -6px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 4px;
+  font-size: 9px;
+  line-height: 14px;
 }
 
 .navLabel {
@@ -147,7 +152,20 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  gap: 14px;
+}
+
+.profileGroup {
+  display: flex;
+  align-items: center;
   gap: 10px;
+}
+
+.divider {
+  display: none;
+  width: 1px;
+  height: 22px;
+  background: var(--color-gray-100);
 }
 
 .bell,
@@ -297,6 +315,12 @@
 }
 
 @media (max-width: 1024px) {
+  /* .nav (which used to fill this gap via flex:1) is hidden below — pin
+     leftGroup/rightGroup to opposite edges explicitly instead. */
+  .bar {
+    justify-content: space-between;
+  }
+
   .search,
   .nav {
     display: none;
@@ -304,6 +328,13 @@
 
   .menuButton {
     display: inline-flex;
+  }
+
+  /* Pins itself (and the menu button right after it) to the far edge,
+     separated from the profile group and logout button. */
+  .divider {
+    display: inline-block;
+    margin-left: auto;
   }
 
   .overlay {

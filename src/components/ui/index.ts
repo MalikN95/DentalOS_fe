@@ -1,3 +1,4 @@
+export { AnalogTimePicker } from './AnalogTimePicker/AnalogTimePicker';
 export { Button } from './Button/Button';
 export type { ButtonColor, ButtonVariant } from './Button/Button';
 export { Badge, NotificationBadge } from './Badge/Badge';

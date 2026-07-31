@@ -1,0 +1,148 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  max-height: 400px;
+  padding: 12px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.heading {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--color-black-700);
+}
+
+.composer {
+  position: relative;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 40px 10px 12px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  font-family: inherit;
+  resize: vertical;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.submit {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-primary-500);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--color-primary-600);
+}
+
+.submit:disabled {
+  background: var(--color-gray-200);
+  cursor: not-allowed;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.state,
+.empty {
+  padding: 8px 0;
+  font-size: var(--text-m-size);
+  color: var(--color-black-500);
+}
+
+.note {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+  background: var(--color-gray-25);
+}
+
+.noteText {
+  margin: 0;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.noteMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-black-500);
+}
+
+.noteAuthor {
+  font-weight: 500;
+  color: var(--color-black-600);
+}
+
+.noteRole {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.noteDate {
+  margin-left: auto;
+}

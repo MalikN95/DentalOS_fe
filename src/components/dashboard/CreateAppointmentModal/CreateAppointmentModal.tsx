@@ -1,7 +1,7 @@
 'use client';
 
 import { useId } from 'react';
-import { useWatch } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type {
   AppointmentFormBranch,
@@ -9,10 +9,12 @@ import type {
   AppointmentFormPatient,
   AppointmentFormService,
 } from '@/common/types/appointment-form';
-import { Alert, Button, Modal, TextField } from '@/components/ui';
+import { AnalogTimePicker, Alert, Button, Modal, TextField } from '@/components/ui';
+import { ApiRequestError } from '@/helpers/api-fetch';
 import {
   APPOINTMENT_DURATION_PRESETS,
   APPOINTMENT_DURATION_STEP,
+  FIELD_ERROR_CODES,
   MAX_APPOINTMENT_DURATION,
   MIN_APPOINTMENT_DURATION,
   useCreateAppointmentForm,
@@ -65,7 +67,7 @@ export const CreateAppointmentModal = ({
 }: CreateAppointmentModalProps) => {
   const { t: dict } = useTranslation();
   const t = dict.appointments;
-  const { form, optionsQuery, filteredDoctors, mutation, resetDoctorSelection } =
+  const { form, optionsQuery, filteredDoctors, mutation, resetDoctorSelection, busyHoursQuery } =
     useCreateAppointmentForm({
       initialPatientId,
       onSuccess: () => {
@@ -111,13 +113,24 @@ export const CreateAppointmentModal = ({
     : undefined;
   const isOptionsLoading = optionsQuery.isLoading;
   const optionsError = optionsQuery.error?.message ?? null;
-  const submitError = mutation.error?.message ?? null;
+  // A slot conflict or working-hours violation is already shown on the
+  // time field itself (see useCreateAppointmentForm's onError) — the
+  // banner is for everything else.
+  const hasFieldLevelError =
+    mutation.error instanceof ApiRequestError &&
+    (mutation.error.status === 409 ||
+      (mutation.error.code !== undefined && mutation.error.code in FIELD_ERROR_CODES));
+  const submitError = !hasFieldLevelError ? (mutation.error?.message ?? null) : null;
+
+  const busyRanges = busyHoursQuery.data ?? [];
+  const showBusyHours = busyHoursQuery.isSuccess;
 
   return (
     <Modal
       title={t.modalTitle}
       closeLabel={dict.common.close}
       scrollHintLabel={dict.common.scrollForMore}
+      closeOnBackdrop={false}
       className={className}
       style={style}
       onClose={handleCloseClick}
@@ -223,12 +236,39 @@ export const CreateAppointmentModal = ({
             )}
           </SelectField>
 
-          <TextField
-            label={t.dateTime}
-            type="datetime-local"
-            error={errors.startsAt?.message}
-            {...register('startsAt')}
-          />
+          <div className={styles.dateTimeRow}>
+            <TextField
+              label={t.date}
+              type="date"
+              error={errors.date?.message}
+              className={styles.dateField}
+              {...register('date')}
+            />
+            <Controller
+              control={form.control}
+              name="time"
+              render={({ field, fieldState }) => (
+                <AnalogTimePicker
+                  label={t.time}
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={fieldState.error?.message}
+                  className={styles.timeField}
+                />
+              )}
+            />
+          </div>
+
+          {showBusyHours ? (
+            <div className={styles.field}>
+              <span className={styles.label}>{t.busyHoursLabel}</span>
+              <div className={styles.staticValue}>
+                {busyRanges.length > 0
+                  ? busyRanges.map((appointment) => `${appointment.time}–${appointment.endTime}`).join(', ')
+                  : t.noBusyHoursToday}
+              </div>
+            </div>
+          ) : null}
 
           <div className={styles.field}>
             <span className={styles.label}>{t.duration}</span>

@@ -16,6 +16,8 @@ type ModalProps = {
   scrollHintLabel?: string;
   /** Blocks overlay click, Escape and the close button (e.g. while saving). */
   isLocked?: boolean;
+  /** Set false to require the close/cancel button — overlay click and Escape won't close it. */
+  closeOnBackdrop?: boolean;
   className?: string;
   style?: React.CSSProperties;
   onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -48,6 +50,7 @@ export const Modal = ({
   closeLabel = 'Close',
   scrollHintLabel = 'Scroll for more',
   isLocked = false,
+  closeOnBackdrop = true,
   className,
   style,
   onSubmit,
@@ -74,16 +77,16 @@ export const Modal = ({
 
   const handleOverlayClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
-      if (event.target === event.currentTarget) {
+      if (closeOnBackdrop && event.target === event.currentTarget) {
         handleClose();
       }
     },
-    [handleClose],
+    [closeOnBackdrop, handleClose],
   );
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (closeOnBackdrop && event.key === 'Escape') {
         handleClose();
       }
     };
@@ -96,7 +99,7 @@ export const Modal = ({
       document.body.style.overflow = overflow;
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [handleClose]);
+  }, [closeOnBackdrop, handleClose]);
 
   const inner = (
     <>

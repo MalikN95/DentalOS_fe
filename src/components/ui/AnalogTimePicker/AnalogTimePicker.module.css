@@ -1,0 +1,177 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: var(--text-m-size);
+  font-weight: 500;
+  line-height: var(--text-m-line);
+  color: var(--color-black-600);
+}
+
+.control {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  color: var(--color-black-700);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.trigger:focus-visible {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.triggerError {
+  border-color: var(--color-red-500);
+}
+
+.triggerIcon {
+  flex-shrink: 0;
+  color: var(--color-gray-400);
+}
+
+.triggerValue {
+  flex: 1;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.errorText {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-red-500);
+}
+
+.panel {
+  /* Portaled to <body> and positioned in JS — fixed so it can never be
+     clipped by a modal's (or any ancestor's) overflow, and a z-index above
+     the Modal overlay (100) so it renders on top of it. */
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgb(51 56 67 / 12%);
+}
+
+.digital {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.digitalSegment {
+  padding: 4px 10px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-black-500);
+  font-size: 28px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.digitalSegmentActive {
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.digitalColon {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-black-400);
+}
+
+.face {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-gray-25);
+  /* Both click-to-select and drag-to-select go through pointer events on
+     this element — the number spans below are purely visual. */
+  touch-action: none;
+  user-select: none;
+}
+
+.centerDot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary-500);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.hand {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  background: var(--color-primary-300);
+  transform-origin: top center;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.handDot {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary-500);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.number {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--color-black-700);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.numberInner {
+  color: var(--color-black-500);
+  font-size: 11px;
+}
+
+.numberActive {
+  color: var(--color-white);
+  font-weight: 600;
+}

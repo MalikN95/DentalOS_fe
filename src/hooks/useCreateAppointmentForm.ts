@@ -5,9 +5,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
-import { createAppointment, fetchAppointmentFormOptions } from '@/helpers/appointments.api';
+import { useTranslation } from '@/common/locale/LocaleProvider';
+import { ApiRequestError } from '@/helpers/api-fetch';
+import {
+  createAppointment,
+  fetchAppointmentFormOptions,
+  fetchDoctorAppointmentsForDate,
+} from '@/helpers/appointments.api';
+import { parseDateInputValue, toDateInputValue } from '@/helpers/date';
 import { useAppSelector } from '@/store/hooks';
 import { selectAccessToken } from '@/store/slices/auth/selectors';
+
+const HTTP_CONFLICT = 409;
+// Backend error codes that get a field-level message instead of the generic banner.
+export const FIELD_ERROR_CODES = {
+  OUTSIDE_WORKING_HOURS: 'outsideWorkingHours',
+  DOCTOR_DAY_OFF: 'doctorDayOff',
+} as const;
 
 // Kept in sync with the backend's own floor/ceiling (create-appointment.dto.ts).
 export const MIN_APPOINTMENT_DURATION = 15;
@@ -20,7 +34,8 @@ const createAppointmentSchema = z.object({
   patientId: z.uuid('Выберите пациента'),
   doctorProfileId: z.uuid('Выберите врача'),
   serviceId: z.uuid('Выберите услугу'),
-  startsAt: z.string().min(1, 'Укажите дату и время'),
+  date: z.string().min(1, 'Укажите дату'),
+  time: z.string().min(1, 'Укажите время'),
   durationMinutes: z
     .number('Укажите продолжительность')
     .int()
@@ -43,19 +58,17 @@ const roundToDurationStep = (minutes: number): number =>
   );
 
 const getDefaultFormValues = (initialPatientId?: string): CreateAppointmentFormValues => {
-  const date = new Date();
-  date.setMinutes(0, 0, 0);
-  date.setHours(date.getHours() + 1);
-
-  const offset = date.getTimezoneOffset();
-  const local = new Date(date.getTime() - offset * 60_000);
+  const now = new Date();
+  now.setMinutes(0, 0, 0);
+  now.setHours(now.getHours() + 1);
 
   return {
     branchId: '',
     patientId: initialPatientId ?? '',
     doctorProfileId: '',
     serviceId: '',
-    startsAt: local.toISOString().slice(0, 16),
+    date: toDateInputValue(now),
+    time: `${String(now.getHours()).padStart(2, '0')}:00`,
     durationMinutes: DEFAULT_DURATION,
     comment: '',
   };
@@ -72,6 +85,7 @@ export const useCreateAppointmentForm = ({
   onSuccess,
 }: UseCreateAppointmentFormParams) => {
   const accessToken = useAppSelector(selectAccessToken);
+  const { t: dict } = useTranslation();
 
   const optionsQuery = useQuery({
     queryKey: ['appointments', 'form-options'],
@@ -97,6 +111,31 @@ export const useCreateAppointmentForm = ({
   const selectedServiceId = useWatch({
     control: form.control,
     name: 'serviceId',
+  });
+  const selectedDoctorProfileId = useWatch({
+    control: form.control,
+    name: 'doctorProfileId',
+  });
+  const selectedDateValue = useWatch({
+    control: form.control,
+    name: 'date',
+  });
+
+  const busyHoursQuery = useQuery({
+    queryKey: ['appointments', 'doctor-busy-hours', selectedDoctorProfileId, selectedDateValue],
+    queryFn: ({ signal }) => {
+      if (!accessToken || !selectedDoctorProfileId || !selectedDateValue) {
+        throw new Error('Not ready');
+      }
+
+      return fetchDoctorAppointmentsForDate(
+        accessToken,
+        selectedDoctorProfileId,
+        parseDateInputValue(selectedDateValue),
+        signal,
+      );
+    },
+    enabled: Boolean(accessToken && selectedDoctorProfileId && selectedDateValue),
   });
 
   const filteredDoctors = useMemo(() => {
@@ -137,7 +176,7 @@ export const useCreateAppointmentForm = ({
         patientId: values.patientId,
         doctorProfileId: values.doctorProfileId,
         serviceId: values.serviceId,
-        startsAt: new Date(values.startsAt).toISOString(),
+        startsAt: new Date(`${values.date}T${values.time}`).toISOString(),
         durationMinutes: values.durationMinutes,
         comment: values.comment?.trim() || undefined,
       });
@@ -145,6 +184,27 @@ export const useCreateAppointmentForm = ({
     onSuccess: () => {
       form.reset(getDefaultFormValues(initialPatientId));
       onSuccess?.();
+    },
+    onError: (error) => {
+      // Surfaces a doctor/time-slot conflict, or a working-hours violation,
+      // on the field it's actually about instead of a generic error banner.
+      if (!(error instanceof ApiRequestError)) {
+        return;
+      }
+
+      if (error.status === HTTP_CONFLICT) {
+        form.setError('time', { message: dict.appointments.slotTaken });
+        return;
+      }
+
+      const messageKey =
+        error.code && error.code in FIELD_ERROR_CODES
+          ? FIELD_ERROR_CODES[error.code as keyof typeof FIELD_ERROR_CODES]
+          : null;
+
+      if (messageKey) {
+        form.setError('time', { message: dict.appointments[messageKey] });
+      }
     },
   });
 
@@ -158,5 +218,6 @@ export const useCreateAppointmentForm = ({
     filteredDoctors,
     mutation,
     resetDoctorSelection,
+    busyHoursQuery,
   };
 };

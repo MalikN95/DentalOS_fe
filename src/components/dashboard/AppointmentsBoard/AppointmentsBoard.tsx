@@ -39,6 +39,8 @@ type AppointmentsBoardProps = {
   onPatientClick: (patientId: string) => void;
   onRowClick: (appointment: Appointment) => void;
   dateNav?: AppointmentsBoardDateNav;
+  /** Hides the doctor filter checklist — pointless when there's only ever one doctor to filter by. */
+  showDoctorFilter?: boolean;
 };
 
 export const AppointmentsBoard = ({
@@ -52,6 +54,7 @@ export const AppointmentsBoard = ({
   onPatientClick,
   onRowClick,
   dateNav,
+  showDoctorFilter = true,
 }: AppointmentsBoardProps) => {
   const { t, language } = useTranslation();
   const hours = useMemo(() => getBoardHourRange(appointments), [appointments]);
@@ -174,6 +177,7 @@ export const AppointmentsBoard = ({
           selectedDoctorIds={selectedDoctorIds}
           onToggleDoctor={handleToggleDoctor}
           onToggleAll={handleToggleAllDoctors}
+          showDoctorFilter={showDoctorFilter}
         />
 
         <div className={styles.board}>

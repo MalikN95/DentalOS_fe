@@ -47,6 +47,13 @@
   border-top: 1px solid var(--color-gray-50);
 }
 
+/* No sibling above it (doctor filter hidden) — drop the separator. */
+.legendNoTopBorder {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
+}
+
 .legendTitle {
   margin-bottom: 2px;
   font-size: 11px;
@@ -103,11 +110,55 @@
   background: var(--color-orange-500);
 }
 
+.legendMobile {
+  display: none;
+  position: relative;
+}
+
+.legendTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.legendTrigger:hover {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+}
+
+.legendPopover {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 220px;
+  margin-top: 6px;
+  padding: 10px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  box-shadow: 0 12px 28px rgb(51 56 67 / 16%);
+}
+
 @media (max-width: 900px) {
   .sidebar {
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: flex-start;
     padding: 0 0 12px;
     border-right: none;
     border-bottom: 1px solid var(--color-gray-50);
@@ -123,16 +174,14 @@
     gap: 4px 12px;
   }
 
+  /* Collapsed behind the "?" trigger instead — see .legendMobile below. */
   .legend {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px 14px;
-    padding-top: 0;
-    margin-top: 0;
-    border-top: none;
+    display: none;
   }
 
-  .legendTitle {
-    width: 100%;
+  .legendMobile {
+    display: inline-flex;
+    flex-shrink: 0;
+    margin-left: auto;
   }
 }

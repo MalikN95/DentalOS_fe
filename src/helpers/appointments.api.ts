@@ -49,6 +49,26 @@ export const fetchAppointmentsForDate = ({
 }: FetchAppointmentsForDateParams): Promise<Appointment[]> =>
   fetchAppointmentsInRange(accessToken, getDayIsoRange(date), signal);
 
+const OCCUPYING_STATUSES = new Set<AppointmentStatus>(['cancelled', 'no_show']);
+
+export const fetchDoctorAppointmentsForDate = async (
+  accessToken: string,
+  doctorProfileId: string,
+  date: Date,
+  signal?: AbortSignal,
+): Promise<Appointment[]> => {
+  const query = new URLSearchParams({ ...getDayIsoRange(date), doctorProfileId });
+  const data = await apiFetch<ApiAppointment[]>(
+    accessToken,
+    `/api/appointments?${query.toString()}`,
+    { signal },
+  );
+
+  return data
+    .map(mapApiAppointmentToRow)
+    .filter((appointment) => !OCCUPYING_STATUSES.has(appointment.status));
+};
+
 export const fetchAppointmentFormOptions = async (
   accessToken: string,
   signal?: AbortSignal,

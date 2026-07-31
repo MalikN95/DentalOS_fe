@@ -5,6 +5,7 @@ import type {
   Patient,
   UpdatePatientPayload,
 } from '@/common/types/patient';
+import type { ApiPatientNote } from '@/common/types/patient-note';
 import type { ApiMedicalRecord, ApiVisit } from '@/common/types/visit';
 import { apiFetch } from '@/helpers/api-fetch';
 
@@ -117,6 +118,23 @@ export const unassignPatientTag = (
 ): Promise<Patient> =>
   apiFetch<Patient>(accessToken, `/api/patients/${patientId}/tags/${tagId}`, {
     method: 'DELETE',
+  });
+
+export const fetchPatientNotes = (
+  accessToken: string,
+  patientId: string,
+  signal?: AbortSignal,
+): Promise<ApiPatientNote[]> =>
+  apiFetch<ApiPatientNote[]>(accessToken, `/api/patients/${patientId}/notes`, { signal });
+
+export const createPatientNote = (
+  accessToken: string,
+  patientId: string,
+  text: string,
+): Promise<ApiPatientNote> =>
+  apiFetch<ApiPatientNote>(accessToken, `/api/patients/${patientId}/notes`, {
+    method: 'POST',
+    body: JSON.stringify({ text }),
   });
 
 export const fetchPatientMedicalRecords = (

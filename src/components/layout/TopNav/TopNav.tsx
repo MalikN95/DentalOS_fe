@@ -137,19 +137,21 @@ export const TopNav = ({
         <nav className={styles.nav}>{navLinks()}</nav>
 
         <div className={styles.rightGroup}>
-          <button type="button" className={styles.bell} aria-label={notificationsLabel} title={notificationsLabel}>
-            <BellIcon size={18} />
-            {notificationsCount > 0 ? (
-              <NotificationBadge className={styles.bellBadge} count={notificationsCount} />
-            ) : null}
-          </button>
+          <div className={styles.profileGroup}>
+            <button type="button" className={styles.bell} aria-label={notificationsLabel} title={notificationsLabel}>
+              <BellIcon size={18} />
+              {notificationsCount > 0 ? (
+                <NotificationBadge className={styles.bellBadge} count={notificationsCount} />
+              ) : null}
+            </button>
 
-          <div className={styles.user}>
-            <span className={styles.avatar}>{getInitials(userName)}</span>
-            <span className={styles.userInfo}>
-              <span className={styles.userName}>{userName}</span>
-              <span className={styles.userRole}>{userRole}</span>
-            </span>
+            <div className={styles.user}>
+              <span className={styles.avatar}>{getInitials(userName)}</span>
+              <span className={styles.userInfo}>
+                <span className={styles.userName}>{userName}</span>
+                <span className={styles.userRole}>{userRole}</span>
+              </span>
+            </div>
           </div>
 
           <button
@@ -161,6 +163,8 @@ export const TopNav = ({
           >
             <LogoutIcon size={18} />
           </button>
+
+          <span className={styles.divider} aria-hidden="true" />
 
           <button
             type="button"

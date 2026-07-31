@@ -231,6 +231,14 @@ export const InfoIcon = createIcon(
   </>,
 );
 
+export const HelpCircleIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M9.1 9a2.9 2.9 0 0 1 5.7 1c0 2-2.9 2.5-2.9 4" />
+    <path d="M12 17h.01" />
+  </>,
+);
+
 export const PhoneIcon = createIcon(
   <path d="M6.6 10.8a15.6 15.6 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.36 2.28.56 3.5.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.22.2 2.4.56 3.5a1 1 0 0 1-.25 1L6.6 10.8Z" />,
 );
@@ -256,6 +264,13 @@ export const TrashIcon = createIcon(
     <path d="M3 6h18" />
     <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
     <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+  </>,
+);
+
+export const ClockIcon = createIcon(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3.5 2" />
   </>,
 );
 

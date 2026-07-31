@@ -1,5 +1,5 @@
 import type { Dictionary } from '@/common/locale/dictionaries/ru';
-import type { StaffRole } from '@/common/types/staff';
+import { STAFF_ROLES, type StaffRole } from '@/common/types/staff';
 import {
   CalendarIcon,
   DashboardIcon,
@@ -20,8 +20,18 @@ export type NavItem = {
   roles?: StaffRole[];
 };
 
+// A doctor only ever works their own schedule/patients — the clinic-wide
+// dashboard and settings aren't theirs to see.
+const NON_DOCTOR_ROLES = STAFF_ROLES.filter((role) => role !== 'doctor');
+
 export const NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard', labelKey: 'dashboard', href: '/', icon: <DashboardIcon /> },
+  {
+    id: 'dashboard',
+    labelKey: 'dashboard',
+    href: '/',
+    icon: <DashboardIcon />,
+    roles: NON_DOCTOR_ROLES,
+  },
   {
     id: 'appointments',
     labelKey: 'appointments',
@@ -50,7 +60,13 @@ export const NAV_ITEMS: NavItem[] = [
     icon: <WalletIcon />,
     roles: ['owner', 'admin', 'accountant'],
   },
-  { id: 'settings', labelKey: 'settings', href: '/settings', icon: <SettingsIcon /> },
+  {
+    id: 'settings',
+    labelKey: 'settings',
+    href: '/settings',
+    icon: <SettingsIcon />,
+    roles: NON_DOCTOR_ROLES,
+  },
 ];
 
 export const getNavItemByPathname = (pathname: string): NavItem => {

@@ -13,6 +13,8 @@ import {
   useAppointmentsByDate,
 } from '@/hooks/useAppointmentsByDate';
 import { useClinic } from '@/hooks/useClinic';
+import { useAppSelector } from '@/store/hooks';
+import { selectCurrentUser } from '@/store/slices/auth/selectors';
 import styles from './page.module.css';
 
 export const AppointmentsPageContent = () => {
@@ -23,7 +25,10 @@ export const AppointmentsPageContent = () => {
   const [managingAppointment, setManagingAppointment] = useState<Appointment | null>(null);
   const { data, isLoading, error } = useAppointmentsByDate(selectedDate);
   const { data: clinic } = useClinic();
+  const currentUser = useAppSelector(selectCurrentUser);
   const currency = clinic?.currency ?? 'RUB';
+  // A doctor only ever sees their own appointments, so filtering "by doctor" is meaningless for them.
+  const showDoctorFilter = currentUser?.role !== 'doctor';
 
   const handleOpenCreateModal = useCallback(() => {
     setIsCreateModalOpen(true);
@@ -58,6 +63,7 @@ export const AppointmentsPageContent = () => {
         onAddClick={handleOpenCreateModal}
         onPatientClick={setViewingPatientId}
         onRowClick={setManagingAppointment}
+        showDoctorFilter={showDoctorFilter}
         dateNav={{
           date: selectedDate,
           onPrevDay: handlePrevDay,
