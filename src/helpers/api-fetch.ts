@@ -74,7 +74,8 @@ export const apiFetch = async <T>(
 };
 
 // For @Public() backend routes (e.g. the patient-facing booking widget) —
-// no access token, no 401-refresh dance, just the clinic subdomain header.
+// no access token, no 401-refresh dance. The booking widget's clinic comes
+// from a `:clinicSlug` segment baked into `path` by the caller.
 export const publicApiFetch = async <T>(path: string, init?: RequestInit): Promise<T> => {
   const response = await fetch(`${API_URL}${path}`, {
     ...init,

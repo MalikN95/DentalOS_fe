@@ -37,7 +37,7 @@ const toMonthValue = (date: Date): string =>
 const isSameMonth = (a: Date, b: Date): boolean =>
   a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
 
-export const useBookingWizard = () => {
+export const useBookingWizard = (clinicSlug: string) => {
   const [step, setStep] = useState<BookingStep>('service');
   const [serviceId, setServiceId] = useState<string | null>(null);
   const [doctorProfileId, setDoctorProfileId] = useState<string | null>(null);
@@ -47,25 +47,26 @@ export const useBookingWizard = () => {
   const [details, setDetails] = useState<PatientDetailsValues>(EMPTY_DETAILS);
 
   const clinicQuery = useQuery({
-    queryKey: ['booking', 'clinic'],
-    queryFn: ({ signal }) => fetchBookingClinic(signal),
+    queryKey: ['booking', clinicSlug, 'clinic'],
+    queryFn: ({ signal }) => fetchBookingClinic(clinicSlug, signal),
   });
 
   // Only needed to look up a branch's name/address once a doctor resolves
   // one — the patient is never asked to pick a branch themselves.
   const branchesQuery = useQuery({
-    queryKey: ['booking', 'branches'],
-    queryFn: ({ signal }) => fetchBookingBranches(signal),
+    queryKey: ['booking', clinicSlug, 'branches'],
+    queryFn: ({ signal }) => fetchBookingBranches(clinicSlug, signal),
   });
 
   const servicesQuery = useQuery({
-    queryKey: ['booking', 'services'],
-    queryFn: ({ signal }) => fetchBookingServices(signal),
+    queryKey: ['booking', clinicSlug, 'services'],
+    queryFn: ({ signal }) => fetchBookingServices(clinicSlug, signal),
   });
 
   const doctorsQuery = useQuery({
-    queryKey: ['booking', 'doctors', serviceId],
-    queryFn: ({ signal }) => fetchBookingDoctors({ serviceId: serviceId as string }, signal),
+    queryKey: ['booking', clinicSlug, 'doctors', serviceId],
+    queryFn: ({ signal }) =>
+      fetchBookingDoctors(clinicSlug, { serviceId: serviceId as string }, signal),
     enabled:
       Boolean(serviceId) && (step === 'doctor' || step === 'datetime' || step === 'details'),
   });
@@ -88,9 +89,18 @@ export const useBookingWizard = () => {
   const monthValue = toMonthValue(visibleMonth);
 
   const daysQuery = useQuery({
-    queryKey: ['booking', 'days', doctorProfileId, serviceId, resolvedBranchId, monthValue],
+    queryKey: [
+      'booking',
+      clinicSlug,
+      'days',
+      doctorProfileId,
+      serviceId,
+      resolvedBranchId,
+      monthValue,
+    ],
     queryFn: ({ signal }) =>
       fetchBookingDays(
+        clinicSlug,
         {
           doctorProfileId: doctorProfileId as string,
           serviceId: serviceId as string,
@@ -103,9 +113,10 @@ export const useBookingWizard = () => {
   });
 
   const slotsQuery = useQuery({
-    queryKey: ['booking', 'slots', doctorProfileId, serviceId, resolvedBranchId, date],
+    queryKey: ['booking', clinicSlug, 'slots', doctorProfileId, serviceId, resolvedBranchId, date],
     queryFn: ({ signal }) =>
       fetchBookingSlots(
+        clinicSlug,
         {
           doctorProfileId: doctorProfileId as string,
           serviceId: serviceId as string,
@@ -118,7 +129,7 @@ export const useBookingWizard = () => {
   });
 
   const bookingMutation = useMutation({
-    mutationFn: (payload: CreateBookingPayload) => createBooking(payload),
+    mutationFn: (payload: CreateBookingPayload) => createBooking(clinicSlug, payload),
     onSuccess: () => setStep('done'),
   });
 

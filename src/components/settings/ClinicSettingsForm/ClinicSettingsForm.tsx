@@ -103,22 +103,22 @@ export const ClinicSettingsForm = () => {
     <section className={styles.section}>
       <p className={styles.description}>{t.clinicSubtitle}</p>
 
-      {clinic?.subdomain ? (
+      {clinic?.slug ? (
         <div className={styles.bookingLink}>
           <span className={styles.fieldLabel}>{t.bookingLinkLabel}</span>
           <div className={styles.bookingLinkRow}>
             <a
-              href={buildClinicBookingUrl(clinic.subdomain)}
+              href={buildClinicBookingUrl(clinic.slug)}
               target="_blank"
               rel="noreferrer"
               className={styles.bookingLinkValue}
             >
-              {buildClinicBookingUrl(clinic.subdomain)}
+              {buildClinicBookingUrl(clinic.slug)}
             </a>
             <button
               type="button"
               className={styles.copyButton}
-              onClick={() => handleCopyBookingLink(buildClinicBookingUrl(clinic.subdomain))}
+              onClick={() => handleCopyBookingLink(buildClinicBookingUrl(clinic.slug))}
             >
               {isLinkCopied ? t.bookingLinkCopied : t.bookingLinkCopy}
             </button>

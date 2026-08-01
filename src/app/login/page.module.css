@@ -222,22 +222,6 @@
   outline-offset: 2px;
 }
 
-.hint {
-  margin-top: auto;
-  padding-top: 8px;
-  font-size: 12px;
-  line-height: 18px;
-  color: var(--color-black-500);
-}
-
-.hintValue {
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-weight: 600;
-  color: var(--color-primary-600);
-  background: var(--color-primary-100);
-}
-
 @keyframes rise {
   from {
     opacity: 0;

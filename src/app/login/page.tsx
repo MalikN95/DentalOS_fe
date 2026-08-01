@@ -16,7 +16,6 @@ import {
   ShieldIcon,
 } from '@/components/icons/icons';
 import { Alert, Button, TextField } from '@/components/ui';
-import { useClinicSubdomain } from '@/hooks/useClinicSubdomain';
 import { useLoginForm } from '@/hooks/useLoginForm';
 import { useAppSelector } from '@/store/hooks';
 import { selectIsAuthenticated } from '@/store/slices/auth/selectors';
@@ -25,7 +24,6 @@ import styles from './page.module.css';
 const LoginPage = () => {
   const { t } = useTranslation();
   const { form, onSubmit, serverError } = useLoginForm();
-  const clinicSubdomain = useClinicSubdomain();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -136,10 +134,6 @@ const LoginPage = () => {
               {isSubmitting ? t.login.signingIn : t.login.signIn}
             </Button>
           </form>
-
-          <p className={styles.hint}>
-            {t.login.clinicFromUrl} <strong className={styles.hintValue}>{clinicSubdomain}</strong>
-          </p>
         </section>
       </div>
     </main>

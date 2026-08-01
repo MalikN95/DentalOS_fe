@@ -11,10 +11,14 @@ import { BookingServiceStep } from '@/components/booking/BookingServiceStep/Book
 import { ChevronLeftIcon, Logo } from '@/components/icons/icons';
 import styles from './page.module.css';
 
-export const BookingPageContent = () => {
+type BookingPageContentProps = {
+  clinicSlug: string;
+};
+
+export const BookingPageContent = ({ clinicSlug }: BookingPageContentProps) => {
   const { t: dict } = useTranslation();
   const t = dict.booking;
-  const wizard = useBookingWizard();
+  const wizard = useBookingWizard(clinicSlug);
 
   const isInitialLoading =
     wizard.clinicQuery.isLoading || wizard.branchesQuery.isLoading || wizard.servicesQuery.isLoading;

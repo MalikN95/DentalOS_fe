@@ -30,7 +30,7 @@ export const WEEKDAY_LABELS: Record<WeekdayKey, string> = {
 export type ClinicSettings = {
   id: string;
   name: string;
-  subdomain: string;
+  slug: string;
   logoKey: string | null;
   logoUrl: string | null;
   address: string | null;
