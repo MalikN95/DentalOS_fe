@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
+import { CookieConsentBanner } from '@/components/layout/CookieConsentBanner/CookieConsentBanner';
 import { AppProviders } from '@/components/providers/AppProviders';
 import './globals.css';
 
@@ -21,7 +22,10 @@ const RootLayout = ({
 }>) => (
   <html lang="ru" className={roboto.variable}>
     <body>
-      <AppProviders>{children}</AppProviders>
+      <AppProviders>
+        {children}
+        <CookieConsentBanner />
+      </AppProviders>
     </body>
   </html>
 );
