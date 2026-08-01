@@ -30,3 +30,16 @@ export const getClinicSubdomain = (): string => {
 
   return CLINIC_SUBDOMAIN_FALLBACK;
 };
+
+// Full public URL of a clinic's own booking page, e.g. https://smile.dentalos.com/book —
+// mirrors the current protocol/port (dev runs with a port, prod typically doesn't).
+export const buildClinicBookingUrl = (subdomain: string): string => {
+  if (typeof window === 'undefined') {
+    return `https://${subdomain}.${APP_DOMAIN}/book`;
+  }
+
+  const { protocol, port } = window.location;
+  const portSuffix = port ? `:${port}` : '';
+
+  return `${protocol}//${subdomain}.${APP_DOMAIN}${portSuffix}/book`;
+};

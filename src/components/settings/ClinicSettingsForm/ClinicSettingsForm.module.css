@@ -32,6 +32,47 @@
   color: var(--color-black-500);
 }
 
+.bookingLink {
+  padding: 10px 12px;
+  background: var(--color-gray-25);
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+}
+
+.bookingLinkRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bookingLinkValue {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-primary-600);
+}
+
+.copyButton {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 4px 10px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-600);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.copyButton:hover {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+}
+
 .identity {
   display: flex;
   align-items: center;

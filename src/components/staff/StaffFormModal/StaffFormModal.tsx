@@ -1,12 +1,17 @@
 'use client';
 
 import { useId } from 'react';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { StaffMember } from '@/common/types/staff';
 import { STAFF_ROLES } from '@/common/types/staff';
+import { StringTagField } from '@/components/patients/StringTagField/StringTagField';
 import { DoctorScheduleSection } from '@/components/staff/DoctorScheduleSection/DoctorScheduleSection';
+import { DoctorServicesField } from '@/components/staff/DoctorServicesField/DoctorServicesField';
 import { Alert, Button, Modal, SwitchToggle, TextField } from '@/components/ui';
 import { useBranchOptions } from '@/hooks/useBranchOptions';
+import { useServiceOptions } from '@/hooks/useServiceOptions';
+import { useSpecializationsCatalog } from '@/hooks/useSpecializationsCatalog';
 import { useStaffForm } from '@/hooks/useStaffForm';
 import styles from './StaffFormModal.module.css';
 
@@ -25,12 +30,16 @@ export const StaffFormModal = ({
   className,
   style,
 }: StaffFormModalProps) => {
+  'use no memo';
+
   const { t: dict } = useTranslation();
   const t = dict.staff.form;
   const roleFieldId = useId();
   const branchFieldId = useId();
   const descriptionFieldId = useId();
   const { branches } = useBranchOptions();
+  const { options: specializationOptions } = useSpecializationsCatalog();
+  const { services: serviceOptions } = useServiceOptions();
 
   const { form, mutation, isEditMode } = useStaffForm({
     member,
@@ -43,10 +52,17 @@ export const StaffFormModal = ({
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
+    control,
     formState: { errors, isSubmitting },
   } = form;
+
+  const selectedRole = useWatch({ control, name: 'role' });
+  const branchId = useWatch({ control, name: 'branchId' });
+  const isActive = useWatch({ control, name: 'isActive' });
+  const acceptsOnlineBooking = useWatch({ control, name: 'acceptsOnlineBooking' });
+  const specializations = useWatch({ control, name: 'specializations' });
+  const serviceIds = useWatch({ control, name: 'serviceIds' });
 
   const handleFormSubmit = handleSubmit((values) => {
     mutation.mutate(values);
@@ -56,7 +72,7 @@ export const StaffFormModal = ({
     setValue('isActive', checked);
   };
 
-  const isDoctor = watch('role') === 'doctor';
+  const isDoctor = selectedRole === 'doctor';
   const submitError = mutation.error?.message ?? null;
   const submitIdleLabel = isEditMode ? t.save : t.create;
 
@@ -147,15 +163,30 @@ export const StaffFormModal = ({
             />
           </div>
 
-          <TextField
+          <StringTagField
             label={t.specializations}
-            placeholder={t.specializationsPlaceholder}
-            {...register('specializations')}
+            value={specializations}
+            onChange={(next) => setValue('specializations', next)}
+            options={specializationOptions}
+            emptyLabel={t.specializationsEmpty}
+            addLabel={t.specializationsAdd}
+            searchPlaceholder={t.specializationsSearchPlaceholder}
+            createLabelTemplate={t.createTagTemplate}
           />
           <TextField
             label={t.education}
             placeholder={t.educationPlaceholder}
             {...register('education')}
+          />
+
+          <DoctorServicesField
+            label={t.services}
+            value={serviceIds}
+            onChange={(next) => setValue('serviceIds', next)}
+            options={serviceOptions}
+            emptyLabel={t.servicesEmpty}
+            addLabel={t.servicesAdd}
+            searchPlaceholder={t.servicesSearchPlaceholder}
           />
 
           <label className={styles.field} htmlFor={descriptionFieldId}>
@@ -167,6 +198,15 @@ export const StaffFormModal = ({
               {...register('description')}
             />
           </label>
+
+          <div className={styles.onlineBooking}>
+            <SwitchToggle
+              checked={acceptsOnlineBooking}
+              label={t.acceptsOnlineBooking}
+              onChange={(checked) => setValue('acceptsOnlineBooking', checked)}
+            />
+            <span className={styles.onlineBookingHint}>{t.acceptsOnlineBookingHint}</span>
+          </div>
         </fieldset>
       ) : null}
 
@@ -175,12 +215,12 @@ export const StaffFormModal = ({
           <legend className={styles.legend}>{dict.doctorSchedule.title}</legend>
           <DoctorScheduleSection
             doctorProfileId={member.doctorProfile.id}
-            branchId={watch('branchId') || null}
+            branchId={branchId || null}
           />
         </fieldset>
       ) : null}
 
-      <SwitchToggle checked={watch('isActive')} label={t.active} onChange={handleActiveChange} />
+      <SwitchToggle checked={isActive} label={t.active} onChange={handleActiveChange} />
     </Modal>
   );
 };

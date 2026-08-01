@@ -1,7 +1,7 @@
 'use client';
 
 import { useId } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient } from '@/common/types/patient';
 import { StringTagField } from '@/components/patients/StringTagField/StringTagField';
@@ -25,6 +25,8 @@ export const PatientFormModal = ({
   className,
   style,
 }: PatientFormModalProps) => {
+  'use no memo';
+
   const { t: dict } = useTranslation();
   const t = dict.patients.form;
   const genderFieldId = useId();
@@ -43,10 +45,11 @@ export const PatientFormModal = ({
   const {
     control,
     handleSubmit,
-    watch,
     setValue,
     formState: { isSubmitting },
   } = form;
+
+  const isActive = useWatch({ control, name: 'isActive' });
 
   const handleFormSubmit = handleSubmit((values) => {
     mutation.mutate(values);
@@ -270,7 +273,7 @@ export const PatientFormModal = ({
       </label>
 
       {isEditMode ? (
-        <SwitchToggle checked={watch('isActive')} label={t.active} onChange={handleActiveChange} />
+        <SwitchToggle checked={isActive} label={t.active} onChange={handleActiveChange} />
       ) : null}
     </Modal>
   );

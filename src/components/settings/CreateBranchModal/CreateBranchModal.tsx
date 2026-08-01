@@ -1,6 +1,6 @@
 'use client';
 
-import type { UseFormReturn } from 'react-hook-form';
+import { useWatch, type UseFormReturn } from 'react-hook-form';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { BranchSettings, WorkingHours } from '@/common/types/settings';
@@ -26,18 +26,20 @@ export const CreateBranchModal = ({
   className,
   style,
 }: CreateBranchModalProps) => {
+  'use no memo';
+
   const { t: dict } = useTranslation();
   const t = dict.branches;
   const {
     register,
-    watch,
+    control,
     setValue,
     formState: { errors, isSubmitting },
   } = createForm;
 
-  const useCustomHours = watch('useCustomHours');
-  const isActive = watch('isActive');
-  const workingHours = watch('workingHours');
+  const useCustomHours = useWatch({ control, name: 'useCustomHours' });
+  const isActive = useWatch({ control, name: 'isActive' });
+  const workingHours = useWatch({ control, name: 'workingHours' });
   const submitError = createMutation.error?.message ?? null;
 
   const handleCloseClick = () => {

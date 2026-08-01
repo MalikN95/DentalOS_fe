@@ -33,6 +33,10 @@
   color: var(--color-black-500);
 }
 
+.timeInput::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
 .separator {
   text-align: center;
   color: var(--color-black-500);

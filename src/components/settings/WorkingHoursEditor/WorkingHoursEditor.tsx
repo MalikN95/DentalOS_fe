@@ -53,6 +53,7 @@ export const WorkingHoursEditor = ({
             />
             <input
               type="time"
+              lang="ru-RU"
               className={styles.timeInput}
               value={schedule?.from ?? '09:00'}
               disabled={disabled || !isOpen}
@@ -61,6 +62,7 @@ export const WorkingHoursEditor = ({
             <span className={styles.separator}>—</span>
             <input
               type="time"
+              lang="ru-RU"
               className={styles.timeInput}
               value={schedule?.to ?? '18:00'}
               disabled={disabled || !isOpen}

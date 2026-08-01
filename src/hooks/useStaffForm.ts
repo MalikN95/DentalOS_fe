@@ -26,8 +26,10 @@ const buildSchema = (isEditMode: boolean) =>
       : z.string().min(MIN_PASSWORD_LENGTH, 'Минимум 8 символов'),
     isActive: z.boolean(),
     branchId: z.string(),
-    specializations: z.string(),
+    specializations: z.array(z.string()),
     education: z.string(),
+    acceptsOnlineBooking: z.boolean(),
+    serviceIds: z.array(z.string()),
     experienceYears: z
       .string()
       .refine(
@@ -52,10 +54,12 @@ const EMPTY_VALUES: StaffFormValues = {
   password: '',
   isActive: true,
   branchId: '',
-  specializations: '',
+  specializations: [],
   education: '',
   experienceYears: '',
   description: '',
+  acceptsOnlineBooking: false,
+  serviceIds: [],
 };
 
 const splitList = (value: string): string[] =>
@@ -75,13 +79,15 @@ const staffToValues = (member: StaffMember): StaffFormValues => ({
   password: '',
   isActive: member.isActive,
   branchId: member.doctorProfile?.branchId ?? '',
-  specializations: joinList(member.doctorProfile?.specializations),
+  specializations: member.doctorProfile?.specializations ?? [],
   education: joinList(member.doctorProfile?.education),
   experienceYears:
     member.doctorProfile?.experienceYears === undefined
       ? ''
       : String(member.doctorProfile.experienceYears),
   description: member.doctorProfile?.description ?? '',
+  acceptsOnlineBooking: member.doctorProfile?.acceptsOnlineBooking ?? false,
+  serviceIds: member.doctorProfile?.services.map((service) => service.id) ?? [],
 });
 
 const valuesToPayload = (values: StaffFormValues): CreateStaffPayload => {
@@ -103,10 +109,12 @@ const valuesToPayload = (values: StaffFormValues): CreateStaffPayload => {
     ...payload,
     doctor: {
       branchId: values.branchId || null,
-      specializations: splitList(values.specializations),
+      specializations: values.specializations,
       education: splitList(values.education),
       experienceYears: values.experienceYears ? Number(values.experienceYears) : 0,
       description: values.description.trim() || null,
+      acceptsOnlineBooking: values.acceptsOnlineBooking,
+      serviceIds: values.serviceIds,
     },
   };
 };

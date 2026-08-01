@@ -72,3 +72,23 @@ export const apiFetch = async <T>(
 
   return (await response.json()) as T;
 };
+
+// For @Public() backend routes (e.g. the patient-facing booking widget) —
+// no access token, no 401-refresh dance, just the clinic subdomain header.
+export const publicApiFetch = async <T>(path: string, init?: RequestInit): Promise<T> => {
+  const response = await fetch(`${API_URL}${path}`, {
+    ...init,
+    headers: buildRequestHeaders(null, init?.headers),
+  });
+
+  if (response.ok === false) {
+    const { message, code } = await parseApiError(response);
+    throw new ApiRequestError(message, response.status, code);
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  return (await response.json()) as T;
+};

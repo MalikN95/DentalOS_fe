@@ -1,0 +1,169 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  color: var(--color-black-700);
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+}
+
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-600);
+  cursor: pointer;
+}
+
+.navButton:hover:not(:disabled) {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+}
+
+.navButton:disabled {
+  color: var(--color-gray-200);
+  cursor: not-allowed;
+}
+
+.monthLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-black-700);
+}
+
+.weekdays,
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.weekday {
+  padding: 4px 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-black-500);
+}
+
+.weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.day,
+.dayEmpty {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day {
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--color-gray-200);
+  font-size: 13px;
+  cursor: not-allowed;
+}
+
+.dayAvailable {
+  color: var(--color-black-700);
+  border-color: var(--color-gray-100);
+  background: var(--color-white);
+  cursor: pointer;
+}
+
+.dayAvailable:hover {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+}
+
+.daySelected {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+.daySelected:hover {
+  color: var(--color-white);
+}
+
+.state {
+  padding: 8px 0;
+  font-size: var(--text-m-size);
+  color: var(--color-black-500);
+}
+
+.empty {
+  font-size: var(--text-m-size);
+  color: var(--color-black-500);
+}
+
+.slots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slotGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+}
+
+.slot {
+  padding: 8px 4px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.slot:hover {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+}
+
+.slotSelected {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+.slotSelected:hover {
+  color: var(--color-white);
+}

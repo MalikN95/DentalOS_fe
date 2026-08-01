@@ -1,0 +1,80 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.description {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.search {
+  max-width: 320px;
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.tableWrap.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-gray-50);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  white-space: nowrap;
+}
+
+.table th {
+  font-weight: 500;
+  color: var(--color-black-500);
+  background: var(--color-gray-25);
+}
+
+.table td {
+  color: var(--color-black-700);
+}
+
+.stateCell {
+  text-align: center;
+  color: var(--color-black-500);
+}
+
+.actionsHead {
+  width: 200px;
+  text-align: right;
+}
+
+.actionsCell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 200px;
+}

@@ -62,3 +62,9 @@ export const updateStaff = (
 
 export const deleteStaff = (accessToken: string, id: string): Promise<void> =>
   apiFetch<void>(accessToken, `/api/staff/${id}`, { method: 'DELETE' });
+
+export const fetchSpecializationsCatalog = (
+  accessToken: string,
+  signal?: AbortSignal,
+): Promise<string[]> =>
+  apiFetch<string[]>(accessToken, '/api/staff/catalog/specializations', { signal });

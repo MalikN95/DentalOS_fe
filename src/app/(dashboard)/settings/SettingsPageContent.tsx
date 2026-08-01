@@ -5,10 +5,11 @@ import { useTranslation } from '@/common/locale/LocaleProvider';
 import { BranchesSection } from '@/components/settings/BranchesSection/BranchesSection';
 import { ClinicSettingsForm } from '@/components/settings/ClinicSettingsForm/ClinicSettingsForm';
 import { EmailTemplatesSection } from '@/components/settings/EmailTemplatesSection/EmailTemplatesSection';
+import { ServicesSection } from '@/components/settings/ServicesSection/ServicesSection';
 import { Tabs } from '@/components/ui';
 import styles from './page.module.css';
 
-const SETTINGS_TABS = ['clinic', 'branches', 'emailTemplates'] as const;
+const SETTINGS_TABS = ['clinic', 'branches', 'services', 'emailTemplates'] as const;
 
 type SettingsTab = (typeof SETTINGS_TABS)[number];
 
@@ -19,6 +20,7 @@ export const SettingsPageContent = () => {
   const tabItems = [
     { id: 'clinic', label: t.settings.clinicTitle },
     { id: 'branches', label: t.branches.title },
+    { id: 'services', label: t.services.title },
     { id: 'emailTemplates', label: t.emailTemplates.title },
   ];
 
@@ -40,6 +42,7 @@ export const SettingsPageContent = () => {
       <div className={styles.sections}>
         {activeTab === 'clinic' ? <ClinicSettingsForm /> : null}
         {activeTab === 'branches' ? <BranchesSection /> : null}
+        {activeTab === 'services' ? <ServicesSection /> : null}
         {activeTab === 'emailTemplates' ? <EmailTemplatesSection /> : null}
       </div>
     </div>

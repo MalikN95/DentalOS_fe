@@ -15,6 +15,94 @@
   text-align: center;
 }
 
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.conflictHint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-red-600);
+}
+
+.branchGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.branchName {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-black-500);
+}
+
+.compactRows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.compactRow {
+  display: grid;
+  grid-template-columns: 64px 84px 12px 84px;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 6px;
+  border-radius: var(--radius-control);
+}
+
+.compactRowConflict {
+  background: var(--color-red-100);
+}
+
+.compactCheckbox {
+  gap: 6px;
+}
+
+.compactTimeInput {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.compactTimeInput::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.compactRowConflict .compactTimeInput {
+  border-color: var(--color-red-200);
+  color: var(--color-red-600);
+}
+
+.compactTimeInput:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.compactTimeInput:disabled {
+  background: var(--color-gray-25);
+  color: var(--color-black-500);
+}
+
+.separator {
+  text-align: center;
+  color: var(--color-black-500);
+  font-size: 12px;
+}
+
 .footer {
   display: flex;
   align-items: center;

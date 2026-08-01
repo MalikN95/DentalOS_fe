@@ -9,6 +9,11 @@ export const STAFF_ROLES = [
 
 export type StaffRole = (typeof STAFF_ROLES)[number];
 
+export type StaffDoctorServiceOption = {
+  id: string;
+  name: string;
+};
+
 export type StaffDoctorProfile = {
   id: string;
   branchId: string | null;
@@ -18,6 +23,8 @@ export type StaffDoctorProfile = {
   experienceYears: number;
   description: string | null;
   isActive: boolean;
+  acceptsOnlineBooking: boolean;
+  services: StaffDoctorServiceOption[];
 };
 
 export type StaffMember = {
@@ -40,6 +47,8 @@ export type StaffDoctorPayload = {
   education?: string[];
   experienceYears?: number;
   description?: string | null;
+  acceptsOnlineBooking?: boolean;
+  serviceIds?: string[];
 };
 
 export type CreateStaffPayload = {

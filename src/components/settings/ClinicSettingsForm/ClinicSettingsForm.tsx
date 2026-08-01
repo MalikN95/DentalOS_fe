@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation, type Language } from '@/common/locale/LocaleProvider';
 import type { WorkingHours } from '@/common/types/settings';
 import { Alert, Button, SearchSelect, SwitchToggle, TextField } from '@/components/ui';
@@ -9,23 +9,28 @@ import { SaveSettingsModal } from '@/components/settings/SaveSettingsModal/SaveS
 import { WorkingHoursEditor } from '@/components/settings/WorkingHoursEditor/WorkingHoursEditor';
 import { useClinicSettings } from '@/hooks/useClinicSettings';
 import { CURRENCY_OPTIONS, LANGUAGE_OPTIONS, TIMEZONE_OPTIONS } from '@/helpers/locale-options';
+import { buildClinicBookingUrl } from '@/helpers/tenant';
 import styles from './ClinicSettingsForm.module.css';
 
+const COPY_FEEDBACK_MS = 2000;
+
 export const ClinicSettingsForm = () => {
+  'use no memo';
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
+  const [isLinkCopied, setIsLinkCopied] = useState(false);
   const { clinicQuery, form, updateMutation, logoMutation } = useClinicSettings();
 
   const {
     register,
     control,
-    watch,
     setValue,
     formState: { errors, isSubmitting, isDirty },
   } = form;
 
-  const workingHours = watch('workingHours');
-  const isActive = watch('isActive');
+  const workingHours = useWatch({ control, name: 'workingHours' });
+  const isActive = useWatch({ control, name: 'isActive' });
   const clinic = clinicQuery.data;
 
   const { t: dict, setLanguage } = useTranslation();
@@ -70,6 +75,16 @@ export const ClinicSettingsForm = () => {
     setValue('isActive', checked, { shouldDirty: true });
   };
 
+  const handleCopyBookingLink = (url: string) => {
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        setIsLinkCopied(true);
+        setTimeout(() => setIsLinkCopied(false), COPY_FEEDBACK_MS);
+      })
+      .catch(() => undefined);
+  };
+
   if (clinicQuery.isLoading) {
     return <div className={styles.section}>{t.loading}</div>;
   }
@@ -87,6 +102,29 @@ export const ClinicSettingsForm = () => {
   return (
     <section className={styles.section}>
       <p className={styles.description}>{t.clinicSubtitle}</p>
+
+      {clinic?.subdomain ? (
+        <div className={styles.bookingLink}>
+          <span className={styles.fieldLabel}>{t.bookingLinkLabel}</span>
+          <div className={styles.bookingLinkRow}>
+            <a
+              href={buildClinicBookingUrl(clinic.subdomain)}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.bookingLinkValue}
+            >
+              {buildClinicBookingUrl(clinic.subdomain)}
+            </a>
+            <button
+              type="button"
+              className={styles.copyButton}
+              onClick={() => handleCopyBookingLink(buildClinicBookingUrl(clinic.subdomain))}
+            >
+              {isLinkCopied ? t.bookingLinkCopied : t.bookingLinkCopy}
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {logoMutation.error ? <Alert color="danger">{logoMutation.error.message}</Alert> : null}
 
