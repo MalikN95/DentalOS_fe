@@ -10,7 +10,7 @@ import {
   type WorkingHours,
 } from '@/common/types/settings';
 import { useToast } from '@/components/providers/ToastProvider';
-import { Button, Checkbox } from '@/components/ui';
+import { Button, Checkbox, TimeSelect } from '@/components/ui';
 import { slotsToWorkingHours, workingHoursToSlots } from '@/helpers/doctor-schedule';
 import { normalizeWorkingHours, toggleWorkingDay, updateWorkingDayTime } from '@/helpers/working-hours';
 import { useBranchOptions } from '@/hooks/useBranchOptions';
@@ -114,50 +114,48 @@ const BranchesGrid = ({ branches, initialSlots, readOnly, isSaving, onSave }: Br
     <div className={styles.grid}>
       {conflictKeys.size > 0 ? <p className={styles.conflictHint}>{t.doctorSchedule.conflictHint}</p> : null}
 
-      {branches.map((branch) => (
-        <div key={branch.id} className={styles.branchGroup}>
-          <span className={styles.branchName}>{branch.name}</span>
-          <div className={styles.compactRows}>
-            {WEEKDAY_KEYS.map((day) => {
-              const schedule = hoursByBranch[branch.id]?.[day] ?? null;
-              const isOpen = schedule !== null;
-              const isConflict = conflictKeys.has(`${branch.id}:${day}`);
+      <div className={styles.branchesRow}>
+        {branches.map((branch) => (
+          <div key={branch.id} className={styles.branchGroup}>
+            <span className={styles.branchName}>{branch.name}</span>
+            <div className={styles.compactRows}>
+              {WEEKDAY_KEYS.map((day) => {
+                const schedule = hoursByBranch[branch.id]?.[day] ?? null;
+                const isOpen = schedule !== null;
+                const isConflict = conflictKeys.has(`${branch.id}:${day}`);
 
-              return (
-                <div
-                  key={day}
-                  className={`${styles.compactRow} ${isConflict ? styles.compactRowConflict : ''}`}
-                >
-                  <Checkbox
-                    className={styles.compactCheckbox}
-                    label={t.weekdaysShort[day]}
-                    checked={isOpen}
-                    disabled={readOnly}
-                    onChange={(checked) => handleToggleDay(branch.id, day, checked)}
-                  />
-                  <input
-                    type="time"
-                    lang="ru-RU"
-                    className={styles.compactTimeInput}
-                    value={schedule?.from ?? '09:00'}
-                    disabled={readOnly || !isOpen}
-                    onChange={(event) => handleTimeChange(branch.id, day, 'from', event.target.value)}
-                  />
-                  <span className={styles.separator}>—</span>
-                  <input
-                    type="time"
-                    lang="ru-RU"
-                    className={styles.compactTimeInput}
-                    value={schedule?.to ?? '18:00'}
-                    disabled={readOnly || !isOpen}
-                    onChange={(event) => handleTimeChange(branch.id, day, 'to', event.target.value)}
-                  />
-                </div>
-              );
-            })}
+                return (
+                  <div
+                    key={day}
+                    className={`${styles.compactRow} ${isConflict ? styles.compactRowConflict : ''}`}
+                  >
+                    <Checkbox
+                      className={styles.compactCheckbox}
+                      label={t.weekdaysShort[day]}
+                      checked={isOpen}
+                      disabled={readOnly}
+                      onChange={(checked) => handleToggleDay(branch.id, day, checked)}
+                    />
+                    <TimeSelect
+                      value={schedule?.from ?? '09:00'}
+                      disabled={readOnly || !isOpen}
+                      conflict={isConflict}
+                      onChange={(value) => handleTimeChange(branch.id, day, 'from', value)}
+                    />
+                    <span className={styles.separator}>–</span>
+                    <TimeSelect
+                      value={schedule?.to ?? '18:00'}
+                      disabled={readOnly || !isOpen}
+                      conflict={isConflict}
+                      onChange={(value) => handleTimeChange(branch.id, day, 'to', value)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       {!readOnly ? (
         <div className={styles.footer}>

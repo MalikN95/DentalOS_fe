@@ -274,6 +274,27 @@ export const ClockIcon = createIcon(
   </>,
 );
 
+const STAR_PATH =
+  'M12 2.75l2.9 5.88 6.48.94-4.69 4.57 1.11 6.46L12 17.5l-5.8 3.05 1.11-6.46-4.69-4.57 6.48-.94L12 2.75Z';
+
+export const StarIcon = ({ size = 20, filled = false, className, style }: IconProps & { filled?: boolean }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={filled ? 'currentColor' : 'none'}
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    style={style}
+    aria-hidden="true"
+  >
+    <path d={STAR_PATH} />
+  </svg>
+);
+
 type LogoProps = {
   height?: number;
   className?: string;

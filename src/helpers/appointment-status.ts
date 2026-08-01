@@ -5,8 +5,8 @@ import type { BadgeColor } from '@/components/ui';
 export const appointmentStatusColor: Record<AppointmentStatus, BadgeColor> = {
   pending: 'primary',
   confirmed: 'primary',
-  arrived: 'gray',
-  in_treatment: 'gray',
+  arrived: 'mint',
+  in_treatment: 'info',
   completed: 'success',
   cancelled: 'danger',
   no_show: 'danger',

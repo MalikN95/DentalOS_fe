@@ -41,6 +41,9 @@ export type BookingDoctor = {
   specializations: string[];
   experienceYears: number;
   description: string | null;
+  /** Only counts reviews explicitly curated for the booking widget; null when there are none yet. */
+  averageRating: number | null;
+  reviewCount: number;
 };
 
 export type CreateBookingPayload = {

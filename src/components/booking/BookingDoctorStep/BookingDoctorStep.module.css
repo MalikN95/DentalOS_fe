@@ -84,3 +84,17 @@
   line-height: 18px;
   color: var(--color-black-500);
 }
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-black-600);
+}
+
+.ratingStar {
+  flex-shrink: 0;
+  color: #f5a524;
+}

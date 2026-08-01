@@ -8,7 +8,7 @@ import {
   toggleWorkingDay,
   updateWorkingDayTime,
 } from '@/helpers/working-hours';
-import { Checkbox } from '@/components/ui';
+import { Checkbox, TimeSelect } from '@/components/ui';
 import styles from './WorkingHoursEditor.module.css';
 
 type WorkingHoursEditorProps = {
@@ -51,22 +51,16 @@ export const WorkingHoursEditor = ({
               disabled={disabled}
               onChange={(checked) => handleToggleDay(day, checked)}
             />
-            <input
-              type="time"
-              lang="ru-RU"
-              className={styles.timeInput}
+            <TimeSelect
               value={schedule?.from ?? '09:00'}
               disabled={disabled || !isOpen}
-              onChange={(event) => handleTimeChange(day, 'from', event.target.value)}
+              onChange={(time) => handleTimeChange(day, 'from', time)}
             />
             <span className={styles.separator}>—</span>
-            <input
-              type="time"
-              lang="ru-RU"
-              className={styles.timeInput}
+            <TimeSelect
               value={schedule?.to ?? '18:00'}
               disabled={disabled || !isOpen}
-              onChange={(event) => handleTimeChange(day, 'to', event.target.value)}
+              onChange={(time) => handleTimeChange(day, 'to', time)}
             />
           </div>
         );

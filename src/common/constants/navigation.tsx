@@ -6,6 +6,7 @@ import {
   PatientsIcon,
   SettingsIcon,
   StaffIcon,
+  StarIcon,
   ToothIcon,
   WalletIcon,
 } from '@/components/icons/icons';
@@ -59,6 +60,13 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/finance',
     icon: <WalletIcon />,
     roles: ['owner', 'admin', 'accountant'],
+  },
+  {
+    id: 'reviews',
+    labelKey: 'reviews',
+    href: '/reviews',
+    icon: <StarIcon />,
+    roles: ['owner', 'admin'],
   },
   {
     id: 'settings',

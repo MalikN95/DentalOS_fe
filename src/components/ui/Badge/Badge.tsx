@@ -1,6 +1,6 @@
 import styles from './Badge.module.css';
 
-export type BadgeColor = 'primary' | 'gray' | 'danger' | 'success' | 'warning';
+export type BadgeColor = 'primary' | 'gray' | 'danger' | 'success' | 'warning' | 'info' | 'mint';
 
 type BadgeProps = {
   children: React.ReactNode;

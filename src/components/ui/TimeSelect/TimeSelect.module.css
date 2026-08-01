@@ -1,0 +1,37 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.select {
+  padding: 4px 2px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-black-700);
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: var(--control-focus-ring);
+}
+
+.select:disabled {
+  background: var(--color-gray-25);
+  color: var(--color-black-500);
+}
+
+.selectConflict {
+  border-color: var(--color-red-200);
+  color: var(--color-red-600);
+}
+
+.colon {
+  color: var(--color-black-500);
+  font-size: 12px;
+}

@@ -1,0 +1,87 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tableWrap {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.tableWrap.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 8px 16px;
+  background: var(--color-gray-25);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-black-500);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 9px 16px;
+  border-top: 1px solid var(--color-gray-50);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-600);
+  white-space: nowrap;
+}
+
+.commentCell {
+  max-width: 280px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.muted {
+  color: var(--color-black-500);
+}
+
+.stars {
+  display: inline-flex;
+  gap: 1px;
+}
+
+.starFilled {
+  color: #f5a524;
+}
+
+.starEmpty {
+  color: var(--color-gray-200);
+}
+
+.stateWrap {
+  padding: 16px 20px 0;
+}
+
+.stateCell {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--color-black-500);
+}

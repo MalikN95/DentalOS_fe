@@ -1,0 +1,123 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  max-height: 400px;
+  padding: 12px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.heading {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--color-black-700);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.state {
+  padding: 8px 0;
+  font-size: var(--text-m-size);
+  color: var(--color-black-500);
+}
+
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+  background: var(--color-gray-25);
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.starFilled {
+  color: #f5a524;
+}
+
+.starEmpty {
+  color: var(--color-gray-200);
+}
+
+.notRated {
+  font-size: 12px;
+  color: var(--color-black-500);
+  font-style: italic;
+}
+
+.comment {
+  margin: 0;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.noComment {
+  margin: 0;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+  font-style: italic;
+}
+
+.reviewMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-black-500);
+}
+
+.counterpartName {
+  font-weight: 500;
+  color: var(--color-black-600);
+}
+
+.date {
+  margin-left: auto;
+}

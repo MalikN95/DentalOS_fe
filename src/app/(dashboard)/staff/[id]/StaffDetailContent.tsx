@@ -7,6 +7,7 @@ import { useTranslation } from '@/common/locale/LocaleProvider';
 import { STAFF_ROLES } from '@/common/types/staff';
 import { CalendarIcon, EditIcon, FileTextIcon } from '@/components/icons/icons';
 import { StringTagField } from '@/components/patients/StringTagField/StringTagField';
+import { ReviewsCard } from '@/components/reviews/ReviewsCard/ReviewsCard';
 import { DoctorScheduleSection } from '@/components/staff/DoctorScheduleSection/DoctorScheduleSection';
 import { DoctorServicesField } from '@/components/staff/DoctorServicesField/DoctorServicesField';
 import { Alert, Badge, Button, SwitchToggle, TextField } from '@/components/ui';
@@ -428,6 +429,8 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
               />
             </section>
           ) : null}
+
+          {doctorProfile ? <ReviewsCard doctorProfileId={doctorProfile.id} /> : null}
         </>
       ) : null}
     </div>

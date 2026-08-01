@@ -2,6 +2,7 @@
 
 import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type { BookingDoctor } from '@/common/types/booking';
+import { StarIcon } from '@/components/icons/icons';
 import { getInitials } from '@/helpers/initials';
 import styles from './BookingDoctorStep.module.css';
 
@@ -48,6 +49,15 @@ export const BookingDoctorStep = ({ doctors, onSelect }: BookingDoctorStepProps)
                 {doctor.experienceYears > 0 ? (
                   <span className={styles.experience}>
                     {format(t.doctorExperience, { years: doctor.experienceYears })}
+                  </span>
+                ) : null}
+                {doctor.averageRating !== null ? (
+                  <span className={styles.rating}>
+                    <StarIcon size={14} filled className={styles.ratingStar} />
+                    {format(t.doctorRating, {
+                      rating: doctor.averageRating,
+                      count: doctor.reviewCount,
+                    })}
                   </span>
                 ) : null}
               </span>

@@ -25,3 +25,4 @@ export type { TabItem } from './Tabs/Tabs';
 export { Toast } from './Toast/Toast';
 export type { ToastColor } from './Toast/Toast';
 export { Tooltip } from './Tooltip/Tooltip';
+export { TimeSelect } from './TimeSelect/TimeSelect';

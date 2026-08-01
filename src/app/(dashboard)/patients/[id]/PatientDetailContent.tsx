@@ -15,6 +15,7 @@ import { PatientTimeline } from '@/components/patients/PatientTimeline/PatientTi
 import { PatientTreatmentPlans } from '@/components/patients/PatientTreatmentPlans/PatientTreatmentPlans';
 import { PatientVisits } from '@/components/patients/PatientVisits/PatientVisits';
 import { SendEmailModal } from '@/components/patients/SendEmailModal/SendEmailModal';
+import { ReviewsCard } from '@/components/reviews/ReviewsCard/ReviewsCard';
 import { Alert } from '@/components/ui';
 import { useClinic } from '@/hooks/useClinic';
 import { PATIENT_DETAIL_QUERY_KEY, usePatientDetail } from '@/hooks/usePatientDetail';
@@ -101,6 +102,8 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
               <PatientDocuments patientId={patientId} />
             </div>
           </div>
+
+          <ReviewsCard patientId={patientId} />
 
           <PatientTimeline events={timelineEvents} currency={currency} isLoading={isTimelineLoading} />
         </>
