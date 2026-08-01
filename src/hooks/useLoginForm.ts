@@ -87,7 +87,7 @@ export const useLoginForm = () => {
         }),
       );
 
-      router.push('/');
+      router.push('/dashboard');
     } catch {
       setServerError('Не удалось подключиться к серверу. Проверьте, что backend запущен.');
     }

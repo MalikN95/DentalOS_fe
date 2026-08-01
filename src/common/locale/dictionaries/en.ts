@@ -824,6 +824,13 @@ export const en: Dictionary = {
       "Doctor schedules, online booking, patient charts, and finances — in one interface your team learns in a day.",
     heroCta: 'Get a quote',
     heroSecondary: 'Log in to dashboard',
+    heroKicker: 'Patients · Doctors · Time · Profit',
+    trialNote: '14 days free · No credit card required',
+    marketplaceTitle: "We don't compete for your patients",
+    marketplaceText:
+      "DentalOS isn't a clinic directory. Your online booking widget is your own page, on your own link and brand — not a listing among competitors in a shared catalog.",
+    marketplacePoint1: 'Your patient base belongs to your clinic alone',
+    marketplacePoint2: 'No other clinics advertised inside your booking widget',
     visitArrived: 'Arrived',
     visitInTreatment: 'In treatment',
     visitOnlineBooking: 'Online booking · +3 today',

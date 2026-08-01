@@ -110,7 +110,7 @@ export const TopNav = ({
     <>
       <header className={`${styles.bar} ${className ?? ''}`} style={style}>
         <div className={styles.leftGroup}>
-          <Link href="/" className={styles.logo}>
+          <Link href="/dashboard" className={styles.logo}>
             <span className={styles.logoMark}>
               {logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element -- presigned S3 URL, arbitrary aspect ratio

@@ -15,7 +15,8 @@ export const middleware = (request: NextRequest) => {
     return NextResponse.rewrite(new URL('/marketing', request.url));
   }
 
-  return NextResponse.next();
+  // The kabinet's home lives at /dashboard now — bounce the bare root there.
+  return NextResponse.redirect(new URL('/dashboard', request.url));
 };
 
 export const config = {

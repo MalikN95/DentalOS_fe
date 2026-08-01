@@ -29,7 +29,7 @@ export const NAV_ITEMS: NavItem[] = [
   {
     id: 'dashboard',
     labelKey: 'dashboard',
-    href: '/',
+    href: '/dashboard',
     icon: <DashboardIcon />,
     roles: NON_DOCTOR_ROLES,
   },
@@ -78,7 +78,7 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const getNavItemByPathname = (pathname: string): NavItem => {
-  const match = NAV_ITEMS.find((item) => item.href !== '/' && pathname.startsWith(item.href));
+  const match = NAV_ITEMS.find((item) => pathname.startsWith(item.href));
 
   return match ?? NAV_ITEMS[0];
 };

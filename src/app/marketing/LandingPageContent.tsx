@@ -6,6 +6,7 @@ import { Badge, Button } from '@/components/ui';
 import {
   CalendarIcon,
   ClockIcon,
+  Logo,
   StaffIcon,
   StarIcon,
   ToothIcon,
@@ -37,9 +38,7 @@ export const LandingPageContent = () => {
   return (
     <div className={styles.page}>
       <nav className={styles.nav}>
-        <div className={styles.logo}>
-          Dental<span>OS</span>
-        </div>
+        <Logo height={22} className={styles.logo} />
         <div className={styles.navLinks}>
           <a href="#features">{t.landing.navFeatures}</a>
           <a href="#pricing">{t.landing.navPricing}</a>
@@ -49,7 +48,9 @@ export const LandingPageContent = () => {
             {t.landing.navLogin}
           </Link>
           <a href={`mailto:${SALES_EMAIL}`}>
-            <Button color="primary">{t.landing.navCta}</Button>
+            <Button color="primary" className={styles.ctaGlow}>
+              {t.landing.navCta}
+            </Button>
           </a>
         </div>
       </nav>
@@ -59,9 +60,12 @@ export const LandingPageContent = () => {
           <span className={styles.heroEyebrow}>{t.landing.heroEyebrow}</span>
           <h1 className={styles.heroTitle}>{t.landing.heroTitle}</h1>
           <p className={styles.heroText}>{t.landing.heroText}</p>
+          <p className={styles.heroKicker}>{t.landing.heroKicker}</p>
           <div className={styles.heroActions}>
             <a href={`mailto:${SALES_EMAIL}`}>
-              <Button color="primary">{t.landing.heroCta}</Button>
+              <Button color="primary" className={styles.ctaGlow}>
+                {t.landing.heroCta}
+              </Button>
             </a>
             <Link href="/login">
               <Button color="gray" variant="outline">
@@ -69,6 +73,7 @@ export const LandingPageContent = () => {
               </Button>
             </Link>
           </div>
+          <p className={styles.trialNote}>{t.landing.trialNote}</p>
         </div>
         <div className={styles.heroVisual}>
           <div className={styles.visualCard}>
@@ -99,7 +104,22 @@ export const LandingPageContent = () => {
         <span className={styles.trustChip}>ОртоЦентр</span>
       </div>
 
+      <section className={styles.marketplace}>
+        <span className={styles.sectionEyebrow}>01</span>
+        <div className={styles.marketplaceBody}>
+          <div>
+            <h2 className={styles.marketplaceTitle}>{t.landing.marketplaceTitle}</h2>
+            <p className={styles.marketplaceText}>{t.landing.marketplaceText}</p>
+          </div>
+          <ul className={styles.marketplaceList}>
+            <li>{t.landing.marketplacePoint1}</li>
+            <li>{t.landing.marketplacePoint2}</li>
+          </ul>
+        </div>
+      </section>
+
       <section id="features" className={styles.features}>
+        <span className={styles.sectionEyebrow}>02</span>
         <h2 className={styles.sectionTitle}>{t.landing.featuresTitle}</h2>
         <div className={styles.featureGrid}>
           {features.map((feature) => (
@@ -115,6 +135,7 @@ export const LandingPageContent = () => {
       </section>
 
       <section className={styles.steps}>
+        <span className={styles.sectionEyebrow}>03</span>
         <h2 className={styles.sectionTitle}>{t.landing.stepsTitle}</h2>
         <div className={styles.stepsRow}>
           {steps.map((step, index) => (
@@ -128,18 +149,20 @@ export const LandingPageContent = () => {
       </section>
 
       <section id="pricing" className={styles.pricing}>
+        <span className={styles.sectionEyebrowLight}>04</span>
         <h2>{t.landing.pricingTitle}</h2>
         <p>{t.landing.pricingText}</p>
         <a href={`mailto:${SALES_EMAIL}`}>
-          <Button color="primary">{t.landing.pricingCta}</Button>
+          <Button color="primary" className={styles.ctaGlow}>
+            {t.landing.pricingCta}
+          </Button>
         </a>
+        <p className={styles.trialNoteLight}>{t.landing.trialNote}</p>
       </section>
 
       <footer className={styles.footer}>
         <div className={styles.footerAbout}>
-          <div className={styles.logo}>
-            Dental<span>OS</span>
-          </div>
+          <Logo height={20} className={styles.logo} />
           <p>{t.landing.footerAbout}</p>
         </div>
         <div className={styles.footerCol}>
