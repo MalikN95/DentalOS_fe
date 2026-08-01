@@ -63,3 +63,13 @@ export const createBooking = (
     method: 'POST',
     body: JSON.stringify(payload),
   });
+
+export const registerBookingPushToken = (
+  clinicSlug: string,
+  patientId: string,
+  token: string,
+): Promise<void> =>
+  publicApiFetch<void>(`/api/booking/${clinicSlug}/push-subscription`, {
+    method: 'POST',
+    body: JSON.stringify({ patientId, token }),
+  });

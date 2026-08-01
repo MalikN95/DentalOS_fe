@@ -8,6 +8,20 @@ export type PatientInsurance = {
   validUntil: string | null; // 'YYYY-MM-DD'
 };
 
+export type PatientNotificationPreferences = {
+  email: boolean;
+  whatsapp: boolean;
+  push: boolean;
+};
+
+// The staff-facing patient form only ever edits email/whatsapp — `push` can
+// only be granted from the patient's own browser (booking widget), so it's
+// never part of what this form sends.
+export type PatientNotificationPreferencesInput = {
+  email: boolean;
+  whatsapp: boolean;
+};
+
 export type Patient = {
   id: string;
   firstName: string;
@@ -22,6 +36,7 @@ export type Patient = {
   comments: string | null;
   isActive: boolean;
   tags: PatientTag[];
+  notificationPreferences: PatientNotificationPreferences;
   createdAt: string;
   updatedAt: string;
 };
@@ -37,6 +52,7 @@ export type CreatePatientPayload = {
   allergies?: string[];
   chronicDiseases?: string[];
   comments?: string;
+  notificationPreferences?: PatientNotificationPreferencesInput;
 };
 
 export type UpdatePatientPayload = Partial<CreatePatientPayload> & {

@@ -24,6 +24,8 @@ const patientFormSchema = z.object({
   insurancePolicyNumber: z.string(),
   insuranceValidUntil: z.string(),
   isActive: z.boolean(),
+  notifyEmail: z.boolean(),
+  notifyWhatsapp: z.boolean(),
 });
 
 export type PatientFormValues = z.infer<typeof patientFormSchema>;
@@ -42,6 +44,8 @@ const EMPTY_VALUES: PatientFormValues = {
   insurancePolicyNumber: '',
   insuranceValidUntil: '',
   isActive: true,
+  notifyEmail: true,
+  notifyWhatsapp: true,
 };
 
 const patientToValues = (patient: Patient): PatientFormValues => ({
@@ -58,6 +62,8 @@ const patientToValues = (patient: Patient): PatientFormValues => ({
   insurancePolicyNumber: patient.insurance?.policyNumber ?? '',
   insuranceValidUntil: patient.insurance?.validUntil ?? '',
   isActive: patient.isActive,
+  notifyEmail: patient.notificationPreferences?.email ?? true,
+  notifyWhatsapp: patient.notificationPreferences?.whatsapp ?? true,
 });
 
 const valuesToPayload = (values: PatientFormValues): CreatePatientPayload => {
@@ -82,6 +88,10 @@ const valuesToPayload = (values: PatientFormValues): CreatePatientPayload => {
           validUntil: values.insuranceValidUntil || null,
         }
       : undefined,
+    notificationPreferences: {
+      email: values.notifyEmail,
+      whatsapp: values.notifyWhatsapp,
+    },
   };
 };
 

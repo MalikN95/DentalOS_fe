@@ -6,8 +6,23 @@ import { EditIcon } from '@/components/icons/icons';
 import { PatientTagsField } from '@/components/patients/PatientTagsField/PatientTagsField';
 import { Badge, PatientAvatar } from '@/components/ui';
 import { formatDate } from '@/helpers/date';
+import {
+  NOTIFICATION_CHANNEL_COLOR,
+  type NotificationChannelKey,
+} from '@/helpers/notification-channel';
 import { deriveTagHue, tagBackground, tagForeground } from '@/helpers/tag-color';
 import styles from './PatientInfoPanel.module.css';
+
+// `push` is read-only here — it's only ever granted from the patient's own
+// browser on the booking widget, never editable from this staff-facing card.
+const PATIENT_NOTIFICATION_CHANNELS: {
+  key: Extract<NotificationChannelKey, 'email' | 'whatsapp' | 'push'>;
+  label: 'notifyEmail' | 'notifyWhatsapp' | 'notifyPush';
+}[] = [
+  { key: 'email', label: 'notifyEmail' },
+  { key: 'whatsapp', label: 'notifyWhatsapp' },
+  { key: 'push', label: 'notifyPush' },
+];
 
 type PatientInfoPanelProps = {
   patient: Patient;
@@ -115,6 +130,24 @@ export const PatientInfoPanel = ({
 
         <TagList label={t.patientInfo.allergies} items={patient.allergies} />
         <TagList label={t.patientInfo.chronic} items={patient.chronicDiseases} />
+
+        <div className={styles.block}>
+          <span className={styles.blockLabel}>{t.patientInfo.notifications}</span>
+          <div className={styles.tags}>
+            {PATIENT_NOTIFICATION_CHANNELS.map(({ key, label }) => {
+              const enabled = patient.notificationPreferences[key];
+              return (
+                <Badge
+                  key={key}
+                  color={enabled ? NOTIFICATION_CHANNEL_COLOR[key] : 'gray'}
+                  className={enabled ? undefined : styles.notificationDisabled}
+                >
+                  {t.patientInfo[label]}
+                </Badge>
+              );
+            })}
+          </div>
+        </div>
 
         <div className={styles.block}>
           <span className={styles.blockLabel}>{t.patientInfo.insurance}</span>

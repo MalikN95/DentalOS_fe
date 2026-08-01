@@ -41,6 +41,10 @@ const buildSchema = (isEditMode: boolean) =>
         'Введите число от 0 до 80',
       ),
     description: z.string(),
+    notifyEmail: z.boolean(),
+    notifyWhatsapp: z.boolean(),
+    notifyPush: z.boolean(),
+    notifyInApp: z.boolean(),
   });
 
 export type StaffFormValues = z.infer<ReturnType<typeof buildSchema>>;
@@ -60,6 +64,10 @@ const EMPTY_VALUES: StaffFormValues = {
   description: '',
   acceptsOnlineBooking: false,
   serviceIds: [],
+  notifyEmail: true,
+  notifyWhatsapp: true,
+  notifyPush: true,
+  notifyInApp: true,
 };
 
 const splitList = (value: string): string[] =>
@@ -88,6 +96,10 @@ const staffToValues = (member: StaffMember): StaffFormValues => ({
   description: member.doctorProfile?.description ?? '',
   acceptsOnlineBooking: member.doctorProfile?.acceptsOnlineBooking ?? false,
   serviceIds: member.doctorProfile?.services.map((service) => service.id) ?? [],
+  notifyEmail: member.notificationPreferences?.email ?? true,
+  notifyWhatsapp: member.notificationPreferences?.whatsapp ?? true,
+  notifyPush: member.notificationPreferences?.push ?? true,
+  notifyInApp: member.notificationPreferences?.inApp ?? true,
 });
 
 const valuesToPayload = (values: StaffFormValues): CreateStaffPayload => {
@@ -99,6 +111,12 @@ const valuesToPayload = (values: StaffFormValues): CreateStaffPayload => {
     role: values.role,
     password: values.password,
     isActive: values.isActive,
+    notificationPreferences: {
+      email: values.notifyEmail,
+      whatsapp: values.notifyWhatsapp,
+      push: values.notifyPush,
+      inApp: values.notifyInApp,
+    },
   };
 
   if (values.role !== 'doctor') {

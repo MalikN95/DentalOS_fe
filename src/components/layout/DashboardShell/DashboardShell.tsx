@@ -98,8 +98,6 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
         onSearchSubmit={handleSearchSubmit}
         userName={`${user.firstName} ${user.lastName}`}
         userRole={userRole}
-        notificationsLabel={t.header.notifications}
-        notificationsCount={3}
         logoutLabel={t.nav.logout}
         onLogout={handleLogout}
         isMobileOpen={isMobileNavOpen}

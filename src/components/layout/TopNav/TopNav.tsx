@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { NotificationBadge } from '@/components/ui';
 import {
-  BellIcon,
   CloseIcon,
   Logo,
   LogoutIcon,
@@ -11,6 +10,7 @@ import {
   SearchIcon,
   UserPlusIcon,
 } from '@/components/icons/icons';
+import { NotificationBell } from '@/components/layout/NotificationBell/NotificationBell';
 import { getInitials } from '@/helpers/initials';
 import styles from './TopNav.module.css';
 
@@ -33,8 +33,6 @@ type TopNavProps = {
   onSearchSubmit: (value: string) => void;
   userName: string;
   userRole: string;
-  notificationsLabel: string;
-  notificationsCount?: number;
   logoutLabel: string;
   onLogout: () => void;
   isMobileOpen: boolean;
@@ -57,8 +55,6 @@ export const TopNav = ({
   onSearchSubmit,
   userName,
   userRole,
-  notificationsLabel,
-  notificationsCount = 0,
   logoutLabel,
   onLogout,
   isMobileOpen,
@@ -138,12 +134,7 @@ export const TopNav = ({
 
         <div className={styles.rightGroup}>
           <div className={styles.profileGroup}>
-            <button type="button" className={styles.bell} aria-label={notificationsLabel} title={notificationsLabel}>
-              <BellIcon size={18} />
-              {notificationsCount > 0 ? (
-                <NotificationBadge className={styles.bellBadge} count={notificationsCount} />
-              ) : null}
-            </button>
+            <NotificationBell />
 
             <div className={styles.user}>
               <span className={styles.avatar}>{getInitials(userName)}</span>

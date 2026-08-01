@@ -50,6 +50,8 @@ export const PatientFormModal = ({
   } = form;
 
   const isActive = useWatch({ control, name: 'isActive' });
+  const notifyEmail = useWatch({ control, name: 'notifyEmail' });
+  const notifyWhatsapp = useWatch({ control, name: 'notifyWhatsapp' });
 
   const handleFormSubmit = handleSubmit((values) => {
     mutation.mutate(values);
@@ -57,6 +59,14 @@ export const PatientFormModal = ({
 
   const handleActiveChange = (checked: boolean) => {
     setValue('isActive', checked);
+  };
+
+  const handleNotifyEmailChange = (checked: boolean) => {
+    setValue('notifyEmail', checked);
+  };
+
+  const handleNotifyWhatsappChange = (checked: boolean) => {
+    setValue('notifyWhatsapp', checked);
   };
 
   const submitError = mutation.error?.message ?? null;
@@ -271,6 +281,22 @@ export const PatientFormModal = ({
           )}
         />
       </label>
+
+      <fieldset className={styles.fieldset}>
+        <legend className={styles.legend}>{t.notifications}</legend>
+        <div className={styles.notificationToggles}>
+          <SwitchToggle
+            checked={notifyEmail}
+            label={t.notifyEmail}
+            onChange={handleNotifyEmailChange}
+          />
+          <SwitchToggle
+            checked={notifyWhatsapp}
+            label={t.notifyWhatsapp}
+            onChange={handleNotifyWhatsappChange}
+          />
+        </div>
+      </fieldset>
 
       {isEditMode ? (
         <SwitchToggle checked={isActive} label={t.active} onChange={handleActiveChange} />

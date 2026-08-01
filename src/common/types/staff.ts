@@ -27,6 +27,13 @@ export type StaffDoctorProfile = {
   services: StaffDoctorServiceOption[];
 };
 
+export type StaffNotificationPreferences = {
+  email: boolean;
+  whatsapp: boolean;
+  push: boolean;
+  inApp: boolean;
+};
+
 export type StaffMember = {
   id: string;
   email: string;
@@ -38,6 +45,7 @@ export type StaffMember = {
   mfaEnabled: boolean;
   createdAt: string;
   updatedAt: string;
+  notificationPreferences: StaffNotificationPreferences;
   doctorProfile: StaffDoctorProfile | null;
 };
 
@@ -60,6 +68,7 @@ export type CreateStaffPayload = {
   password: string;
   isActive?: boolean;
   doctor?: StaffDoctorPayload;
+  notificationPreferences?: StaffNotificationPreferences;
 };
 
 export type UpdateStaffPayload = Partial<CreateStaffPayload>;

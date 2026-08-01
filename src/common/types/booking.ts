@@ -46,6 +46,11 @@ export type BookingDoctor = {
   reviewCount: number;
 };
 
+export type BookingNotificationPreferences = {
+  email: boolean;
+  whatsapp: boolean;
+};
+
 export type CreateBookingPayload = {
   branchId: string;
   serviceId: string;
@@ -57,10 +62,12 @@ export type CreateBookingPayload = {
   phone: string;
   email?: string;
   comment?: string;
+  notificationPreferences?: BookingNotificationPreferences;
 };
 
 export type BookingConfirmation = {
   appointmentId: string;
+  patientId: string;
   status: string;
   startsAt: string;
   doctorName: string;

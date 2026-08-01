@@ -175,6 +175,17 @@
   color: var(--color-black-600);
 }
 
+.notificationToggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.notificationDisabled {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
 .muted {
   font-size: var(--text-m-size);
   line-height: var(--text-m-line);

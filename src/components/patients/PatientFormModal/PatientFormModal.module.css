@@ -58,6 +58,12 @@
   color: var(--color-black-500);
 }
 
+.notificationToggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
 @media (max-width: 560px) {
   .grid {
     grid-template-columns: minmax(0, 1fr);

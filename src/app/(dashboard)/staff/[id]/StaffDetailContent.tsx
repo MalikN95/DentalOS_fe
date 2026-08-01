@@ -11,6 +11,10 @@ import { ReviewsCard } from '@/components/reviews/ReviewsCard/ReviewsCard';
 import { DoctorScheduleSection } from '@/components/staff/DoctorScheduleSection/DoctorScheduleSection';
 import { DoctorServicesField } from '@/components/staff/DoctorServicesField/DoctorServicesField';
 import { Alert, Badge, Button, SwitchToggle, TextField } from '@/components/ui';
+import {
+  NOTIFICATION_CHANNEL_COLOR,
+  type NotificationChannelKey,
+} from '@/helpers/notification-channel';
 import { deriveTagHue, tagBackground, tagForeground } from '@/helpers/tag-color';
 import { useBranchOptions } from '@/hooks/useBranchOptions';
 import { useServiceOptions } from '@/hooks/useServiceOptions';
@@ -25,6 +29,13 @@ import styles from './StaffDetailContent.module.css';
 type StaffDetailContentProps = {
   staffId: string;
 };
+
+const NOTIFICATION_CHANNELS: { key: NotificationChannelKey; label: 'notifyEmail' | 'notifyWhatsapp' | 'notifyPush' | 'notifyInApp' }[] = [
+  { key: 'email', label: 'notifyEmail' },
+  { key: 'whatsapp', label: 'notifyWhatsapp' },
+  { key: 'push', label: 'notifyPush' },
+  { key: 'inApp', label: 'notifyInApp' },
+];
 
 export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
   'use no memo';
@@ -74,6 +85,10 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
   const acceptsOnlineBooking = useWatch({ control, name: 'acceptsOnlineBooking' });
   const specializations = useWatch({ control, name: 'specializations' });
   const serviceIds = useWatch({ control, name: 'serviceIds' });
+  const notifyEmail = useWatch({ control, name: 'notifyEmail' });
+  const notifyWhatsapp = useWatch({ control, name: 'notifyWhatsapp' });
+  const notifyPush = useWatch({ control, name: 'notifyPush' });
+  const notifyInApp = useWatch({ control, name: 'notifyInApp' });
 
   const handleFormSubmit = handleSubmit((values) => {
     mutation.mutate(values);
@@ -211,6 +226,54 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
                     label={t.active}
                     onChange={handleActiveChange}
                   />
+                ) : null}
+
+                {isEditing ? (
+                  <div className={styles.block}>
+                    <span className={styles.blockLabel}>{t.notifications}</span>
+                    <div className={styles.notificationToggles}>
+                      <SwitchToggle
+                        checked={notifyEmail}
+                        label={t.notifyEmail}
+                        onChange={(checked) => setValue('notifyEmail', checked)}
+                      />
+                      <SwitchToggle
+                        checked={notifyWhatsapp}
+                        label={t.notifyWhatsapp}
+                        onChange={(checked) => setValue('notifyWhatsapp', checked)}
+                      />
+                      <SwitchToggle
+                        checked={notifyPush}
+                        label={t.notifyPush}
+                        onChange={(checked) => setValue('notifyPush', checked)}
+                      />
+                      <SwitchToggle
+                        checked={notifyInApp}
+                        label={t.notifyInApp}
+                        onChange={(checked) => setValue('notifyInApp', checked)}
+                      />
+                    </div>
+                  </div>
+                ) : null}
+
+                {!isEditing && member ? (
+                  <div className={styles.block}>
+                    <span className={styles.blockLabel}>{t.notifications}</span>
+                    <div className={styles.tags}>
+                      {NOTIFICATION_CHANNELS.map(({ key, label }) => {
+                        const enabled = member.notificationPreferences[key];
+                        return (
+                          <Badge
+                            key={key}
+                            color={enabled ? NOTIFICATION_CHANNEL_COLOR[key] : 'gray'}
+                            className={enabled ? undefined : styles.notificationDisabled}
+                          >
+                            {t[label]}
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                  </div>
                 ) : null}
               </section>
 

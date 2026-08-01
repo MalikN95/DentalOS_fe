@@ -67,6 +67,12 @@
   gap: 4px;
 }
 
+.notificationToggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
 .onlineBookingHint {
   font-size: 12px;
   line-height: 18px;

@@ -168,7 +168,6 @@
   background: var(--color-gray-100);
 }
 
-.bell,
 .logout,
 .menuButton {
   display: inline-flex;
@@ -185,19 +184,8 @@
   transition: background-color 0.15s ease;
 }
 
-.bell:hover,
 .logout:hover {
   background: var(--color-gray-25);
-}
-
-.bell {
-  position: relative;
-}
-
-.bellBadge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
 }
 
 .user {

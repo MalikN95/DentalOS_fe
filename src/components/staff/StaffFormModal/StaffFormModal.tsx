@@ -63,6 +63,10 @@ export const StaffFormModal = ({
   const acceptsOnlineBooking = useWatch({ control, name: 'acceptsOnlineBooking' });
   const specializations = useWatch({ control, name: 'specializations' });
   const serviceIds = useWatch({ control, name: 'serviceIds' });
+  const notifyEmail = useWatch({ control, name: 'notifyEmail' });
+  const notifyWhatsapp = useWatch({ control, name: 'notifyWhatsapp' });
+  const notifyPush = useWatch({ control, name: 'notifyPush' });
+  const notifyInApp = useWatch({ control, name: 'notifyInApp' });
 
   const handleFormSubmit = handleSubmit((values) => {
     mutation.mutate(values);
@@ -219,6 +223,32 @@ export const StaffFormModal = ({
           />
         </fieldset>
       ) : null}
+
+      <fieldset className={styles.fieldset}>
+        <legend className={styles.legend}>{t.notifications}</legend>
+        <div className={styles.notificationToggles}>
+          <SwitchToggle
+            checked={notifyEmail}
+            label={t.notifyEmail}
+            onChange={(checked) => setValue('notifyEmail', checked)}
+          />
+          <SwitchToggle
+            checked={notifyWhatsapp}
+            label={t.notifyWhatsapp}
+            onChange={(checked) => setValue('notifyWhatsapp', checked)}
+          />
+          <SwitchToggle
+            checked={notifyPush}
+            label={t.notifyPush}
+            onChange={(checked) => setValue('notifyPush', checked)}
+          />
+          <SwitchToggle
+            checked={notifyInApp}
+            label={t.notifyInApp}
+            onChange={(checked) => setValue('notifyInApp', checked)}
+          />
+        </div>
+      </fieldset>
 
       <SwitchToggle checked={isActive} label={t.active} onChange={handleActiveChange} />
     </Modal>
