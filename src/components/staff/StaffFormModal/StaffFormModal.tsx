@@ -37,6 +37,7 @@ export const StaffFormModal = ({
   const roleFieldId = useId();
   const branchFieldId = useId();
   const descriptionFieldId = useId();
+  const reviewRatingFieldId = useId();
   const { branches } = useBranchOptions();
   const { options: specializationOptions } = useSpecializationsCatalog();
   const { services: serviceOptions } = useServiceOptions();
@@ -67,6 +68,7 @@ export const StaffFormModal = ({
   const notifyWhatsapp = useWatch({ control, name: 'notifyWhatsapp' });
   const notifyPush = useWatch({ control, name: 'notifyPush' });
   const notifyInApp = useWatch({ control, name: 'notifyInApp' });
+  const reviewAlertMaxRating = useWatch({ control, name: 'reviewAlertMaxRating' });
 
   const handleFormSubmit = handleSubmit((values) => {
     mutation.mutate(values);
@@ -77,6 +79,7 @@ export const StaffFormModal = ({
   };
 
   const isDoctor = selectedRole === 'doctor';
+  const canReceiveReviewAlerts = selectedRole === 'owner' || selectedRole === 'admin';
   const submitError = mutation.error?.message ?? null;
   const submitIdleLabel = isEditMode ? t.save : t.create;
 
@@ -248,6 +251,25 @@ export const StaffFormModal = ({
             onChange={(checked) => setValue('notifyInApp', checked)}
           />
         </div>
+
+        {canReceiveReviewAlerts ? (
+          <label className={styles.field} htmlFor={reviewRatingFieldId}>
+            <span className={styles.label}>{t.reviewAlertMaxRating}</span>
+            <select
+              id={reviewRatingFieldId}
+              className={styles.select}
+              value={reviewAlertMaxRating}
+              onChange={(event) => setValue('reviewAlertMaxRating', Number(event.target.value))}
+            >
+              {[1, 2, 3, 4, 5].map((rating) => (
+                <option key={rating} value={rating}>
+                  {rating}
+                </option>
+              ))}
+            </select>
+            <span className={styles.hint}>{t.reviewAlertMaxRatingHint}</span>
+          </label>
+        ) : null}
       </fieldset>
 
       <SwitchToggle checked={isActive} label={t.active} onChange={handleActiveChange} />

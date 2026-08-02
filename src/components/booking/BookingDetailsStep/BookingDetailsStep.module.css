@@ -60,6 +60,16 @@
   color: var(--color-black-600);
 }
 
+.notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+}
+
 .textarea {
   width: 100%;
   min-height: 70px;

@@ -260,7 +260,8 @@
   gap: 4px;
 }
 
-.onlineBookingHint {
+.onlineBookingHint,
+.hint {
   font-size: 12px;
   line-height: 18px;
   color: var(--color-black-500);

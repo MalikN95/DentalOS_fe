@@ -45,6 +45,7 @@ const buildSchema = (isEditMode: boolean) =>
     notifyWhatsapp: z.boolean(),
     notifyPush: z.boolean(),
     notifyInApp: z.boolean(),
+    reviewAlertMaxRating: z.number().int().min(1).max(5),
   });
 
 export type StaffFormValues = z.infer<ReturnType<typeof buildSchema>>;
@@ -68,6 +69,7 @@ const EMPTY_VALUES: StaffFormValues = {
   notifyWhatsapp: true,
   notifyPush: true,
   notifyInApp: true,
+  reviewAlertMaxRating: 3,
 };
 
 const splitList = (value: string): string[] =>
@@ -100,6 +102,7 @@ const staffToValues = (member: StaffMember): StaffFormValues => ({
   notifyWhatsapp: member.notificationPreferences?.whatsapp ?? true,
   notifyPush: member.notificationPreferences?.push ?? true,
   notifyInApp: member.notificationPreferences?.inApp ?? true,
+  reviewAlertMaxRating: member.notificationPreferences?.reviewAlertMaxRating ?? 3,
 });
 
 const valuesToPayload = (values: StaffFormValues): CreateStaffPayload => {
@@ -116,6 +119,7 @@ const valuesToPayload = (values: StaffFormValues): CreateStaffPayload => {
       whatsapp: values.notifyWhatsapp,
       push: values.notifyPush,
       inApp: values.notifyInApp,
+      reviewAlertMaxRating: values.reviewAlertMaxRating,
     },
   };
 

@@ -4,7 +4,7 @@ import { useId, useState } from 'react';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { BookingBranch, BookingDoctor, BookingService } from '@/common/types/booking';
 import type { PatientDetailsValues } from '@/hooks/useBookingWizard';
-import { Alert, Button, TextField } from '@/components/ui';
+import { Alert, Button, Checkbox, TextField } from '@/components/ui';
 import { formatMoney } from '@/helpers/appointment-status';
 import { parseDateInputValue } from '@/helpers/date';
 import styles from './BookingDetailsStep.module.css';
@@ -153,6 +153,25 @@ export const BookingDetailsStep = ({
             onChange={(event) => onChange({ ...values, comment: event.target.value })}
           />
         </label>
+
+        <fieldset className={styles.notifications}>
+          <legend className={styles.label}>{t.notificationsTitle}</legend>
+          <Checkbox
+            checked={values.notifyEmail}
+            label={t.notifyEmail}
+            onChange={(checked) => onChange({ ...values, notifyEmail: checked })}
+          />
+          <Checkbox
+            checked={values.notifyWhatsapp}
+            label={t.notifyWhatsapp}
+            onChange={(checked) => onChange({ ...values, notifyWhatsapp: checked })}
+          />
+          <Checkbox
+            checked={values.notifyPush}
+            label={t.notifyPushHint}
+            onChange={(checked) => onChange({ ...values, notifyPush: checked })}
+          />
+        </fieldset>
 
         <Button type="submit" className={styles.submit} disabled={isSubmitting}>
           {isSubmitting ? t.submitting : t.submit}

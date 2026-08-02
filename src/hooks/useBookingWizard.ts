@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { getToken } from 'firebase/messaging';
+import { FIREBASE_VAPID_KEY } from '@/common/constants/env';
 import type { CreateBookingPayload } from '@/common/types/booking';
 import {
   createBooking,
@@ -11,7 +13,9 @@ import {
   fetchBookingDoctors,
   fetchBookingServices,
   fetchBookingSlots,
+  registerBookingPushToken,
 } from '@/helpers/booking.api';
+import { getMessagingInstance } from '@/helpers/firebase';
 
 export type BookingStep = 'service' | 'doctor' | 'datetime' | 'details' | 'done';
 
@@ -21,6 +25,9 @@ export type PatientDetailsValues = {
   phone: string;
   email: string;
   comment: string;
+  notifyEmail: boolean;
+  notifyWhatsapp: boolean;
+  notifyPush: boolean;
 };
 
 const EMPTY_DETAILS: PatientDetailsValues = {
@@ -29,6 +36,26 @@ const EMPTY_DETAILS: PatientDetailsValues = {
   phone: '',
   email: '',
   comment: '',
+  notifyEmail: true,
+  notifyWhatsapp: true,
+  notifyPush: false,
+};
+
+// Best-effort: silently does nothing if the browser denies permission, FCM
+// isn't configured, or the widget isn't served over HTTPS.
+const registerPushForBooking = async (clinicSlug: string, patientId: string): Promise<void> => {
+  if (typeof Notification === 'undefined') return;
+
+  const permission = await Notification.requestPermission();
+  if (permission !== 'granted') return;
+
+  const messaging = await getMessagingInstance();
+  if (!messaging) return;
+
+  const token = await getToken(messaging, { vapidKey: FIREBASE_VAPID_KEY });
+  if (!token) return;
+
+  await registerBookingPushToken(clinicSlug, patientId, token);
 };
 
 const toMonthValue = (date: Date): string =>
@@ -130,7 +157,13 @@ export const useBookingWizard = (clinicSlug: string) => {
 
   const bookingMutation = useMutation({
     mutationFn: (payload: CreateBookingPayload) => createBooking(clinicSlug, payload),
-    onSuccess: () => setStep('done'),
+    onSuccess: (confirmation) => {
+      setStep('done');
+
+      if (details.notifyPush) {
+        registerPushForBooking(clinicSlug, confirmation.patientId).catch(() => undefined);
+      }
+    },
   });
 
   const selectService = (id: string) => {
@@ -199,6 +232,10 @@ export const useBookingWizard = (clinicSlug: string) => {
       phone: details.phone.trim(),
       email: details.email.trim() || undefined,
       comment: details.comment.trim() || undefined,
+      notificationPreferences: {
+        email: details.notifyEmail,
+        whatsapp: details.notifyWhatsapp,
+      },
     });
   };
 

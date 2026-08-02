@@ -32,6 +32,7 @@ export type StaffNotificationPreferences = {
   whatsapp: boolean;
   push: boolean;
   inApp: boolean;
+  reviewAlertMaxRating: number;
 };
 
 export type StaffMember = {
