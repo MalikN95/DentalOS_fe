@@ -7,7 +7,6 @@ import {
   Logo,
   LogoutIcon,
   MenuIcon,
-  SearchIcon,
   UserPlusIcon,
 } from '@/components/icons/icons';
 import { NotificationBell } from '@/components/layout/NotificationBell/NotificationBell';
@@ -29,8 +28,6 @@ type TopNavProps = {
   logoUrl?: string | null;
   newPatientHref: string;
   newPatientLabel: string;
-  searchPlaceholder: string;
-  onSearchSubmit: (value: string) => void;
   userName: string;
   userRole: string;
   logoutLabel: string;
@@ -51,8 +48,6 @@ export const TopNav = ({
   logoUrl,
   newPatientHref,
   newPatientLabel,
-  searchPlaceholder,
-  onSearchSubmit,
   userName,
   userRole,
   logoutLabel,
@@ -65,12 +60,6 @@ export const TopNav = ({
   className,
   style,
 }: TopNavProps) => {
-  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return;
-    const value = event.currentTarget.value.trim();
-    if (value) onSearchSubmit(value);
-  };
-
   const navLinks = (onNavigate?: () => void) => (
     <>
       {items.map((item) => (
@@ -117,17 +106,6 @@ export const TopNav = ({
             </span>
             <span className={styles.clinicName}>{clinicName}</span>
           </Link>
-
-          <div className={styles.search}>
-            <SearchIcon size={16} className={styles.searchIcon} />
-            <input
-              type="search"
-              className={styles.searchInput}
-              placeholder={searchPlaceholder}
-              aria-label={searchPlaceholder}
-              onKeyDown={handleSearchKeyDown}
-            />
-          </div>
         </div>
 
         <nav className={styles.nav}>{navLinks()}</nav>
@@ -175,19 +153,6 @@ export const TopNav = ({
       />
 
       <div className={`${styles.mobilePanel} ${isMobileOpen ? styles.mobilePanelOpen : ''}`}>
-        <div className={styles.mobileSearch}>
-          <SearchIcon size={16} className={styles.searchIcon} />
-          <input
-            type="search"
-            className={styles.searchInput}
-            placeholder={searchPlaceholder}
-            aria-label={searchPlaceholder}
-            onKeyDown={(event) => {
-              handleSearchKeyDown(event);
-              if (event.key === 'Enter') onCloseMobile();
-            }}
-          />
-        </div>
         <nav className={styles.mobileNav}>{navLinks(onCloseMobile)}</nav>
         <button type="button" className={styles.mobileLogout} onClick={onLogout}>
           <LogoutIcon size={18} />

@@ -3,6 +3,7 @@ import { STAFF_ROLES, type StaffRole } from '@/common/types/staff';
 import {
   CalendarIcon,
   DashboardIcon,
+  MessageIcon,
   PatientsIcon,
   SettingsIcon,
   StaffIcon,
@@ -40,6 +41,7 @@ export const NAV_ITEMS: NavItem[] = [
     icon: <CalendarIcon />,
   },
   { id: 'patients', labelKey: 'patients', href: '/patients', icon: <PatientsIcon /> },
+  { id: 'chats', labelKey: 'chats', href: '/chats', icon: <MessageIcon /> },
   {
     id: 'treatment-plans',
     labelKey: 'treatmentPlans',

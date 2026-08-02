@@ -82,6 +82,27 @@
 .list {
   max-height: 360px;
   overflow-y: auto;
+  /* keep the native scrollbar light even when the OS is in dark mode */
+  color-scheme: light;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-200) transparent;
+}
+
+.list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.list::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--color-gray-200);
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
 }
 
 .empty {

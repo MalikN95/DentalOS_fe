@@ -38,7 +38,7 @@ const EMPTY_DETAILS: PatientDetailsValues = {
   comment: '',
   notifyEmail: true,
   notifyWhatsapp: true,
-  notifyPush: false,
+  notifyPush: true,
 };
 
 // Best-effort: silently does nothing if the browser denies permission, FCM

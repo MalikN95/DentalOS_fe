@@ -10,6 +10,7 @@ import { MOCK_CLINIC_NAME, MOCK_USER } from '@/common/mocks/auth.mock';
 import { TopNav } from '@/components/layout/TopNav/TopNav';
 import { logoutRequest } from '@/helpers/auth-bridge';
 import { useClinic } from '@/hooks/useClinic';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useMobileNav } from '@/hooks/useMobileNav';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useTodayAppointments } from '@/hooks/useTodayAppointments';
@@ -34,13 +35,14 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   const { data: todayAppointments } = useTodayAppointments();
   const { data: clinic } = useClinic();
   const { isOpen: isMobileNavOpen, toggle: toggleMobileNav, close: closeMobileNav } = useMobileNav();
+  const activeItem = getNavItemByPathname(pathname);
+  const clinicName = clinic?.name ?? MOCK_CLINIC_NAME;
+  useDocumentTitle(`${t.nav[activeItem.labelKey]} — ${clinicName}`);
 
   // Close the mobile nav panel whenever the route changes.
   useEffect(() => {
     closeMobileNav();
   }, [pathname, closeMobileNav]);
-
-  const activeItem = getNavItemByPathname(pathname);
   const accessibleNavItems = NAV_ITEMS.filter(
     (item) => !item.roles || item.roles.includes(user.role as StaffRole),
   );
@@ -74,11 +76,6 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
     router.push('/login');
   };
 
-  const handleSearchSubmit = (value: string) => {
-    router.push(`/patients?search=${encodeURIComponent(value)}`);
-    closeMobileNav();
-  };
-
   // Block rendering for unauthenticated users or a role-blocked route
   // (redirects are handled by the effects above).
   if (!isAuthenticated || isRoleBlocked) {
@@ -90,12 +87,10 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
       <TopNav
         items={items}
         activeId={activeItem.id}
-        clinicName={clinic?.name ?? MOCK_CLINIC_NAME}
+        clinicName={clinicName}
         logoUrl={clinic?.logoUrl}
         newPatientHref="/patients?new=1"
         newPatientLabel={t.patients.newPatient}
-        searchPlaceholder={t.header.searchPatient}
-        onSearchSubmit={handleSearchSubmit}
         userName={`${user.firstName} ${user.lastName}`}
         userRole={userRole}
         logoutLabel={t.nav.logout}

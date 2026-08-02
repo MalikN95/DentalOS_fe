@@ -1,0 +1,123 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 296px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  border-right: 1px solid var(--color-gray-50);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row:hover {
+  background: var(--color-gray-25);
+}
+
+.rowActive {
+  background: var(--color-primary-100);
+}
+
+.rowActive:hover {
+  background: var(--color-primary-100);
+}
+
+.teamIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.rowBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+}
+
+.rowTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.name {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--color-black-700);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--color-black-500);
+}
+
+.preview {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--color-black-500);
+}
+
+.previewIcon {
+  flex-shrink: 0;
+}
+
+.previewText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sectionHeading {
+  padding: 12px 16px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-black-500);
+  text-transform: uppercase;
+}
+
+.empty {
+  padding: 8px 16px 16px;
+  font-size: 12px;
+  color: var(--color-black-500);
+}
+
+.loadMore {
+  margin: 4px 16px 12px;
+  padding: 6px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: 8px;
+  background: var(--color-white);
+  color: var(--color-black-600);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.loadMore:hover {
+  background: var(--color-gray-25);
+}
