@@ -103,6 +103,37 @@
   word-break: break-word;
 }
 
+.codeRowValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.codeText {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.revealButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-black-500);
+  cursor: pointer;
+}
+
+.revealButton:hover {
+  background: var(--color-gray-50);
+  color: var(--color-primary-600);
+}
+
 .block {
   display: flex;
   flex-direction: column;

@@ -78,6 +78,14 @@ export const fetchPatient = (
   signal?: AbortSignal,
 ): Promise<Patient> => apiFetch<Patient>(accessToken, `/api/patients/${id}`, { signal });
 
+// Dev/QA only — code is null in any real deployment (see backend README).
+export const fetchPatientDevLoginCode = (
+  accessToken: string,
+  id: string,
+  signal?: AbortSignal,
+): Promise<{ code: string | null }> =>
+  apiFetch<{ code: string | null }>(accessToken, `/api/patients/${id}/dev-login-code`, { signal });
+
 export const fetchAllergiesCatalog = (
   accessToken: string,
   signal?: AbortSignal,

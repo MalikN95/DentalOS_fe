@@ -99,6 +99,7 @@ export const BookingPageContent = ({ clinicSlug }: BookingPageContentProps) => {
       return (
         <BookingConfirmationStep
           confirmation={wizard.bookingMutation.data}
+          clinicSlug={clinicSlug}
           onBookAnother={() => window.location.reload()}
         />
       );

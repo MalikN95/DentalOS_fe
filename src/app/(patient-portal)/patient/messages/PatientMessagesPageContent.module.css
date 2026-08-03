@@ -1,0 +1,19 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-black-700);
+}
+
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}

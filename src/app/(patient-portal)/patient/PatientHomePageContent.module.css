@@ -1,0 +1,35 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.greeting {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-black-700);
+}
+
+.sectionTitle {
+  margin-bottom: 8px;
+  font-size: var(--text-m-size);
+  font-weight: 600;
+  color: var(--color-black-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.previewList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.viewAllLink {
+  align-self: center;
+  padding: 8px;
+  font-size: var(--text-m-size);
+  font-weight: 500;
+  color: var(--color-primary-500);
+  text-decoration: none;
+}

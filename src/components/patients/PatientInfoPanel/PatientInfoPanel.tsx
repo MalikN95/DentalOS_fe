@@ -1,8 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient } from '@/common/types/patient';
-import { EditIcon } from '@/components/icons/icons';
+import { EditIcon, EyeIcon, EyeOffIcon } from '@/components/icons/icons';
 import { PatientTagsField } from '@/components/patients/PatientTagsField/PatientTagsField';
 import { Badge, PatientAvatar } from '@/components/ui';
 import { formatDate } from '@/helpers/date';
@@ -30,6 +31,8 @@ type PatientInfoPanelProps = {
   hideHeader?: boolean;
   /** Render without the card border/padding, e.g. when already inside a modal/card. */
   bordered?: boolean;
+  /** Dev/QA only — see DevLoginCodeRow. Omitted/null renders nothing. */
+  devLoginCode?: string | null;
   /** Shows an edit button next to the name, e.g. on the patient's own profile page. */
   onEdit?: () => void;
   className?: string;
@@ -42,6 +45,33 @@ const Row = ({ label, value }: { label: string; value: string }) => (
     <span className={styles.rowValue}>{value}</span>
   </div>
 );
+
+// Dev/QA only — `code` is null in any real deployment (backend never
+// persists a plaintext code once WhatsApp is actually configured), so this
+// row renders nothing there.
+const DevLoginCodeRow = ({ code }: { code: string }) => {
+  const { t } = useTranslation();
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  return (
+    <div className={styles.row}>
+      <span className={styles.rowLabel} title={t.patientInfo.loginCodeHint}>
+        {t.patientInfo.loginCode}
+      </span>
+      <span className={`${styles.rowValue} ${styles.codeRowValue}`}>
+        <span className={styles.codeText}>{isRevealed ? code : '••••••'}</span>
+        <button
+          type="button"
+          className={styles.revealButton}
+          aria-label={isRevealed ? t.patientInfo.hideLoginCode : t.patientInfo.showLoginCode}
+          onClick={() => setIsRevealed((revealed) => !revealed)}
+        >
+          {isRevealed ? <EyeOffIcon size={15} /> : <EyeIcon size={15} />}
+        </button>
+      </span>
+    </div>
+  );
+};
 
 const TagList = ({ label, items }: { label: string; items: string[] }) => (
   <div className={styles.block}>
@@ -71,6 +101,7 @@ export const PatientInfoPanel = ({
   patient,
   hideHeader = false,
   bordered = true,
+  devLoginCode,
   onEdit,
   className,
   style,
@@ -126,6 +157,7 @@ export const PatientInfoPanel = ({
             label={t.patientInfo.gender}
             value={patient.gender ? t.gender[patient.gender] : dash}
           />
+          {devLoginCode ? <DevLoginCodeRow code={devLoginCode} /> : null}
         </div>
 
         <TagList label={t.patientInfo.allergies} items={patient.allergies} />

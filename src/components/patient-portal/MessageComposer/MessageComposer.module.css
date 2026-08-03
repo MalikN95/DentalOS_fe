@@ -1,0 +1,32 @@
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-gray-100);
+}
+
+.textarea {
+  flex: 1;
+  min-height: 40px;
+  max-height: 120px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  font-family: inherit;
+  color: var(--color-black-700);
+  resize: none;
+  /* html sets color-scheme: dark in dark mode, which makes native form
+     controls default to a dark UA background — pin this one light since the
+     rest of the portal doesn't have a dark theme yet. */
+  color-scheme: light;
+}
+
+.textarea:focus {
+  outline: none;
+  box-shadow: var(--control-focus-ring);
+}

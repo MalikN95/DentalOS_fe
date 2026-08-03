@@ -1,0 +1,20 @@
+.stars {
+  display: flex;
+  gap: 4px;
+}
+
+.starButton {
+  display: inline-flex;
+  padding: 2px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.starFilled {
+  color: #f5a524;
+}
+
+.starEmpty {
+  color: var(--color-gray-200);
+}

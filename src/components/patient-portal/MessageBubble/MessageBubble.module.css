@@ -1,0 +1,42 @@
+.row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.rowOwn {
+  justify-content: flex-end;
+}
+
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 80%;
+  padding: 10px 14px;
+  background: var(--color-gray-50);
+  border-radius: 16px 16px 16px 4px;
+}
+
+.bubbleOwn {
+  background: var(--color-primary-100);
+  border-radius: 16px 16px 4px 16px;
+}
+
+.subject {
+  font-size: var(--text-m-size);
+  font-weight: 600;
+  color: var(--color-black-700);
+}
+
+.body {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.meta {
+  font-size: 11px;
+  color: var(--color-black-500);
+}

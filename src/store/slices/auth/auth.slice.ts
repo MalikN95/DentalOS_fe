@@ -7,6 +7,9 @@ export type AuthUser = {
   firstName: string;
   lastName: string;
   role: string;
+  // Patient portal only — lets the auth guard redirect back to the right
+  // clinic's /portal/{slug} login on logout/401 (staff logins don't set this).
+  clinicSlug?: string;
 };
 
 export type AuthState = {

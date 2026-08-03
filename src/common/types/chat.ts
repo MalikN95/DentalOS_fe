@@ -1,4 +1,6 @@
-export type PatientMessageChannel = 'email' | 'whatsapp';
+export type PatientMessageChannel = 'email' | 'whatsapp' | 'portal';
+
+export type PatientMessageDirection = 'outbound' | 'inbound';
 
 export type ApiChatMessage = {
   id: string;
@@ -16,12 +18,14 @@ export type ApiConversationSummary = {
   patientName: string;
   lastMessageAt: string;
   lastMessageChannel: PatientMessageChannel;
+  lastMessageDirection: PatientMessageDirection;
   lastMessagePreview: string;
 };
 
 export type ApiPatientMessage = {
   id: string;
   channel: PatientMessageChannel;
+  direction: PatientMessageDirection;
   subject: string | null;
   body: string;
   createdAt: string;

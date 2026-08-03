@@ -18,6 +18,7 @@ import { SendEmailModal } from '@/components/patients/SendEmailModal/SendEmailMo
 import { ReviewsCard } from '@/components/reviews/ReviewsCard/ReviewsCard';
 import { Alert } from '@/components/ui';
 import { useClinic } from '@/hooks/useClinic';
+import { usePatientDevLoginCode } from '@/hooks/usePatientDevLoginCode';
 import { PATIENT_DETAIL_QUERY_KEY, usePatientDetail } from '@/hooks/usePatientDetail';
 import { PATIENT_INVOICES_QUERY_KEY, usePatientInvoices } from '@/hooks/usePatientInvoices';
 import { usePatientTimeline } from '@/hooks/usePatientTimeline';
@@ -44,6 +45,7 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
     errorMessage: invoicesErrorMessage,
   } = usePatientInvoices(patientId);
   const { events: timelineEvents, isLoading: isTimelineLoading } = usePatientTimeline(patientId);
+  const { code: devLoginCode } = usePatientDevLoginCode(patientId);
 
   const handleAppointmentCreated = useCallback(() => {
     queryClient
@@ -70,7 +72,11 @@ export const PatientDetailContent = ({ patientId }: PatientDetailContentProps) =
       {!isLoading && patient ? (
         <>
           <div className={`${styles.row} ${styles.profileRow}`}>
-            <PatientInfoPanel patient={patient} onEdit={() => setIsEditOpen(true)} />
+            <PatientInfoPanel
+              patient={patient}
+              devLoginCode={devLoginCode}
+              onEdit={() => setIsEditOpen(true)}
+            />
             <PatientDentalChart patientId={patientId} currency={currency} />
             <PatientVisits
               upcoming={upcoming}

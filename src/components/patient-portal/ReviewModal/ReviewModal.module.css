@@ -1,0 +1,28 @@
+.label {
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 8px;
+  font-size: var(--text-m-size);
+  font-weight: 500;
+  color: var(--color-black-700);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  font-family: inherit;
+  color: var(--color-black-700);
+  resize: vertical;
+  color-scheme: light;
+}
+
+.textarea:focus {
+  outline: none;
+  box-shadow: var(--control-focus-ring);
+}

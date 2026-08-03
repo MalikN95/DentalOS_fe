@@ -1,0 +1,81 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 16px;
+}
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.date {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-black-700);
+}
+
+.time {
+  font-size: var(--text-m-size);
+  color: var(--color-black-500);
+}
+
+.service {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-black-700);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.price {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-black-700);
+}
+
+.cancellationReason {
+  font-size: var(--text-m-size);
+  color: var(--color-red-600);
+}
+
+.reviewRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-gray-100);
+}
+
+.reviewLink {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: var(--text-m-size);
+  font-weight: 500;
+  color: var(--color-primary-500);
+  cursor: pointer;
+}

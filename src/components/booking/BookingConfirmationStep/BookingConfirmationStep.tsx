@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { BookingConfirmation } from '@/common/types/booking';
 import { CheckIcon } from '@/components/icons/icons';
@@ -9,11 +10,13 @@ import styles from './BookingConfirmationStep.module.css';
 
 type BookingConfirmationStepProps = {
   confirmation: BookingConfirmation;
+  clinicSlug: string;
   onBookAnother: () => void;
 };
 
 export const BookingConfirmationStep = ({
   confirmation,
+  clinicSlug,
   onBookAnother,
 }: BookingConfirmationStepProps) => {
   const { t: dict } = useTranslation();
@@ -47,6 +50,14 @@ export const BookingConfirmationStep = ({
           <span className={styles.label}>{t.confirmationAddress}</span>
           <span>{confirmation.branchAddress}</span>
         </div>
+      </div>
+
+      <div className={styles.portalPromo}>
+        <span className={styles.portalPromoTitle}>{t.confirmationPortalTitle}</span>
+        <p className={styles.portalPromoText}>{t.confirmationPortalText}</p>
+        <Link href={`/portal/${clinicSlug}`} className={styles.portalPromoLink}>
+          <Button className={styles.portalPromoButton}>{t.confirmationPortalCta}</Button>
+        </Link>
       </div>
 
       <Button className={styles.again} variant="soft" color="gray" onClick={onBookAnother}>
