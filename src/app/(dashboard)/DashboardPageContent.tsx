@@ -89,6 +89,7 @@ export const DashboardPageContent = () => {
         className={styles.tableSection}
         appointments={appointments ?? []}
         currency={currency}
+        title={t.appointments.todayTitle}
         isLoading={isLoading}
         errorMessage={error?.message ?? null}
         onAddClick={handleOpenCreateModal}

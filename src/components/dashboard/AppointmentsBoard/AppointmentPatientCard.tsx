@@ -4,7 +4,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type { Appointment } from '@/common/types/appointment';
-import { AlertTriangleIcon, FileTextIcon, MailIcon, PhoneIcon, WalletIcon } from '@/components/icons/icons';
+import {
+  AlertTriangleIcon,
+  FileTextIcon,
+  MailIcon,
+  PhoneIcon,
+  WalletIcon,
+} from '@/components/icons/icons';
 import { PatientPaymentModal } from '@/components/patients/PatientPaymentModal/PatientPaymentModal';
 import { PatientTimeline } from '@/components/patients/PatientTimeline/PatientTimeline';
 import { SendEmailModal } from '@/components/patients/SendEmailModal/SendEmailModal';
@@ -104,7 +110,11 @@ export const AppointmentPatientCard = ({
         <span
           className={styles.accentBar}
           data-tone={accentTone}
-          title={accentTone === 'cancelled' ? t.appointments.cancelledHint : t.appointments.firstAppointmentHint}
+          title={
+            accentTone === 'cancelled'
+              ? t.appointments.cancelledHint
+              : t.appointments.firstAppointmentHint
+          }
         />
       ) : null}
 
@@ -143,7 +153,9 @@ export const AppointmentPatientCard = ({
           <span className={styles.timeRange}>
             {appointment.time}–{appointment.endTime}
             <span className={styles.timeDuration}>
-              {format(t.appointments.durationMinutesShort, { minutes: appointment.durationMinutes })}
+              {format(t.appointments.durationMinutesShort, {
+                minutes: appointment.durationMinutes,
+              })}
             </span>
           </span>
           <span className={styles.meta}>{appointment.patientPhone}</span>
@@ -208,7 +220,11 @@ export const AppointmentPatientCard = ({
         </Tooltip>
 
         <Tooltip label={t.appointments.quickPayment} side="bottom">
-          <button type="button" className={styles.actionButton} onClick={() => setIsPaymentOpen(true)}>
+          <button
+            type="button"
+            className={styles.actionButton}
+            onClick={() => setIsPaymentOpen(true)}
+          >
             <WalletIcon size={13} />
           </button>
         </Tooltip>
@@ -225,7 +241,12 @@ export const AppointmentPatientCard = ({
       </div>
 
       <div className={styles.timelineWrap}>
-        <PatientTimeline compact events={events} currency={currency} isLoading={isTimelineLoading} />
+        <PatientTimeline
+          compact
+          events={events}
+          currency={currency}
+          isLoading={isTimelineLoading}
+        />
       </div>
 
       {isEmailOpen && patient ? (

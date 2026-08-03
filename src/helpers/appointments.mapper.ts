@@ -1,10 +1,11 @@
 import type { ApiAppointment, Appointment } from '@/common/types/appointment';
-import { formatTime } from '@/helpers/date';
+import { formatTime, toDateInputValue } from '@/helpers/date';
 
 const MS_PER_MINUTE = 60_000;
 
 export const mapApiAppointmentToRow = (appointment: ApiAppointment): Appointment => ({
   id: appointment.id,
+  date: toDateInputValue(new Date(appointment.startsAt)),
   time: formatTime(appointment.startsAt),
   endTime: formatTime(appointment.endsAt),
   durationMinutes: Math.round(

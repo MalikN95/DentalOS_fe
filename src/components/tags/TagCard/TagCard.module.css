@@ -1,0 +1,128 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.swatchButton {
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.swatch {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: var(--radius-control);
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.iconButton:hover {
+  color: var(--color-black-700);
+  background: var(--color-gray-25);
+}
+
+.iconButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.name {
+  font-size: var(--text-m-size);
+  font-weight: 600;
+  line-height: var(--text-m-line);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nameInput {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  font-size: var(--text-m-size);
+  font-weight: 600;
+  line-height: var(--text-m-line);
+}
+
+.nameInput:focus {
+  outline: none;
+  box-shadow: var(--control-focus-ring);
+}
+
+.palette {
+  position: absolute;
+  top: 46px;
+  left: 12px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 176px;
+  padding: 8px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  box-shadow: 0 8px 20px rgb(51 56 67 / 16%);
+}
+
+.paletteSwatch {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.rerollButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-gray-25);
+  color: var(--color-black-500);
+  cursor: pointer;
+}
+
+.rerollButton:hover {
+  color: var(--color-black-700);
+}

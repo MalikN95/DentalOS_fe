@@ -1,0 +1,168 @@
+.wrap {
+  --bottom-nav-bg: #363853;
+
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  width: 150px;
+  height: 28px;
+  transform: translateX(-50%);
+}
+
+@keyframes handleBreathe {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 -2px 10px rgba(15, 23, 42, 0.35);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.08);
+    box-shadow: 0 -4px 20px rgba(54, 56, 83, 0.6);
+  }
+}
+
+.handle {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 138px;
+  height: 10px;
+  border: none;
+  border-radius: 999px 999px 0 0;
+  background: var(--bottom-nav-bg);
+  cursor: pointer;
+  transform-origin: bottom center;
+  animation: handleBreathe 2.2s ease-in-out infinite;
+  transition:
+    background-color 0.15s ease,
+    height 0.15s ease;
+}
+
+.handle:hover {
+  height: 13px;
+  background: #454869;
+  animation-play-state: paused;
+}
+
+.wrapExpanded .handle {
+  opacity: 0;
+  pointer-events: none;
+  animation-play-state: paused;
+}
+
+.bar {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 16px;
+  background: var(--bottom-nav-bg);
+  border-radius: 999px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+  overflow-x: auto;
+  scrollbar-width: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 10px) scale(0.96);
+  transform-origin: bottom center;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.wrapExpanded .bar {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.bar::-webkit-scrollbar {
+  display: none;
+}
+
+.pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-right: 6px;
+  border: none;
+  background: none;
+  color: var(--color-white);
+  opacity: 0.7;
+  cursor: pointer;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.pin > * {
+  transition: transform 0.15s ease;
+}
+
+.pin:not(.pinActive) > * {
+  transform: rotate(-40deg);
+}
+
+.pin:hover {
+  opacity: 1;
+}
+
+.pinActive {
+  opacity: 1;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.item {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.85);
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.item:hover {
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.itemActive {
+  color: var(--color-primary-100);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.itemActive:hover {
+  color: var(--color-primary-100);
+}
+
+.icon {
+  display: inline-flex;
+}
+
+@media (max-width: 480px) {
+  .label {
+    display: none;
+  }
+
+  .item {
+    padding: 8px 10px;
+  }
+}

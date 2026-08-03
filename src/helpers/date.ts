@@ -31,8 +31,70 @@ export const addDays = (date: Date, amount: number): Date => {
   return next;
 };
 
+export const addWeeks = (date: Date, amount: number): Date => addDays(date, amount * 7);
+
+// setMonth()/setFullYear() roll over into the wrong month when the current
+// day doesn't exist there (Jan 31 + 1 month lands on Mar 3, not Feb 28) —
+// clamp to the target month's last day instead.
+export const addMonths = (date: Date, amount: number): Date => {
+  const targetMonth = date.getMonth() + amount;
+  const daysInTargetMonth = new Date(date.getFullYear(), targetMonth + 1, 0).getDate();
+  const day = Math.min(date.getDate(), daysInTargetMonth);
+  return new Date(date.getFullYear(), targetMonth, day);
+};
+
+export const addYears = (date: Date, amount: number): Date => addMonths(date, amount * 12);
+
 export const startOfDay = (date: Date): Date =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+// Monday-start week, matching the ru locale's week convention used elsewhere (weekdaysShort).
+export const startOfWeek = (date: Date): Date => {
+  const start = startOfDay(date);
+  const weekday = start.getDay();
+  const mondayOffset = weekday === 0 ? -6 : 1 - weekday;
+  return addDays(start, mondayOffset);
+};
+
+export const getWeekDays = (date: Date): Date[] => {
+  const start = startOfWeek(date);
+  return Array.from({ length: 7 }, (_, index) => addDays(start, index));
+};
+
+export const getWeekIsoRange = (date: Date): { from: string; to: string } => {
+  const days = getWeekDays(date);
+  return {
+    from: startOfDay(days[0]).toISOString(),
+    to: new Date(
+      days[6].getFullYear(),
+      days[6].getMonth(),
+      days[6].getDate(),
+      23,
+      59,
+      59,
+      999,
+    ).toISOString(),
+  };
+};
+
+// Weeks (Monday-start) covering the full month, including the leading/trailing
+// days from adjacent months needed to keep every row a full 7 days.
+export const getMonthMatrix = (date: Date): Date[][] => {
+  const lastOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const gridStart = startOfWeek(new Date(date.getFullYear(), date.getMonth(), 1));
+  const weeks: Date[][] = [];
+
+  for (let weekIndex = 0; ; weekIndex += 1) {
+    const weekStart = addDays(gridStart, weekIndex * 7);
+    if (weekStart > lastOfMonth) break;
+    weeks.push(Array.from({ length: 7 }, (_, dayIndex) => addDays(weekStart, dayIndex)));
+  }
+
+  return weeks;
+};
+
+export const getYearMonths = (date: Date): Date[] =>
+  Array.from({ length: 12 }, (_, month) => new Date(date.getFullYear(), month, 1));
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 

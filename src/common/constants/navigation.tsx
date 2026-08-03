@@ -8,6 +8,7 @@ import {
   SettingsIcon,
   StaffIcon,
   StarIcon,
+  TagIcon,
   ToothIcon,
   WalletIcon,
 } from '@/components/icons/icons';
@@ -41,7 +42,6 @@ export const NAV_ITEMS: NavItem[] = [
     icon: <CalendarIcon />,
   },
   { id: 'patients', labelKey: 'patients', href: '/patients', icon: <PatientsIcon /> },
-  { id: 'chats', labelKey: 'chats', href: '/chats', icon: <MessageIcon /> },
   {
     id: 'treatment-plans',
     labelKey: 'treatmentPlans',
@@ -64,13 +64,6 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['owner', 'admin', 'accountant'],
   },
   {
-    id: 'reviews',
-    labelKey: 'reviews',
-    href: '/reviews',
-    icon: <StarIcon />,
-    roles: ['owner', 'admin'],
-  },
-  {
     id: 'settings',
     labelKey: 'settings',
     href: '/settings',
@@ -79,8 +72,24 @@ export const NAV_ITEMS: NavItem[] = [
   },
 ];
 
+// Rendered in the floating bottom bar instead of the top nav — kept in a
+// separate list so DashboardShell can lay the two bars out independently.
+export const BOTTOM_NAV_ITEMS: NavItem[] = [
+  { id: 'chats', labelKey: 'chats', href: '/chats', icon: <MessageIcon /> },
+  { id: 'tags', labelKey: 'tags', href: '/tags', icon: <TagIcon /> },
+  {
+    id: 'reviews',
+    labelKey: 'reviews',
+    href: '/reviews',
+    icon: <StarIcon />,
+    roles: ['owner', 'admin', 'doctor'],
+  },
+];
+
+const ALL_NAV_ITEMS = [...NAV_ITEMS, ...BOTTOM_NAV_ITEMS];
+
 export const getNavItemByPathname = (pathname: string): NavItem => {
-  const match = NAV_ITEMS.find((item) => pathname.startsWith(item.href));
+  const match = ALL_NAV_ITEMS.find((item) => pathname.startsWith(item.href));
 
   return match ?? NAV_ITEMS[0];
 };

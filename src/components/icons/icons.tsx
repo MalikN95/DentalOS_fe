@@ -274,10 +274,22 @@ export const ClockIcon = createIcon(
   </>,
 );
 
+export const PinIcon = createIcon(
+  <>
+    <path d="M12 17v5" />
+    <path d="M8 3h8l-1 6 3 3v2H6v-2l3-3-1-6Z" />
+  </>,
+);
+
 const STAR_PATH =
   'M12 2.75l2.9 5.88 6.48.94-4.69 4.57 1.11 6.46L12 17.5l-5.8 3.05 1.11-6.46-4.69-4.57 6.48-.94L12 2.75Z';
 
-export const StarIcon = ({ size = 20, filled = false, className, style }: IconProps & { filled?: boolean }) => (
+export const StarIcon = ({
+  size = 20,
+  filled = false,
+  className,
+  style,
+}: IconProps & { filled?: boolean }) => (
   <svg
     width={size}
     height={size}

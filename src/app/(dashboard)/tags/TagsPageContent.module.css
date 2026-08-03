@@ -1,0 +1,52 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--color-black-700);
+}
+
+.search {
+  flex: 0 1 240px;
+}
+
+.description {
+  margin: 0;
+  max-width: 720px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-black-500);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.state {
+  margin: 0;
+  padding: 24px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-black-500);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}

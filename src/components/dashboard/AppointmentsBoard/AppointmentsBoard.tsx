@@ -1,32 +1,18 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Appointment } from '@/common/types/appointment';
-import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from '@/components/icons/icons';
 import { Alert, Button } from '@/components/ui';
-import { formatHourLabel, getBoardHourRange, groupAppointmentsByHour } from '@/helpers/appointments-board';
-import { isSameDay, parseDateInputValue, toDateInputValue } from '@/helpers/date';
+import {
+  formatHourLabel,
+  getBoardHourRange,
+  groupAppointmentsByHour,
+} from '@/helpers/appointments-board';
+import { useDoctorFilter } from '@/hooks/useDoctorFilter';
 import { AppointmentPatientCard } from './AppointmentPatientCard';
-import { AppointmentsBoardSidebar, type BoardDoctorOption } from './AppointmentsBoardSidebar';
+import { AppointmentsBoardSidebar } from './AppointmentsBoardSidebar';
 import styles from './AppointmentsBoard.module.css';
-
-const getBoardDoctors = (appointments: Appointment[]): BoardDoctorOption[] => {
-  const byId = new Map<string, string>();
-  appointments.forEach((appointment) => {
-    if (!byId.has(appointment.doctorProfileId)) {
-      byId.set(appointment.doctorProfileId, appointment.doctorName);
-    }
-  });
-  return Array.from(byId, ([id, name]) => ({ id, name }));
-};
-
-type AppointmentsBoardDateNav = {
-  date: Date;
-  onPrevDay: () => void;
-  onNextDay: () => void;
-  onSelectDate: (date: Date) => void;
-};
 
 type AppointmentsBoardProps = {
   appointments: Appointment[];
@@ -38,7 +24,10 @@ type AppointmentsBoardProps = {
   onAddClick: () => void;
   onPatientClick: (patientId: string) => void;
   onRowClick: (appointment: Appointment) => void;
-  dateNav?: AppointmentsBoardDateNav;
+  /** The day being shown — passed through to each card for its "not started yet" check. Defaults to today. */
+  date?: Date;
+  /** Shown in the card header in place of a date nav — omit when a calendar nav already renders above the board. */
+  title?: string;
   /** Hides the doctor filter checklist — pointless when there's only ever one doctor to filter by. */
   showDoctorFilter?: boolean;
 };
@@ -53,58 +42,14 @@ export const AppointmentsBoard = ({
   onAddClick,
   onPatientClick,
   onRowClick,
-  dateNav,
+  date,
+  title,
   showDoctorFilter = true,
 }: AppointmentsBoardProps) => {
-  const { t, language } = useTranslation();
+  const { t } = useTranslation();
   const hours = useMemo(() => getBoardHourRange(appointments), [appointments]);
-  const doctors = useMemo(() => getBoardDoctors(appointments), [appointments]);
-  const doctorIdsKey = useMemo(
-    () =>
-      doctors
-        .map((doctor) => doctor.id)
-        .sort()
-        .join(','),
-    [doctors],
-  );
-
-  // Every doctor with an appointment today is visible by default; re-derived
-  // whenever the set of doctors for the day actually changes (e.g. switching
-  // dates), not on every appointments refetch. Reset-on-prop-change during
-  // render (React's documented pattern), not an effect, so switching days
-  // doesn't render once with the stale selection before catching up.
-  const [prevDoctorIdsKey, setPrevDoctorIdsKey] = useState(doctorIdsKey);
-  const [selectedDoctorIds, setSelectedDoctorIds] = useState<Set<string>>(
-    () => new Set(doctorIdsKey ? doctorIdsKey.split(',') : []),
-  );
-
-  if (doctorIdsKey !== prevDoctorIdsKey) {
-    setPrevDoctorIdsKey(doctorIdsKey);
-    setSelectedDoctorIds(new Set(doctorIdsKey ? doctorIdsKey.split(',') : []));
-  }
-
-  const handleToggleDoctor = (doctorId: string) => {
-    setSelectedDoctorIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(doctorId)) {
-        next.delete(doctorId);
-      } else {
-        next.add(doctorId);
-      }
-      return next;
-    });
-  };
-
-  const handleToggleAllDoctors = () => {
-    setSelectedDoctorIds((prev) =>
-      prev.size === doctors.length ? new Set() : new Set(doctors.map((doctor) => doctor.id)),
-    );
-  };
-
-  const visibleAppointments = useMemo(
-    () => appointments.filter((appointment) => selectedDoctorIds.has(appointment.doctorProfileId)),
-    [appointments, selectedDoctorIds],
-  );
+  const { doctors, selectedDoctorIds, toggleDoctor, toggleAll, visibleAppointments } =
+    useDoctorFilter(appointments);
   const appointmentsByHour = useMemo(
     () => groupAppointmentsByHour(visibleAppointments),
     [visibleAppointments],
@@ -115,51 +60,7 @@ export const AppointmentsBoard = ({
   return (
     <div className={`${styles.card} ${className ?? ''}`} style={style}>
       <div className={styles.cardHeader}>
-        {dateNav ? (
-          <div className={styles.dateNav}>
-            <button
-              type="button"
-              className={styles.navButton}
-              onClick={dateNav.onPrevDay}
-              aria-label={t.appointments.prevDay}
-            >
-              <ChevronLeftIcon size={16} />
-            </button>
-            <span className={styles.dateLabel}>
-              {isSameDay(dateNav.date, new Date())
-                ? t.appointments.today
-                : dateNav.date.toLocaleDateString(language, {
-                    day: 'numeric',
-                    month: 'long',
-                    weekday: 'short',
-                  })}
-            </span>
-            <button
-              type="button"
-              className={styles.navButton}
-              onClick={dateNav.onNextDay}
-              aria-label={t.appointments.nextDay}
-            >
-              <ChevronRightIcon size={16} />
-            </button>
-            <span className={styles.calendarTrigger}>
-              <CalendarIcon size={15} className={styles.calendarIcon} />
-              <input
-                type="date"
-                className={styles.calendarInput}
-                value={toDateInputValue(dateNav.date)}
-                aria-label={t.appointments.pickDate}
-                onChange={(event) => {
-                  if (event.target.value) {
-                    dateNav.onSelectDate(parseDateInputValue(event.target.value));
-                  }
-                }}
-              />
-            </span>
-          </div>
-        ) : (
-          <span className={styles.cardTitle}>{t.appointments.todayTitle}</span>
-        )}
+        <span className={styles.cardTitle}>{title ?? ''}</span>
         <Button variant="soft" className={styles.addButton} onClick={onAddClick}>
           {t.appointments.newAppointment}
         </Button>
@@ -175,8 +76,8 @@ export const AppointmentsBoard = ({
         <AppointmentsBoardSidebar
           doctors={doctors}
           selectedDoctorIds={selectedDoctorIds}
-          onToggleDoctor={handleToggleDoctor}
-          onToggleAll={handleToggleAllDoctors}
+          onToggleDoctor={toggleDoctor}
+          onToggleAll={toggleAll}
           showDoctorFilter={showDoctorFilter}
         />
 
@@ -203,7 +104,7 @@ export const AppointmentsBoard = ({
                             key={appointment.id}
                             appointment={appointment}
                             currency={currency}
-                            date={dateNav?.date}
+                            date={date}
                             onOpenPatient={onPatientClick}
                             onOpenAppointment={onRowClick}
                           />

@@ -21,7 +21,7 @@ type FetchAppointmentsForDateParams = {
 
 const LIST_QUERY = 'page=1&limit=200';
 
-const fetchAppointmentsInRange = async (
+export const fetchAppointmentsInRange = async (
   accessToken: string,
   range: { from: string; to: string },
   signal?: AbortSignal,

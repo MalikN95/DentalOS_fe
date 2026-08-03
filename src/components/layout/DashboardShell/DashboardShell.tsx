@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import type { Dictionary } from '@/common/locale/dictionaries/ru';
 import { useTranslation } from '@/common/locale/LocaleProvider';
-import { getNavItemByPathname, NAV_ITEMS } from '@/common/constants/navigation';
+import { BOTTOM_NAV_ITEMS, getNavItemByPathname, NAV_ITEMS } from '@/common/constants/navigation';
 import type { StaffRole } from '@/common/types/staff';
 import { MOCK_CLINIC_NAME, MOCK_USER } from '@/common/mocks/auth.mock';
+import { BottomNav } from '@/components/layout/BottomNav/BottomNav';
 import { TopNav } from '@/components/layout/TopNav/TopNav';
 import { logoutRequest } from '@/helpers/auth-bridge';
 import { useClinic } from '@/hooks/useClinic';
@@ -34,7 +35,11 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   const accessToken = useAppSelector(selectAccessToken);
   const { data: todayAppointments } = useTodayAppointments();
   const { data: clinic } = useClinic();
-  const { isOpen: isMobileNavOpen, toggle: toggleMobileNav, close: closeMobileNav } = useMobileNav();
+  const {
+    isOpen: isMobileNavOpen,
+    toggle: toggleMobileNav,
+    close: closeMobileNav,
+  } = useMobileNav();
   const activeItem = getNavItemByPathname(pathname);
   const clinicName = clinic?.name ?? MOCK_CLINIC_NAME;
   useDocumentTitle(`${t.nav[activeItem.labelKey]} — ${clinicName}`);
@@ -51,6 +56,14 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
     href: item.href,
     icon: item.icon,
     badgeCount: item.id === 'appointments' ? todayAppointments?.length : item.badgeCount,
+    label: t.nav[item.labelKey],
+  }));
+  const bottomNavItems = BOTTOM_NAV_ITEMS.filter(
+    (item) => !item.roles || item.roles.includes(user.role as StaffRole),
+  ).map((item) => ({
+    id: item.id,
+    href: item.href,
+    icon: item.icon,
     label: t.nav[item.labelKey],
   }));
   const roleKey = user.role as keyof Dictionary['roles'];
@@ -102,6 +115,7 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
         closeMenuLabel={t.nav.closeMenu}
       />
       <main className={styles.content}>{children}</main>
+      <BottomNav items={bottomNavItems} activeId={activeItem.id} />
     </div>
   );
 };

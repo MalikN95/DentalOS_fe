@@ -1,0 +1,96 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+}
+
+.dateNav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.navButton:hover {
+  background: var(--color-gray-25);
+  color: var(--color-black-700);
+}
+
+.dateLabel {
+  min-width: 88px;
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  color: var(--color-black-700);
+  text-transform: capitalize;
+}
+
+.todayButton {
+  padding: 4px 10px;
+  margin-left: 8px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-black-600);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.todayButton:hover {
+  background: var(--color-gray-25);
+}
+
+.calendarTrigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-control);
+  color: var(--color-black-500);
+}
+
+.calendarIcon {
+  pointer-events: none;
+}
+
+.calendarInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color-scheme: light;
+  opacity: 0;
+  cursor: pointer;
+}

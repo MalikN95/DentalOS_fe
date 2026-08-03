@@ -1,0 +1,150 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-50);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.stateWrap {
+  padding: 12px 14px 0;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  padding-left: 14px;
+}
+
+.mainArea {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 12px 14px 14px;
+}
+
+@media (max-width: 900px) {
+  .body {
+    flex-direction: column;
+  }
+}
+
+.weekdayRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding-bottom: 6px;
+}
+
+.weekdayLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-black-500);
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+  min-height: 104px;
+  padding: 6px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.day:hover {
+  background: var(--color-gray-25);
+}
+
+.dayOutside {
+  color: var(--color-gray-200);
+  background: var(--color-gray-25);
+}
+
+.dayOutside .dayNumber {
+  color: var(--color-gray-200);
+}
+
+.dayToday {
+  border-color: var(--color-primary-500);
+}
+
+.dayNumber {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-black-700);
+}
+
+.summaryRow {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.pill {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.pill[data-color='primary'] {
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.pill[data-color='success'] {
+  background: var(--color-green-100);
+  color: var(--color-green-600);
+}
+
+.pill[data-color='danger'] {
+  background: var(--color-red-100);
+  color: var(--color-red-600);
+}
+
+.stateBlock {
+  padding: 12px 0 0;
+  text-align: center;
+  color: var(--color-black-500);
+}
+
+@media (max-width: 640px) {
+  .day {
+    min-height: 88px;
+    padding: 4px;
+  }
+
+  .pill {
+    padding: 1px 4px;
+    font-size: 9px;
+  }
+}

@@ -13,12 +13,13 @@ type ReviewsTableProps = {
   reviews: ApiReview[];
   isLoading?: boolean;
   errorMessage?: string | null;
+  /** Hides the Featured / Show-in-booking toggle columns — a doctor can see their own reviews but not curate them. */
+  readOnly?: boolean;
   footer?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
 };
 
-const COLUMN_COUNT = 7;
 const RATING_MAX = 5;
 
 const MiniStarRating = ({ rating }: { rating: number }) => (
@@ -38,6 +39,7 @@ export const ReviewsTable = ({
   reviews,
   isLoading = false,
   errorMessage = null,
+  readOnly = false,
   footer,
   className,
   style,
@@ -46,6 +48,7 @@ export const ReviewsTable = ({
   const t = dict.reviews;
   const featuredMutation = useUpdateReviewFeatured();
   const showInBookingMutation = useUpdateReviewShowInBooking();
+  const columnCount = readOnly ? 5 : 7;
 
   const {
     ref: tableWrapRef,
@@ -74,14 +77,18 @@ export const ReviewsTable = ({
               <th>{t.colDoctor}</th>
               <th>{t.colRating}</th>
               <th>{t.colComment}</th>
-              <th>{t.colFeatured}</th>
-              <th>{t.colShowInBooking}</th>
+              {readOnly ? null : (
+                <>
+                  <th>{t.colFeatured}</th>
+                  <th>{t.colShowInBooking}</th>
+                </>
+              )}
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
-                <td className={styles.stateCell} colSpan={COLUMN_COUNT}>
+                <td className={styles.stateCell} colSpan={columnCount}>
                   {t.loading}
                 </td>
               </tr>
@@ -89,7 +96,7 @@ export const ReviewsTable = ({
 
             {!isLoading && reviews.length === 0 ? (
               <tr>
-                <td className={styles.stateCell} colSpan={COLUMN_COUNT}>
+                <td className={styles.stateCell} colSpan={columnCount}>
                   {t.empty}
                 </td>
               </tr>
@@ -123,26 +130,33 @@ export const ReviewsTable = ({
                       <td className={styles.commentCell}>
                         {review.comment ?? <span className={styles.muted}>{t.noComment}</span>}
                       </td>
-                      <td>
-                        <SwitchToggle
-                          checked={review.featured}
-                          disabled={(!isRated && !review.featured) || isUpdatingThisFeatured}
-                          onChange={(checked) =>
-                            featuredMutation.mutate({ id: review.id, featured: checked })
-                          }
-                        />
-                      </td>
-                      <td>
-                        <SwitchToggle
-                          checked={review.showInBooking}
-                          disabled={
-                            (!isRated && !review.showInBooking) || isUpdatingThisShowInBooking
-                          }
-                          onChange={(checked) =>
-                            showInBookingMutation.mutate({ id: review.id, showInBooking: checked })
-                          }
-                        />
-                      </td>
+                      {readOnly ? null : (
+                        <>
+                          <td>
+                            <SwitchToggle
+                              checked={review.featured}
+                              disabled={(!isRated && !review.featured) || isUpdatingThisFeatured}
+                              onChange={(checked) =>
+                                featuredMutation.mutate({ id: review.id, featured: checked })
+                              }
+                            />
+                          </td>
+                          <td>
+                            <SwitchToggle
+                              checked={review.showInBooking}
+                              disabled={
+                                (!isRated && !review.showInBooking) || isUpdatingThisShowInBooking
+                              }
+                              onChange={(checked) =>
+                                showInBookingMutation.mutate({
+                                  id: review.id,
+                                  showInBooking: checked,
+                                })
+                              }
+                            />
+                          </td>
+                        </>
+                      )}
                     </tr>
                   );
                 })

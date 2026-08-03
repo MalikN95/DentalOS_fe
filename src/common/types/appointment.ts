@@ -1,8 +1,12 @@
 export type AppointmentStatus =
   'pending' | 'confirmed' | 'arrived' | 'in_treatment' | 'completed' | 'cancelled' | 'no_show';
 
+export type AppointmentsViewMode = 'day' | 'week' | 'month' | 'year';
+
 export type Appointment = {
   id: string;
+  /** 'YYYY-MM-DD' in local time — the calendar day this appointment falls on. */
+  date: string;
   time: string;
   endTime: string;
   durationMinutes: number;
