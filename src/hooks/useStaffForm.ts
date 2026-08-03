@@ -13,6 +13,7 @@ import { selectAccessToken } from '@/store/slices/auth/selectors';
 
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_EXPERIENCE_YEARS = 80;
+const MAX_ADVANCE_BOOKING_DAYS = 365;
 
 const buildSchema = (isEditMode: boolean) =>
   z.object({
@@ -29,6 +30,16 @@ const buildSchema = (isEditMode: boolean) =>
     specializations: z.array(z.string()),
     education: z.string(),
     acceptsOnlineBooking: z.boolean(),
+    maxAdvanceBookingDays: z
+      .string()
+      .refine(
+        (value) =>
+          value === '' ||
+          (Number.isInteger(Number(value)) &&
+            Number(value) >= 0 &&
+            Number(value) <= MAX_ADVANCE_BOOKING_DAYS),
+        `Введите число от 0 до ${MAX_ADVANCE_BOOKING_DAYS}`,
+      ),
     serviceIds: z.array(z.string()),
     experienceYears: z
       .string()
@@ -64,6 +75,7 @@ const EMPTY_VALUES: StaffFormValues = {
   experienceYears: '',
   description: '',
   acceptsOnlineBooking: false,
+  maxAdvanceBookingDays: '',
   serviceIds: [],
   notifyEmail: true,
   notifyWhatsapp: true,
@@ -97,6 +109,10 @@ const staffToValues = (member: StaffMember): StaffFormValues => ({
       : String(member.doctorProfile.experienceYears),
   description: member.doctorProfile?.description ?? '',
   acceptsOnlineBooking: member.doctorProfile?.acceptsOnlineBooking ?? false,
+  maxAdvanceBookingDays:
+    member.doctorProfile?.maxAdvanceBookingDays == null
+      ? ''
+      : String(member.doctorProfile.maxAdvanceBookingDays),
   serviceIds: member.doctorProfile?.services.map((service) => service.id) ?? [],
   notifyEmail: member.notificationPreferences?.email ?? true,
   notifyWhatsapp: member.notificationPreferences?.whatsapp ?? true,
@@ -136,6 +152,9 @@ const valuesToPayload = (values: StaffFormValues): CreateStaffPayload => {
       experienceYears: values.experienceYears ? Number(values.experienceYears) : 0,
       description: values.description.trim() || null,
       acceptsOnlineBooking: values.acceptsOnlineBooking,
+      maxAdvanceBookingDays: values.maxAdvanceBookingDays
+        ? Number(values.maxAdvanceBookingDays)
+        : null,
       serviceIds: values.serviceIds,
     },
   };

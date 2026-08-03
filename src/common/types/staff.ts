@@ -24,6 +24,7 @@ export type StaffDoctorProfile = {
   description: string | null;
   isActive: boolean;
   acceptsOnlineBooking: boolean;
+  maxAdvanceBookingDays: number | null;
   services: StaffDoctorServiceOption[];
 };
 
@@ -57,6 +58,7 @@ export type StaffDoctorPayload = {
   experienceYears?: number;
   description?: string | null;
   acceptsOnlineBooking?: boolean;
+  maxAdvanceBookingDays?: number | null;
   serviceIds?: string[];
 };
 

@@ -6,11 +6,14 @@ type ApiErrorBody = {
   message?: string | string[];
   /** Machine-readable reason (e.g. "OUTSIDE_WORKING_HOURS") for errors the UI needs to branch on. */
   code?: string;
+  /** Present alongside code "DOCTOR_DAY_OFF" — which kind of schedule exception blocked the slot. */
+  exceptionType?: string;
 };
 
 type ParsedApiError = {
   message: string;
   code?: string;
+  exceptionType?: string;
 };
 
 export class ApiRequestError extends Error {
@@ -18,11 +21,14 @@ export class ApiRequestError extends Error {
 
   readonly code?: string;
 
-  constructor(message: string, status?: number, code?: string) {
+  readonly exceptionType?: string;
+
+  constructor(message: string, status?: number, code?: string, exceptionType?: string) {
     super(message);
     this.name = 'ApiRequestError';
     this.status = status;
     this.code = code;
+    this.exceptionType = exceptionType;
   }
 }
 
@@ -35,6 +41,7 @@ export const parseApiError = async (response: Response): Promise<ParsedApiError>
   return {
     message: message ?? `Request failed (${response.status})`,
     code: errorBody?.code,
+    exceptionType: errorBody?.exceptionType,
   };
 };
 
@@ -62,8 +69,8 @@ export const apiFetch = async <T>(
   }
 
   if (response.ok === false) {
-    const { message, code } = await parseApiError(response);
-    throw new ApiRequestError(message, response.status, code);
+    const { message, code, exceptionType } = await parseApiError(response);
+    throw new ApiRequestError(message, response.status, code, exceptionType);
   }
 
   if (response.status === 204) {
@@ -83,8 +90,8 @@ export const publicApiFetch = async <T>(path: string, init?: RequestInit): Promi
   });
 
   if (response.ok === false) {
-    const { message, code } = await parseApiError(response);
-    throw new ApiRequestError(message, response.status, code);
+    const { message, code, exceptionType } = await parseApiError(response);
+    throw new ApiRequestError(message, response.status, code, exceptionType);
   }
 
   if (response.status === 204) {

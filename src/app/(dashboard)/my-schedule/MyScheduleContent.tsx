@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslation } from '@/common/locale/LocaleProvider';
+import { DoctorScheduleExceptions } from '@/components/staff/DoctorScheduleExceptions/DoctorScheduleExceptions';
 import { DoctorScheduleSection } from '@/components/staff/DoctorScheduleSection/DoctorScheduleSection';
 import { useMyDoctorProfile } from '@/hooks/useMyDoctorProfile';
 import styles from './MyScheduleContent.module.css';
@@ -25,6 +26,13 @@ export const MyScheduleContent = () => {
           <DoctorScheduleSection doctorProfileId={doctorProfileId} branchId={branchId} readOnly />
         ) : null}
       </div>
+
+      {!isLoading && doctorProfileId ? (
+        <div className={styles.card}>
+          <h2 className={styles.subtitle}>{t.scheduleExceptions.title}</h2>
+          <DoctorScheduleExceptions doctorProfileId={doctorProfileId} />
+        </div>
+      ) : null}
     </div>
   );
 };

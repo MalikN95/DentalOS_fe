@@ -23,6 +23,18 @@ export const FIELD_ERROR_CODES = {
   DOCTOR_DAY_OFF: 'doctorDayOff',
 } as const;
 
+// DOCTOR_DAY_OFF fires for any schedule-exception type — this picks a more
+// specific message when the backend tells us which one (vacation/sick leave/
+// holiday all have their own copy; a plain day off falls back to the generic key).
+const EXCEPTION_TYPE_MESSAGE_KEYS: Record<
+  string,
+  'doctorOnVacation' | 'doctorOnSickLeave' | 'doctorOnHoliday'
+> = {
+  vacation: 'doctorOnVacation',
+  sick_leave: 'doctorOnSickLeave',
+  holiday: 'doctorOnHoliday',
+};
+
 // Kept in sync with the backend's own floor/ceiling (create-appointment.dto.ts).
 export const MIN_APPOINTMENT_DURATION = 15;
 export const MAX_APPOINTMENT_DURATION = 480;
@@ -194,6 +206,14 @@ export const useCreateAppointmentForm = ({
 
       if (error.status === HTTP_CONFLICT) {
         form.setError('time', { message: dict.appointments.slotTaken });
+        return;
+      }
+
+      if (error.code === 'DOCTOR_DAY_OFF') {
+        const specificKey = error.exceptionType
+          ? EXCEPTION_TYPE_MESSAGE_KEYS[error.exceptionType]
+          : undefined;
+        form.setError('time', { message: dict.appointments[specificKey ?? 'doctorDayOff'] });
         return;
       }
 

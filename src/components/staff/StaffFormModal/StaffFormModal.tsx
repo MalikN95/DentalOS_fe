@@ -213,6 +213,16 @@ export const StaffFormModal = ({
               onChange={(checked) => setValue('acceptsOnlineBooking', checked)}
             />
             <span className={styles.onlineBookingHint}>{t.acceptsOnlineBookingHint}</span>
+
+            <TextField
+              className={styles.maxAdvanceBookingDaysField}
+              label={t.maxAdvanceBookingDays}
+              hint={t.maxAdvanceBookingDaysHint}
+              placeholder={t.maxAdvanceBookingDaysPlaceholder}
+              inputMode="numeric"
+              error={errors.maxAdvanceBookingDays?.message}
+              {...register('maxAdvanceBookingDays')}
+            />
           </div>
         </fieldset>
       ) : null}

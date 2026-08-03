@@ -1,0 +1,83 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.description {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.hint {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-500);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+}
+
+.range {
+  flex-shrink: 0;
+  font-size: var(--text-m-size);
+  font-weight: 500;
+  color: var(--color-black-700);
+}
+
+.comment {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13px;
+  color: var(--color-black-500);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.deleteButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin-left: auto;
+  border: none;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--color-black-500);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.deleteButton:hover {
+  color: var(--color-red-500);
+  background: var(--color-red-100);
+}
+
+.deleteButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

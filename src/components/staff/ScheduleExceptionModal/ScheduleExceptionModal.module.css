@@ -1,0 +1,77 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  font-weight: 500;
+  color: var(--color-black-700);
+}
+
+.typeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.typeOption {
+  padding: 6px 12px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: 999px;
+  background: var(--color-white);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.typeOption[data-color='primary'] {
+  color: var(--color-primary-600);
+}
+
+.typeOption[data-color='danger'] {
+  color: var(--color-red-600);
+}
+
+.typeOption[data-color='success'] {
+  color: var(--color-green-600);
+}
+
+.typeOption[data-color='gray'] {
+  color: var(--color-black-600);
+}
+
+.typeOptionActive[data-color='primary'] {
+  background: var(--color-primary-100);
+  border-color: var(--color-primary-200);
+}
+
+.typeOptionActive[data-color='danger'] {
+  background: var(--color-red-100);
+  border-color: var(--color-red-200);
+}
+
+.typeOptionActive[data-color='success'] {
+  background: var(--color-green-100);
+  border-color: var(--color-green-200);
+}
+
+.typeOptionActive[data-color='gray'] {
+  background: var(--color-gray-50);
+  border-color: var(--color-gray-100);
+}
+
+.dateRow {
+  display: flex;
+  gap: 12px;
+}
+
+.dateRow > * {
+  flex: 1;
+  min-width: 0;
+}

@@ -8,6 +8,7 @@ import { STAFF_ROLES } from '@/common/types/staff';
 import { CalendarIcon, EditIcon, FileTextIcon } from '@/components/icons/icons';
 import { StringTagField } from '@/components/patients/StringTagField/StringTagField';
 import { ReviewsCard } from '@/components/reviews/ReviewsCard/ReviewsCard';
+import { DoctorScheduleExceptions } from '@/components/staff/DoctorScheduleExceptions/DoctorScheduleExceptions';
 import { DoctorScheduleSection } from '@/components/staff/DoctorScheduleSection/DoctorScheduleSection';
 import { DoctorServicesField } from '@/components/staff/DoctorServicesField/DoctorServicesField';
 import { Alert, Badge, Button, SwitchToggle, TextField } from '@/components/ui';
@@ -30,7 +31,10 @@ type StaffDetailContentProps = {
   staffId: string;
 };
 
-const NOTIFICATION_CHANNELS: { key: NotificationChannelKey; label: 'notifyEmail' | 'notifyWhatsapp' | 'notifyPush' | 'notifyInApp' }[] = [
+const NOTIFICATION_CHANNELS: {
+  key: NotificationChannelKey;
+  label: 'notifyEmail' | 'notifyWhatsapp' | 'notifyPush' | 'notifyInApp';
+}[] = [
   { key: 'email', label: 'notifyEmail' },
   { key: 'whatsapp', label: 'notifyWhatsapp' },
   { key: 'push', label: 'notifyPush' },
@@ -225,11 +229,7 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
                 )}
 
                 {isEditing ? (
-                  <SwitchToggle
-                    checked={isActive}
-                    label={t.active}
-                    onChange={handleActiveChange}
-                  />
+                  <SwitchToggle checked={isActive} label={t.active} onChange={handleActiveChange} />
                 ) : null}
 
                 {isEditing ? (
@@ -300,7 +300,8 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
                     </div>
                     {memberReceivesReviewAlerts ? (
                       <span className={styles.muted}>
-                        {t.reviewAlertMaxRating}: {member.notificationPreferences.reviewAlertMaxRating}
+                        {t.reviewAlertMaxRating}:{' '}
+                        {member.notificationPreferences.reviewAlertMaxRating}
                       </span>
                     ) : null}
                   </div>
@@ -394,6 +395,16 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
                         <span className={styles.onlineBookingHint}>
                           {t.acceptsOnlineBookingHint}
                         </span>
+
+                        <TextField
+                          className={styles.maxAdvanceBookingDaysField}
+                          label={t.maxAdvanceBookingDays}
+                          hint={t.maxAdvanceBookingDaysHint}
+                          placeholder={t.maxAdvanceBookingDaysPlaceholder}
+                          inputMode="numeric"
+                          error={errors.maxAdvanceBookingDays?.message}
+                          {...register('maxAdvanceBookingDays')}
+                        />
                       </div>
                     </>
                   ) : null}
@@ -403,8 +414,14 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
                       <div className={styles.rows}>
                         <div className={styles.infoRow}>
                           <span className={styles.infoLabel}>{t.experienceYears}</span>
+                          <span className={styles.infoValue}>{doctorProfile.experienceYears}</span>
+                        </div>
+                        <div className={styles.infoRow}>
+                          <span className={styles.infoLabel}>{t.maxAdvanceBookingDays}</span>
                           <span className={styles.infoValue}>
-                            {doctorProfile.experienceYears}
+                            {doctorProfile.maxAdvanceBookingDays === null
+                              ? t.maxAdvanceBookingDaysUnlimited
+                              : doctorProfile.maxAdvanceBookingDays}
                           </span>
                         </div>
                       </div>
@@ -518,6 +535,21 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
               <DoctorScheduleSection
                 doctorProfileId={doctorProfile.id}
                 branchId={doctorProfile.branchId}
+                readOnly={!canManageStaff}
+              />
+            </section>
+          ) : null}
+
+          {doctorProfile ? (
+            <section className={styles.card}>
+              <div className={styles.header}>
+                <span className={styles.headerIcon}>
+                  <CalendarIcon size={13} />
+                </span>
+                <h2 className={styles.heading}>{dict.scheduleExceptions.title}</h2>
+              </div>
+              <DoctorScheduleExceptions
+                doctorProfileId={doctorProfile.id}
                 readOnly={!canManageStaff}
               />
             </section>

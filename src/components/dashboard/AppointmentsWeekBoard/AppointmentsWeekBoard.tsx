@@ -16,6 +16,35 @@ import { getWeekDays, isSameDay, toDateInputValue } from '@/helpers/date';
 import { useDoctorFilter } from '@/hooks/useDoctorFilter';
 import styles from './AppointmentsWeekBoard.module.css';
 
+// A cell's row height is set explicitly in JS (rather than left to CSS grid's
+// auto-row-sizing) — a grid row's track height is supposed to auto-fit its
+// tallest flex-column cell, but that intrinsic-sizing computation for a flex
+// container nested inside a grid item is exactly where some engines get it
+// wrong, which is what caused chips to overlap the row below when a cell had
+// many stacked appointments. Computing the height ourselves from the actual
+// chip count sidesteps that entirely.
+const CHIP_HEIGHT = 35;
+const CHIP_GAP = 3;
+const CELL_PADDING = 4;
+const CELL_BORDER = 1;
+const MIN_ROW_HEIGHT = 40;
+// A little slack over the exact chip math so sub-pixel text rendering never
+// clips a chip — better a couple of spare pixels of empty space than a
+// scrollbar or a clipped line.
+const ROW_HEIGHT_BUFFER = 4;
+
+const getRowHeight = (maxChipCount: number): number =>
+  maxChipCount === 0
+    ? MIN_ROW_HEIGHT
+    : Math.max(
+        MIN_ROW_HEIGHT,
+        maxChipCount * CHIP_HEIGHT +
+          (maxChipCount - 1) * CHIP_GAP +
+          CELL_PADDING * 2 +
+          CELL_BORDER +
+          ROW_HEIGHT_BUFFER,
+      );
+
 type AppointmentsWeekBoardProps = {
   appointments: Appointment[];
   isLoading?: boolean;
@@ -93,27 +122,38 @@ export const AppointmentsWeekBoard = ({
               {showLoading ? t.appointments.loading : t.appointments.empty}
             </div>
           ) : (
-            hours.map((hour, hourIndex) => (
+            hours.map((hour, hourIndex) => {
               // Every cell gets an explicit gridRow/gridColumn rather than relying on
               // implicit auto-placement counting 8 items per row — a Fragment grouping
               // 1 label + 7 cells per hour is still correct DOM-wise, but explicit
-              // coordinates make placement immune to any browser auto-placement quirk,
-              // and let each row grow independently to fit its busiest day.
-              <Fragment key={hour}>
-                <div className={styles.hourLabel} style={{ gridRow: hourIndex + 2, gridColumn: 1 }}>
-                  {formatHourLabel(hour)}
-                </div>
-                {weekDays.map((day, dayIndex) => {
-                  const dayAppointments = appointmentsByDate.get(toDateInputValue(day)) ?? [];
-                  const cellAppointments = groupAppointmentsByHour(dayAppointments).get(hour) ?? [];
+              // coordinates make placement immune to any browser auto-placement quirk.
+              const dayCellAppointments = weekDays.map((day) => {
+                const dayAppointments = appointmentsByDate.get(toDateInputValue(day)) ?? [];
+                return groupAppointmentsByHour(dayAppointments).get(hour) ?? [];
+              });
+              const rowHeight = getRowHeight(
+                Math.max(...dayCellAppointments.map((list) => list.length), 0),
+              );
 
-                  return (
+              return (
+                <Fragment key={hour}>
+                  <div
+                    className={styles.hourLabel}
+                    style={{ gridRow: hourIndex + 2, gridColumn: 1, height: rowHeight }}
+                  >
+                    {formatHourLabel(hour)}
+                  </div>
+                  {weekDays.map((day, dayIndex) => (
                     <div
                       key={toDateInputValue(day)}
                       className={styles.cell}
-                      style={{ gridRow: hourIndex + 2, gridColumn: dayIndex + 2 }}
+                      style={{
+                        gridRow: hourIndex + 2,
+                        gridColumn: dayIndex + 2,
+                        height: rowHeight,
+                      }}
                     >
-                      {cellAppointments.map((appointment) => (
+                      {dayCellAppointments[dayIndex].map((appointment) => (
                         <button
                           key={appointment.id}
                           type="button"
@@ -127,10 +167,10 @@ export const AppointmentsWeekBoard = ({
                         </button>
                       ))}
                     </div>
-                  );
-                })}
-              </Fragment>
-            ))
+                  ))}
+                </Fragment>
+              );
+            })
           )}
         </div>
       </div>

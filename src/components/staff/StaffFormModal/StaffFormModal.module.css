@@ -67,6 +67,11 @@
   gap: 4px;
 }
 
+.maxAdvanceBookingDaysField {
+  max-width: 220px;
+  margin-top: 4px;
+}
+
 .notificationToggles {
   display: flex;
   flex-wrap: wrap;
