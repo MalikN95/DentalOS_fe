@@ -40,6 +40,10 @@
   --color-blue-500: #3b82f6;
   --color-blue-600: #1d4ed8;
 
+  /* Platform-admin top nav only */
+  --color-maroon-500: #7a1a3c;
+  --color-maroon-600: #5c1330;
+
   --radius-control: 8px;
   --radius-checkbox: 6px;
 

@@ -73,14 +73,22 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
     activeItem.roles && !activeItem.roles.includes(user.role as StaffRole),
   );
   const fallbackHref = accessibleNavItems[0]?.href ?? '/login';
+  const isSuperAdmin = user.role === 'super_admin';
 
   // The nav only hides links the role can't use — a direct URL still has to
   // be turned away, so redirect to the first section this role can reach.
   useEffect(() => {
+    if (isSuperAdmin) {
+      // super_admin has no clinicId, so this shell's clinic-scoped data
+      // hooks would just error — bounce straight to its own area instead.
+      router.replace('/admin');
+      return;
+    }
+
     if (isRoleBlocked) {
       router.replace(fallbackHref);
     }
-  }, [isRoleBlocked, fallbackHref, router]);
+  }, [isSuperAdmin, isRoleBlocked, fallbackHref, router]);
 
   const handleLogout = () => {
     // Fire-and-forget: the request already carries the current token.
@@ -91,7 +99,7 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
 
   // Block rendering for unauthenticated users or a role-blocked route
   // (redirects are handled by the effects above).
-  if (!isAuthenticated || isRoleBlocked) {
+  if (!isAuthenticated || isSuperAdmin || isRoleBlocked) {
     return null;
   }
 

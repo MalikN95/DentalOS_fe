@@ -18,7 +18,7 @@ import {
 import { Alert, Button, TextField } from '@/components/ui';
 import { useLoginForm } from '@/hooks/useLoginForm';
 import { useAppSelector } from '@/store/hooks';
-import { selectIsAuthenticated } from '@/store/slices/auth/selectors';
+import { selectCurrentUser, selectIsAuthenticated } from '@/store/slices/auth/selectors';
 import styles from './page.module.css';
 
 const LoginPage = () => {
@@ -27,12 +27,13 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const user = useAppSelector(selectCurrentUser);
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace('/dashboard');
+      router.replace(user?.role === 'super_admin' ? '/admin' : '/dashboard');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user, router]);
 
   const {
     register,

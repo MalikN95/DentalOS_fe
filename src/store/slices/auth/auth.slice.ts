@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type AuthUser = {
   id: string;
-  clinicId: string;
+  // null for super_admin — a platform-wide account with no home clinic.
+  clinicId: string | null;
   email: string;
   firstName: string;
   lastName: string;

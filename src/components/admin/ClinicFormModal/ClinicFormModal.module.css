@@ -1,0 +1,28 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fieldset {
+  margin: 12px 0 0;
+  padding: 16px;
+  border: 1px solid var(--color-gray-50);
+  border-radius: var(--radius-control);
+}
+
+.legend {
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-black-500);
+}

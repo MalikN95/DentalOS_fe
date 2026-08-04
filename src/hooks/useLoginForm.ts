@@ -87,7 +87,7 @@ export const useLoginForm = () => {
         }),
       );
 
-      router.push('/dashboard');
+      router.push(payload.role === 'super_admin' ? '/admin' : '/dashboard');
     } catch {
       setServerError('Не удалось подключиться к серверу. Проверьте, что backend запущен.');
     }

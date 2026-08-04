@@ -1,6 +1,6 @@
 type JwtPayload = {
   sub: string;
-  clinicId: string;
+  clinicId: string | null;
   role: string;
 };
 
