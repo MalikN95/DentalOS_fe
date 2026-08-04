@@ -111,7 +111,7 @@ export const ru = {
     next: 'Вперёд',
   },
   appointmentStatus: {
-    pending: 'Ожидает',
+    pending: 'Ожидает подтверждения',
     confirmed: 'Подтверждена',
     arrived: 'Пришёл',
     in_treatment: 'На лечении',

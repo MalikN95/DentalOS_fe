@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Appointment, AppointmentStatus } from '@/common/types/appointment';
 import { useTranslation } from '@/common/locale/LocaleProvider';
+import { CloseIcon, ExpandIcon } from '@/components/icons/icons';
 import { Badge, Button, Modal } from '@/components/ui';
 import { AppointmentManagePanel } from '@/components/dashboard/AppointmentManagePanel/AppointmentManagePanel';
 import { appointmentStatusColor } from '@/helpers/appointment-status';
@@ -36,8 +37,30 @@ export const AppointmentManageModal = ({
 
   const title = (
     <span className={styles.title}>
-      {t.manageTitle}
-      <Badge color={appointmentStatusColor[status]}>{dict.appointmentStatus[status]}</Badge>
+      <span className={styles.titleMain}>
+        {t.manageTitle}
+        <Badge color={appointmentStatusColor[status]}>{dict.appointmentStatus[status]}</Badge>
+        <Button
+          type="button"
+          variant="soft"
+          color="primary"
+          size="sm"
+          iconLeft={<ExpandIcon size={14} />}
+          onClick={handleViewDetails}
+        >
+          {t.viewDetails}
+        </Button>
+      </span>
+      <Button
+        type="button"
+        variant="soft"
+        color="gray"
+        size="sm"
+        iconLeft={<CloseIcon size={14} />}
+        onClick={onClose}
+      >
+        {dict.common.close}
+      </Button>
     </span>
   );
 
@@ -46,19 +69,10 @@ export const AppointmentManageModal = ({
       title={title}
       closeLabel={dict.common.close}
       scrollHintLabel={dict.common.scrollForMore}
+      showCloseButton={false}
       className={className}
       style={style}
       onClose={onClose}
-      footer={
-        <>
-          <Button type="button" variant="soft" color="gray" onClick={onClose}>
-            {dict.common.close}
-          </Button>
-          <Button type="button" onClick={handleViewDetails}>
-            {t.viewDetails}
-          </Button>
-        </>
-      }
     >
       <AppointmentManagePanel
         appointment={appointment}

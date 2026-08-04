@@ -78,6 +78,8 @@
 }
 
 .title {
+  flex: 1 1 auto;
+  min-width: 0;
   font-size: 15px;
   font-weight: 500;
   line-height: 20px;

@@ -20,9 +20,6 @@ const patientFormSchema = z.object({
   allergies: z.array(z.string()),
   chronicDiseases: z.array(z.string()),
   comments: z.string(),
-  insuranceCompany: z.string(),
-  insurancePolicyNumber: z.string(),
-  insuranceValidUntil: z.string(),
   isActive: z.boolean(),
   notifyEmail: z.boolean(),
   notifyWhatsapp: z.boolean(),
@@ -40,9 +37,6 @@ const EMPTY_VALUES: PatientFormValues = {
   allergies: [],
   chronicDiseases: [],
   comments: '',
-  insuranceCompany: '',
-  insurancePolicyNumber: '',
-  insuranceValidUntil: '',
   isActive: true,
   notifyEmail: true,
   notifyWhatsapp: true,
@@ -58,42 +52,26 @@ const patientToValues = (patient: Patient): PatientFormValues => ({
   allergies: patient.allergies ?? [],
   chronicDiseases: patient.chronicDiseases ?? [],
   comments: patient.comments ?? '',
-  insuranceCompany: patient.insurance?.company ?? '',
-  insurancePolicyNumber: patient.insurance?.policyNumber ?? '',
-  insuranceValidUntil: patient.insurance?.validUntil ?? '',
   isActive: patient.isActive,
   notifyEmail: patient.notificationPreferences?.email ?? true,
   notifyWhatsapp: patient.notificationPreferences?.whatsapp ?? true,
 });
 
-const valuesToPayload = (values: PatientFormValues): CreatePatientPayload => {
-  const hasInsurance = Boolean(
-    values.insuranceCompany.trim() && values.insurancePolicyNumber.trim(),
-  );
-
-  return {
-    firstName: values.firstName.trim(),
-    lastName: values.lastName.trim(),
-    phone: values.phone.trim(),
-    email: values.email.trim() || undefined,
-    birthDate: values.birthDate || undefined,
-    gender: values.gender || undefined,
-    allergies: values.allergies,
-    chronicDiseases: values.chronicDiseases,
-    comments: values.comments.trim() || undefined,
-    insurance: hasInsurance
-      ? {
-          company: values.insuranceCompany.trim(),
-          policyNumber: values.insurancePolicyNumber.trim(),
-          validUntil: values.insuranceValidUntil || null,
-        }
-      : undefined,
-    notificationPreferences: {
-      email: values.notifyEmail,
-      whatsapp: values.notifyWhatsapp,
-    },
-  };
-};
+const valuesToPayload = (values: PatientFormValues): CreatePatientPayload => ({
+  firstName: values.firstName.trim(),
+  lastName: values.lastName.trim(),
+  phone: values.phone.trim(),
+  email: values.email.trim() || undefined,
+  birthDate: values.birthDate || undefined,
+  gender: values.gender || undefined,
+  allergies: values.allergies,
+  chronicDiseases: values.chronicDiseases,
+  comments: values.comments.trim() || undefined,
+  notificationPreferences: {
+    email: values.notifyEmail,
+    whatsapp: values.notifyWhatsapp,
+  },
+});
 
 type UsePatientFormParams = {
   patient?: Patient | null;

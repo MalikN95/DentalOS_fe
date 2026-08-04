@@ -181,24 +181,6 @@ export const PatientInfoPanel = ({
           </div>
         </div>
 
-        <div className={styles.block}>
-          <span className={styles.blockLabel}>{t.patientInfo.insurance}</span>
-          {patient.insurance ? (
-            <div className={styles.rows}>
-              <Row label={t.patientInfo.company} value={patient.insurance.company} />
-              <Row label={t.patientInfo.policy} value={patient.insurance.policyNumber} />
-              <Row
-                label={t.patientInfo.validUntil}
-                value={
-                  patient.insurance.validUntil ? formatDate(patient.insurance.validUntil) : dash
-                }
-              />
-            </div>
-          ) : (
-            <span className={styles.muted}>{t.patientInfo.insuranceNone}</span>
-          )}
-        </div>
-
         <PatientTagsField patient={patient} />
 
         {patient.comments ? (

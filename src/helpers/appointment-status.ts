@@ -3,7 +3,7 @@ import type { BadgeColor } from '@/components/ui';
 
 // Labels live in the locale dictionary (t.appointmentStatus); only colors here.
 export const appointmentStatusColor: Record<AppointmentStatus, BadgeColor> = {
-  pending: 'primary',
+  pending: 'warning',
   confirmed: 'primary',
   arrived: 'mint',
   in_treatment: 'info',

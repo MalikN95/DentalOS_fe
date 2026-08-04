@@ -5,11 +5,22 @@ import type { Appointment, AppointmentStatus } from '@/common/types/appointment'
 import { MOCK_USER } from '@/common/mocks/auth.mock';
 import type { StaffRole } from '@/common/types/staff';
 import { useTranslation } from '@/common/locale/LocaleProvider';
-import { Alert, Button, TextField, type ButtonColor } from '@/components/ui';
+import {
+  CheckIcon,
+  ChevronLeftIcon,
+  CloseIcon,
+  SaveIcon,
+  UserPlusIcon,
+  WalletIcon,
+  XCircleIcon,
+  ZapIcon,
+} from '@/components/icons/icons';
+import { Alert, Badge, Button, TextField, type BadgeColor, type ButtonColor } from '@/components/ui';
 import { getAppointmentCode } from '@/helpers/appointment-code';
 import {
   actionTargetStatus,
   appointmentStatusActions,
+  appointmentStatusColor,
   formatMoney,
   isTerminalStatus,
   type AppointmentStatusAction,
@@ -29,6 +40,19 @@ const PAYMENT_ROLES: StaffRole[] = ['owner', 'admin', 'accountant', 'receptionis
 // and memberships are redeemed through their own dedicated flows.
 const PAYMENT_METHODS = ['cash', 'card', 'transfer'] as const;
 type OfferedPaymentMethod = (typeof PAYMENT_METHODS)[number];
+
+// Same hue as the status badge, so the panel's background reads as "this
+// appointment's status" at a glance — mixed down to a wash light enough that
+// the white cards on top of it stay readable.
+const BADGE_COLOR_TINT: Record<BadgeColor, string> = {
+  primary: 'var(--color-primary-100)',
+  gray: 'var(--color-gray-50)',
+  danger: 'var(--color-red-100)',
+  success: 'var(--color-green-100)',
+  warning: 'var(--color-orange-100)',
+  info: 'var(--color-blue-100)',
+  mint: 'var(--color-green-200)',
+};
 
 type AppointmentManagePanelProps = {
   appointment: Appointment;
@@ -200,8 +224,46 @@ export const AppointmentManagePanel = ({
     cancel: 'danger',
   };
 
+  const actionIcons: Record<AppointmentStatusAction, React.ReactNode> = {
+    confirm: <CheckIcon size={14} />,
+    arrive: <UserPlusIcon size={14} />,
+    no_show: <XCircleIcon size={14} />,
+    start: <ZapIcon size={14} />,
+    complete: <CheckIcon size={14} />,
+    cancel: <CloseIcon size={14} />,
+  };
+
+  const showTopCompleteAction = status === 'in_treatment' && canEditRecord;
+  // Nothing actionable left to show once a status is final (except "cancelled",
+  // which still needs to surface who cancelled it and why).
+  const hideStatusCard = isTerminalStatus(status) && status !== 'cancelled';
+  const isPaidInFull = !isPaymentLoading && remaining <= 0;
+  const showTopActions = showTopCompleteAction || isPaidInFull;
+
+  const panelStyle = {
+    ...style,
+    '--panel-tint': BADGE_COLOR_TINT[appointmentStatusColor[status]],
+  } as React.CSSProperties;
+
   return (
-    <div className={`${styles.panel} ${className ?? ''}`} style={style}>
+    <div className={`${styles.panel} ${className ?? ''}`} style={panelStyle}>
+      {showTopActions ? (
+        <div className={styles.topActions}>
+          {isPaidInFull ? <Badge color="success">{t.paidInFull}</Badge> : null}
+          {showTopCompleteAction ? (
+            <Button
+              type="button"
+              size="sm"
+              iconLeft={<CheckIcon size={14} />}
+              disabled={recordMutation.isPending || statusMutation.isPending}
+              onClick={handleCompleteTreatment}
+            >
+              {t.completeTreatment}
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className={styles.summary}>
         <div className={styles.field}>
           <span className={styles.label}>{t.codeLabel}</span>
@@ -256,78 +318,90 @@ export const AppointmentManagePanel = ({
 
       {statusMutation.error ? <Alert color="danger">{statusMutation.error.message}</Alert> : null}
 
-      <div className={styles.card}>
-        <span className={styles.cardTitle}>{t.statusLabel}</span>
+      {!hideStatusCard ? (
+        <div className={styles.card}>
+          <span className={styles.cardTitle}>{t.statusLabel}</span>
 
-        {status === 'cancelled' ? (
-          <div className={styles.state}>
-            {cancelledInfo.by ? (
-              <p>
-                {cancelledInfo.by.isPatient ? t.cancelledByPatientLabel : t.cancelledByStaffLabel}{' '}
-                {cancelledInfo.by.name}
-              </p>
-            ) : null}
-            {cancelledInfo.reason ? (
-              <p>
-                {t.cancelReasonLabel}: {cancelledInfo.reason}
-              </p>
-            ) : null}
-          </div>
-        ) : null}
-
-        {isTerminalStatus(status) && status !== 'cancelled' ? (
-          <p className={styles.state}>{t.terminalNote}</p>
-        ) : null}
-
-        {!isTerminalStatus(status) && isCancelling ? (
-          <div className={styles.cancelForm}>
-            <TextField
-              label={t.cancelReasonLabel}
-              placeholder={t.cancelReasonPlaceholder}
-              value={cancellationReason}
-              error={cancelError ?? undefined}
-              onChange={(event) => {
-                setCancellationReason(event.target.value);
-                setCancelError(null);
-              }}
-            />
-            <div className={styles.actions}>
-              <Button type="button" variant="soft" color="gray" onClick={handleCancelBack}>
-                {t.cancelBack}
-              </Button>
-              <Button
-                type="button"
-                color="danger"
-                disabled={statusMutation.isPending}
-                onClick={handleConfirmCancel}
-              >
-                {statusMutation.isPending ? t.updatingStatus : t.cancelConfirm}
-              </Button>
+          {status === 'cancelled' ? (
+            <div className={styles.state}>
+              {cancelledInfo.by ? (
+                <p>
+                  {cancelledInfo.by.isPatient
+                    ? t.cancelledByPatientLabel
+                    : t.cancelledByStaffLabel}{' '}
+                  {cancelledInfo.by.name}
+                </p>
+              ) : null}
+              {cancelledInfo.reason ? (
+                <p>
+                  {t.cancelReasonLabel}: {cancelledInfo.reason}
+                </p>
+              ) : null}
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        {!isTerminalStatus(status) && !isCancelling ? (
-          <div className={styles.statusActions}>
-            {appointmentStatusActions[status]
-              // when the current user can fill in the record, "complete" is
-              // handled by the combined button in the record section below
-              .filter((action) => !(action === 'complete' && canEditRecord))
-              .map((action) => (
+          {!isTerminalStatus(status) && isCancelling ? (
+            <div className={styles.cancelForm}>
+              <TextField
+                size="sm"
+                label={t.cancelReasonLabel}
+                placeholder={t.cancelReasonPlaceholder}
+                value={cancellationReason}
+                error={cancelError ?? undefined}
+                onChange={(event) => {
+                  setCancellationReason(event.target.value);
+                  setCancelError(null);
+                }}
+              />
+              <div className={styles.actions}>
                 <Button
-                  key={action}
                   type="button"
-                  variant={action === 'cancel' ? 'soft' : 'solid'}
-                  color={actionColors[action]}
-                  disabled={statusMutation.isPending}
-                  onClick={() => handleAction(action)}
+                  variant="soft"
+                  color="gray"
+                  size="sm"
+                  iconLeft={<ChevronLeftIcon size={14} />}
+                  onClick={handleCancelBack}
                 >
-                  {actionLabels[action]}
+                  {t.cancelBack}
                 </Button>
-              ))}
-          </div>
-        ) : null}
-      </div>
+                <Button
+                  type="button"
+                  color="danger"
+                  size="sm"
+                  iconLeft={<CloseIcon size={14} />}
+                  disabled={statusMutation.isPending}
+                  onClick={handleConfirmCancel}
+                >
+                  {statusMutation.isPending ? t.updatingStatus : t.cancelConfirm}
+                </Button>
+              </div>
+            </div>
+          ) : null}
+
+          {!isTerminalStatus(status) && !isCancelling ? (
+            <div className={styles.statusActions}>
+              {appointmentStatusActions[status]
+                // when the current user can fill in the record, "complete" is
+                // handled by the combined button in the record section below
+                .filter((action) => !(action === 'complete' && canEditRecord))
+                .map((action) => (
+                  <Button
+                    key={action}
+                    type="button"
+                    variant={action === 'cancel' ? 'soft' : 'solid'}
+                    color={actionColors[action]}
+                    size="sm"
+                    iconLeft={actionIcons[action]}
+                    disabled={statusMutation.isPending}
+                    onClick={() => handleAction(action)}
+                  >
+                    {actionLabels[action]}
+                  </Button>
+                ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className={styles.card}>
         <span className={styles.cardTitle}>{t.planSectionTitle}</span>
@@ -337,69 +411,74 @@ export const AppointmentManagePanel = ({
         />
       </div>
 
-      <div className={styles.card}>
-        <span className={styles.cardTitle}>{t.paymentSectionTitle}</span>
+      {!isPaidInFull ? (
+        <div className={styles.card}>
+          <span className={styles.cardTitle}>{t.paymentSectionTitle}</span>
 
-        {isPaymentLoading ? <p className={styles.state}>{dict.common.loading}</p> : null}
+          {isPaymentLoading ? <p className={styles.state}>{dict.common.loading}</p> : null}
 
-        {!isPaymentLoading && remaining <= 0 ? (
-          <p className={styles.state}>{t.paidInFull}</p>
-        ) : null}
+          {!isPaymentLoading && remaining > 0 && !canRecordPayment ? (
+            <p className={styles.state}>{t.paymentForbidden}</p>
+          ) : null}
 
-        {!isPaymentLoading && remaining > 0 && !canRecordPayment ? (
-          <p className={styles.state}>{t.paymentForbidden}</p>
-        ) : null}
+          {!isPaymentLoading && remaining > 0 && canRecordPayment ? (
+            <div className={styles.recordForm}>
+              <div className={styles.paymentRow}>
+                <TextField
+                  size="sm"
+                  className={styles.paymentAmountField}
+                  label={t.paymentAmountLabel}
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder={remaining.toFixed(2)}
+                  value={paymentAmount}
+                  error={paymentError ?? undefined}
+                  onChange={(event) => {
+                    setPaymentAmount(event.target.value);
+                    setPaymentError(null);
+                  }}
+                />
 
-        {!isPaymentLoading && remaining > 0 && canRecordPayment ? (
-          <div className={styles.recordForm}>
-            <TextField
-              label={t.paymentAmountLabel}
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder={remaining.toFixed(2)}
-              value={paymentAmount}
-              error={paymentError ?? undefined}
-              onChange={(event) => {
-                setPaymentAmount(event.target.value);
-                setPaymentError(null);
-              }}
-            />
+                <div className={`${styles.field} ${styles.paymentMethodField}`}>
+                  <label className={styles.label} htmlFor={paymentMethodFieldId}>
+                    {t.paymentMethodLabel}
+                  </label>
+                  <select
+                    id={paymentMethodFieldId}
+                    className={styles.select}
+                    value={paymentMethod}
+                    onChange={(event) =>
+                      setPaymentMethod(event.target.value as OfferedPaymentMethod)
+                    }
+                  >
+                    {PAYMENT_METHODS.map((method) => (
+                      <option key={method} value={method}>
+                        {dict.paymentMethods[method]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor={paymentMethodFieldId}>
-                {t.paymentMethodLabel}
-              </label>
-              <select
-                id={paymentMethodFieldId}
-                className={styles.select}
-                value={paymentMethod}
-                onChange={(event) => setPaymentMethod(event.target.value as OfferedPaymentMethod)}
-              >
-                {PAYMENT_METHODS.map((method) => (
-                  <option key={method} value={method}>
-                    {dict.paymentMethods[method]}
-                  </option>
-                ))}
-              </select>
+                <Button
+                  type="button"
+                  size="sm"
+                  className={styles.paymentSubmit}
+                  iconLeft={<WalletIcon size={14} />}
+                  disabled={paymentMutation.isPending}
+                  onClick={handleRecordPayment}
+                >
+                  {paymentMutation.isPending ? t.recordingPayment : t.recordPayment}
+                </Button>
+              </div>
+
+              {paymentMutation.error ? (
+                <Alert color="danger">{paymentMutation.error.message}</Alert>
+              ) : null}
             </div>
-
-            {paymentMutation.error ? (
-              <Alert color="danger">{paymentMutation.error.message}</Alert>
-            ) : null}
-
-            <div className={styles.actions}>
-              <Button
-                type="button"
-                disabled={paymentMutation.isPending}
-                onClick={handleRecordPayment}
-              >
-                {paymentMutation.isPending ? t.recordingPayment : t.recordPayment}
-              </Button>
-            </div>
-          </div>
-        ) : null}
-      </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className={styles.card}>
         <span className={styles.cardTitle}>{t.recordSectionTitle}</span>
@@ -408,14 +487,14 @@ export const AppointmentManagePanel = ({
 
         {!isRecordLoading && canEditRecord ? (
           <div className={styles.recordForm}>
-            <RecordField label={dict.visits.complaints} {...register('complaints')} />
-            <RecordField label={dict.visits.examination} {...register('examination')} />
             <RecordField
               label={dict.visits.diagnosis}
               required
               error={errors.diagnosis?.message}
               {...register('diagnosis')}
             />
+            <RecordField label={dict.visits.complaints} {...register('complaints')} />
+            <RecordField label={dict.visits.examination} {...register('examination')} />
             <RecordField label={dict.visits.treatment} {...register('treatment')} />
             <RecordField label={dict.visits.prescriptions} {...register('prescriptions')} />
             <RecordField label={dict.visits.recommendations} {...register('recommendations')} />
@@ -430,30 +509,22 @@ export const AppointmentManagePanel = ({
                 type="button"
                 variant="soft"
                 color="gray"
+                size="sm"
+                iconLeft={<SaveIcon size={14} />}
                 disabled={recordMutation.isPending}
                 onClick={handleSaveRecord}
               >
                 {recordMutation.isPending ? t.savingRecord : t.saveRecord}
               </Button>
-
-              {status === 'in_treatment' ? (
-                <Button
-                  type="button"
-                  disabled={recordMutation.isPending || statusMutation.isPending}
-                  onClick={handleCompleteTreatment}
-                >
-                  {t.completeTreatment}
-                </Button>
-              ) : null}
             </div>
           </div>
         ) : null}
 
         {!isRecordLoading && !canEditRecord && existingRecord ? (
           <div className={styles.recordForm}>
+            <ReadonlyRow label={dict.visits.diagnosis} value={existingRecord.diagnosis} />
             <ReadonlyRow label={dict.visits.complaints} value={existingRecord.complaints} />
             <ReadonlyRow label={dict.visits.examination} value={existingRecord.examination} />
-            <ReadonlyRow label={dict.visits.diagnosis} value={existingRecord.diagnosis} />
             <ReadonlyRow label={dict.visits.treatment} value={existingRecord.treatment} />
             <ReadonlyRow label={dict.visits.prescriptions} value={existingRecord.prescriptions} />
             <ReadonlyRow

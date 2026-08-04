@@ -23,6 +23,13 @@
   cursor: not-allowed;
 }
 
+.sizeSm {
+  gap: 4px;
+  padding: 7px 10px;
+  font-size: 12px;
+  line-height: 16px;
+}
+
 .icon {
   display: inline-flex;
   width: 20px;
@@ -30,6 +37,11 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.iconSm {
+  width: 14px;
+  height: 14px;
 }
 
 /* Primary */

@@ -18,6 +18,8 @@ type ModalProps = {
   isLocked?: boolean;
   /** Set false to require the close/cancel button — overlay click and Escape won't close it. */
   closeOnBackdrop?: boolean;
+  /** Set false when the caller renders its own close control in the title (avoids two close buttons). */
+  showCloseButton?: boolean;
   className?: string;
   style?: React.CSSProperties;
   onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -51,6 +53,7 @@ export const Modal = ({
   scrollHintLabel = 'Scroll for more',
   isLocked = false,
   closeOnBackdrop = true,
+  showCloseButton = true,
   className,
   style,
   onSubmit,
@@ -149,7 +152,7 @@ export const Modal = ({
           <span id={titleId} className={styles.title}>
             {title}
           </span>
-          {onClose ? (
+          {onClose && showCloseButton ? (
             <button
               type="button"
               className={styles.closeButton}

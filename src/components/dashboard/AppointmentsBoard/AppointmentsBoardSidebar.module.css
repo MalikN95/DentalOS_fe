@@ -103,6 +103,10 @@
   background: var(--color-green-600);
 }
 
+.legendDot[data-color='warning'] {
+  background: var(--color-orange-500);
+}
+
 .legendBar {
   width: 4px;
   height: 14px;

@@ -113,7 +113,7 @@ export const en: Dictionary = {
     next: 'Next',
   },
   appointmentStatus: {
-    pending: 'Pending',
+    pending: 'Awaiting confirmation',
     confirmed: 'Confirmed',
     arrived: 'Arrived',
     in_treatment: 'In treatment',

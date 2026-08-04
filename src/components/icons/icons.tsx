@@ -216,6 +216,14 @@ export const RefreshIcon = createIcon(
 
 export const CheckIcon = createIcon(<path d="M20 6 9 17l-5-5" />);
 
+export const SaveIcon = createIcon(
+  <>
+    <path d="M5 3h11l3 3v15H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
+    <path d="M8 3v6h8V3" />
+    <path d="M8 21v-7h8v7" />
+  </>,
+);
+
 export const TagIcon = createIcon(
   <>
     <path d="M12.59 2.59 3 12.17V21h8.83l9.58-9.59a2 2 0 0 0 0-2.82l-6.4-6.4a2 2 0 0 0-2.42 0Z" />

@@ -2,11 +2,14 @@ import styles from './Button.module.css';
 
 export type ButtonColor = 'primary' | 'gray' | 'danger' | 'success' | 'warning';
 export type ButtonVariant = 'solid' | 'soft' | 'outline';
+export type ButtonSize = 'md' | 'sm';
 
 type ButtonProps = {
   children: React.ReactNode;
   color?: ButtonColor;
   variant?: ButtonVariant;
+  /** 'sm' renders a more compact button, e.g. in a modal action bar. */
+  size?: ButtonSize;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
@@ -48,6 +51,7 @@ export const Button = ({
   children,
   color = 'primary',
   variant = 'solid',
+  size = 'md',
   iconLeft,
   iconRight,
   type = 'button',
@@ -60,12 +64,12 @@ export const Button = ({
     // eslint-disable-next-line react/button-has-type -- type comes from a typed prop with a default
     type={type}
     disabled={disabled}
-    className={`${styles.button} ${variantClass[color][variant]} ${className ?? ''}`}
+    className={`${styles.button} ${variantClass[color][variant]} ${size === 'sm' ? styles.sizeSm : ''} ${className ?? ''}`}
     style={style}
     onClick={onClick}
   >
-    {iconLeft ? <span className={styles.icon}>{iconLeft}</span> : null}
+    {iconLeft ? <span className={`${styles.icon} ${size === 'sm' ? styles.iconSm : ''}`}>{iconLeft}</span> : null}
     {children}
-    {iconRight ? <span className={styles.icon}>{iconRight}</span> : null}
+    {iconRight ? <span className={`${styles.icon} ${size === 'sm' ? styles.iconSm : ''}`}>{iconRight}</span> : null}
   </button>
 );

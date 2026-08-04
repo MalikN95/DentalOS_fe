@@ -221,49 +221,6 @@ export const PatientFormModal = ({
         )}
       />
 
-      <fieldset className={styles.fieldset}>
-        <legend className={styles.legend}>{t.insurance}</legend>
-        <div className={styles.grid}>
-          <Controller
-            control={control}
-            name="insuranceCompany"
-            render={({ field }) => (
-              <TextField
-                label={t.company}
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="insurancePolicyNumber"
-            render={({ field }) => (
-              <TextField
-                label={t.policy}
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="insuranceValidUntil"
-            render={({ field }) => (
-              <TextField
-                label={t.validUntil}
-                type="date"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
-            )}
-          />
-        </div>
-      </fieldset>
-
       <label className={styles.field} htmlFor={commentsFieldId}>
         <span className={styles.label}>{t.comment}</span>
         <Controller

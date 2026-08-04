@@ -15,14 +15,7 @@ import styles from './PatientDocuments.module.css';
 
 const EDIT_ROLES: StaffRole[] = ['owner', 'admin', 'doctor', 'receptionist'];
 const ACCEPTED_FILE_TYPES = 'application/pdf,image/*';
-const DOCUMENT_TYPES: PatientDocumentType[] = [
-  'contract',
-  'consent',
-  'certificate',
-  'id',
-  'insurance',
-  'other',
-];
+const DOCUMENT_TYPES: PatientDocumentType[] = ['contract', 'consent', 'certificate', 'id', 'other'];
 
 const isAcceptedFile = (file: File): boolean =>
   file.type === 'application/pdf' || file.type.startsWith('image/');

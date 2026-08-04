@@ -113,7 +113,7 @@ export const ky: Dictionary = {
     next: 'Алдыга',
   },
   appointmentStatus: {
-    pending: 'Күтүүдө',
+    pending: 'Ырастоону күтүүдө',
     confirmed: 'Тастыкталды',
     arrived: 'Келди',
     in_treatment: 'Кабылдоодо',
