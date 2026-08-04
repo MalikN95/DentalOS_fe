@@ -6,6 +6,7 @@ import type { PatientPortalAppointment } from '@/common/types/patient-portal';
 import { AppointmentCard } from '@/components/patient-portal/AppointmentCard/AppointmentCard';
 import { ReviewModal } from '@/components/patient-portal/ReviewModal/ReviewModal';
 import { Alert, Button, EmptyState, Modal, Tabs, type TabItem } from '@/components/ui';
+import { useClinic } from '@/hooks/useClinic';
 import { usePortalAppointments } from '@/hooks/usePortalAppointments';
 import { usePortalCancelAppointment } from '@/hooks/usePortalCancelAppointment';
 import { usePortalReviews } from '@/hooks/usePortalReviews';
@@ -19,6 +20,8 @@ export const PatientAppointmentsPageContent = () => {
   const cancelMutation = usePortalCancelAppointment();
   const { reviews } = usePortalReviews();
   const submitReviewMutation = usePortalSubmitReview();
+  const { data: clinic } = useClinic();
+  const currency = clinic?.currency ?? 'RUB';
 
   const [appointmentToCancel, setAppointmentToCancel] = useState<PatientPortalAppointment | null>(
     null,
@@ -64,6 +67,7 @@ export const PatientAppointmentsPageContent = () => {
             key={appointment.id}
             appointment={appointment}
             review={reviews.find((review) => review.appointmentId === appointment.id) ?? null}
+            currency={currency}
             onCancel={setAppointmentToCancel}
             onReview={setAppointmentToReview}
           />

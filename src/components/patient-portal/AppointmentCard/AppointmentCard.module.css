@@ -55,6 +55,12 @@
   color: var(--color-black-700);
 }
 
+.cancelButton {
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 16px;
+}
+
 .cancellationReason {
   font-size: var(--text-m-size);
   color: var(--color-red-600);

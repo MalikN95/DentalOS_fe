@@ -8,6 +8,7 @@ import { AccordionSection } from '@/components/patient-portal/AccordionSection/A
 import { AppointmentCard } from '@/components/patient-portal/AppointmentCard/AppointmentCard';
 import { MessageBubble } from '@/components/patient-portal/MessageBubble/MessageBubble';
 import { EmptyState } from '@/components/ui';
+import { useClinic } from '@/hooks/useClinic';
 import { usePortalAppointments } from '@/hooks/usePortalAppointments';
 import { usePortalMessages } from '@/hooks/usePortalMessages';
 import { usePortalProfile } from '@/hooks/usePortalProfile';
@@ -20,6 +21,8 @@ export const PatientHomePageContent = () => {
   const { profile } = usePortalProfile();
   const { appointments } = usePortalAppointments('upcoming');
   const { messages } = usePortalMessages();
+  const { data: clinic } = useClinic();
+  const currency = clinic?.currency ?? 'RUB';
 
   const [isAppointmentsOpen, setIsAppointmentsOpen] = useState(true);
   const [isMessagesOpen, setIsMessagesOpen] = useState(false);
@@ -38,7 +41,7 @@ export const PatientHomePageContent = () => {
       <section>
         <h2 className={styles.sectionTitle}>{t.patientPortal.upcomingSectionTitle}</h2>
         {nextAppointment ? (
-          <AppointmentCard appointment={nextAppointment} />
+          <AppointmentCard appointment={nextAppointment} currency={currency} />
         ) : (
           <EmptyState title={t.patientPortal.noUpcoming} />
         )}
@@ -54,7 +57,7 @@ export const PatientHomePageContent = () => {
         <div className={styles.previewList}>
           {previewAppointments.length > 0 ? (
             previewAppointments.map((appointment) => (
-              <AppointmentCard key={appointment.id} appointment={appointment} />
+              <AppointmentCard key={appointment.id} appointment={appointment} currency={currency} />
             ))
           ) : (
             <EmptyState title={t.patientPortal.noUpcoming} />

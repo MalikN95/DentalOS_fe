@@ -12,6 +12,8 @@ type AppointmentCardProps = {
   appointment: PatientPortalAppointment;
   /** Only meaningful once the appointment is completed. */
   review?: PatientPortalReview | null;
+  /** Clinic's configured currency (ISO code, e.g. "RUB"/"USD"). Defaults to RUB when unknown. */
+  currency?: string;
   className?: string;
   style?: React.CSSProperties;
   onCancel?: (appointment: PatientPortalAppointment) => void;
@@ -21,6 +23,7 @@ type AppointmentCardProps = {
 export const AppointmentCard = ({
   appointment,
   review,
+  currency,
   className,
   style,
   onCancel,
@@ -55,13 +58,14 @@ export const AppointmentCard = ({
       </div>
 
       <div className={styles.bottomRow}>
-        <span className={styles.price}>{formatMoney(appointment.price)}</span>
+        <span className={styles.price}>{formatMoney(appointment.price, currency)}</span>
 
-        {appointment.isCancellable ? (
+        {appointment.isCancellable && onCancel ? (
           <Button
+            className={styles.cancelButton}
             color="danger"
             variant="soft"
-            onClick={() => onCancel?.(appointment)}
+            onClick={() => onCancel(appointment)}
           >
             {t.patientPortal.cancelButton}
           </Button>
