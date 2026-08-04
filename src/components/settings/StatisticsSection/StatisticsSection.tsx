@@ -138,11 +138,6 @@ export const StatisticsSection = () => {
     value: doctor.appointmentsCount,
   }));
 
-  const insurerItems = (demographics?.byInsurer ?? []).map((insurer) => ({
-    label: insurer.company === 'self_pay' ? t.statistics.selfPay : insurer.company,
-    value: insurer.count,
-  }));
-
   const genderSegments = (demographics?.byGender ?? [])
     .filter((item) => item.count > 0)
     .map((item) => ({
@@ -271,31 +266,21 @@ export const StatisticsSection = () => {
         />
 
         <ChartCard
-          title={t.statistics.chartInsurers}
-          isLoading={demographicsQuery.isLoading}
-          isEmpty={insurerItems.length === 0}
-        >
-          <RankedBarList items={insurerItems} colorVar="--color-primary-500" />
-        </ChartCard>
-      </div>
-
-      <div className={styles.row}>
-        <ChartCard
           title={t.statistics.chartTopServices}
           isLoading={topServicesQuery.isLoading}
           isEmpty={topServicesItems.length === 0}
         >
           <RankedBarList items={topServicesItems} colorVar="--color-green-500" />
         </ChartCard>
-
-        <ChartCard
-          title={t.statistics.chartDoctorsLoad}
-          isLoading={doctorsLoadQuery.isLoading}
-          isEmpty={doctorsLoadItems.length === 0}
-        >
-          <RankedBarList items={doctorsLoadItems} colorVar="--color-orange-500" />
-        </ChartCard>
       </div>
+
+      <ChartCard
+        title={t.statistics.chartDoctorsLoad}
+        isLoading={doctorsLoadQuery.isLoading}
+        isEmpty={doctorsLoadItems.length === 0}
+      >
+        <RankedBarList items={doctorsLoadItems} colorVar="--color-orange-500" />
+      </ChartCard>
 
       <ChartCard
         title={t.statistics.chartRevenueTrend}

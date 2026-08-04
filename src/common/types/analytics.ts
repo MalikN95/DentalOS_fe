@@ -56,14 +56,8 @@ export type AgeGroupBreakdownItem = {
   count: number;
 };
 
-export type InsurerBreakdownItem = {
-  company: string;
-  count: number;
-};
-
 export type PatientDemographics = {
   totalPatients: number;
   byGender: GenderBreakdownItem[];
   byAgeGroup: AgeGroupBreakdownItem[];
-  byInsurer: InsurerBreakdownItem[];
 };

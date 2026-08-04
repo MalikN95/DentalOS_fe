@@ -279,12 +279,10 @@ export const ky: Dictionary = {
     statReturningRate: 'Кайра келген бейтаптар',
     chartGender: 'Жынысы',
     chartAge: 'Курак боюнча бөлүштүрүү',
-    chartInsurers: 'Камсыздандыруу компаниялары',
     chartTopServices: 'Топ кызматтар',
     chartDoctorsLoad: 'Дарыгерлердин жүктөмү',
     chartRevenueTrend: 'Кирешенин динамикасы',
     empty: 'Маалымат жок',
-    selfPay: 'Камсыздандыруусуз',
     genderLabels: {
       male: 'Эркек',
       female: 'Аял',

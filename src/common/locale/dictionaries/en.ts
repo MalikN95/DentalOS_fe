@@ -279,12 +279,10 @@ export const en: Dictionary = {
     statReturningRate: 'Returning patients',
     chartGender: 'Gender',
     chartAge: 'Age distribution',
-    chartInsurers: 'Insurer breakdown',
     chartTopServices: 'Top services',
     chartDoctorsLoad: 'Doctor workload',
     chartRevenueTrend: 'Revenue trend',
     empty: 'No data',
-    selfPay: 'Self-pay',
     genderLabels: {
       male: 'Male',
       female: 'Female',

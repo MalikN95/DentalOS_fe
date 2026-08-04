@@ -277,12 +277,10 @@ export const ru = {
     statReturningRate: 'Повторные пациенты',
     chartGender: 'Пол',
     chartAge: 'Возрастное распределение',
-    chartInsurers: 'Страховые компании',
     chartTopServices: 'Топ услуг',
     chartDoctorsLoad: 'Загрузка врачей',
     chartRevenueTrend: 'Динамика выручки',
     empty: 'Нет данных',
-    selfPay: 'Без страховки',
     genderLabels: {
       male: 'Мужской',
       female: 'Женский',
