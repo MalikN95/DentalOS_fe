@@ -17,6 +17,8 @@ type ButtonProps = {
   className?: string;
   style?: React.CSSProperties;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  /** Required for an icon-only button (no text children) so it stays accessible. */
+  ariaLabel?: string;
 };
 
 const variantClass: Record<ButtonColor, Record<ButtonVariant, string>> = {
@@ -59,11 +61,13 @@ export const Button = ({
   className,
   style,
   onClick,
+  ariaLabel,
 }: ButtonProps) => (
   <button
     // eslint-disable-next-line react/button-has-type -- type comes from a typed prop with a default
     type={type}
     disabled={disabled}
+    aria-label={ariaLabel}
     className={`${styles.button} ${variantClass[color][variant]} ${size === 'sm' ? styles.sizeSm : ''} ${className ?? ''}`}
     style={style}
     onClick={onClick}

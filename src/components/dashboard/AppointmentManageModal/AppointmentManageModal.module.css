@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
 }
 
@@ -11,4 +10,66 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+}
+
+.closeButton {
+  margin-left: auto;
+}
+
+.closeLabel {
+  display: inline;
+}
+
+.statusLabelFull {
+  display: inline;
+}
+
+.statusLabelShort {
+  display: none;
+}
+
+/* Narrow header: drop the "Close" label (icon-only) and swap the status badge
+   to its short form — keeps the whole title row (name, badge, "Details",
+   close) on one line. */
+@media (max-width: 560px) {
+  .closeLabel {
+    display: none;
+  }
+
+  .closeButton {
+    padding: 6px !important;
+  }
+
+  .statusLabelFull {
+    display: none;
+  }
+
+  .statusLabelShort {
+    display: inline;
+  }
+}
+
+.dialogClosing {
+  /* Modal.module.css's own .dialog rule sets an opening `animation` on this same
+     element; !important guarantees this closing keyframe wins regardless of
+     CSS-module bundling order between the two files. */
+  animation: dialog-out 160ms ease forwards !important;
+}
+
+@keyframes dialog-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialogClosing {
+    animation: none;
+  }
 }

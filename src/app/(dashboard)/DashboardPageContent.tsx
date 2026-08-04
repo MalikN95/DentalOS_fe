@@ -10,6 +10,7 @@ import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointment
 import { StatCard, type StatCardAccent } from '@/components/dashboard/StatCard/StatCard';
 import { CalendarIcon, PatientsIcon, WalletIcon, XCircleIcon } from '@/components/icons/icons';
 import { PatientQuickViewModal } from '@/components/patients/PatientQuickViewModal/PatientQuickViewModal';
+import { formatHourLabel } from '@/helpers/appointments-board';
 import { buildDashboardStats } from '@/helpers/dashboard';
 import { useClinic } from '@/hooks/useClinic';
 import { useNewPatientsToday } from '@/hooks/useNewPatientsToday';
@@ -33,6 +34,7 @@ export const DashboardPageContent = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createModalHour, setCreateModalHour] = useState<number | undefined>(undefined);
   const [viewingPatientId, setViewingPatientId] = useState<string | null>(null);
   const [managingAppointment, setManagingAppointment] = useState<Appointment | null>(null);
   const currentUser = useAppSelector(selectCurrentUser);
@@ -57,7 +59,8 @@ export const DashboardPageContent = () => {
     [t, appointments, newPatientsCount, revenue, canViewRevenue, currency],
   );
 
-  const handleOpenCreateModal = useCallback(() => {
+  const handleOpenCreateModal = useCallback((hour?: number) => {
+    setCreateModalHour(hour);
     setIsCreateModalOpen(true);
   }, []);
 
@@ -99,6 +102,7 @@ export const DashboardPageContent = () => {
 
       {isCreateModalOpen ? (
         <CreateAppointmentModal
+          initialTime={createModalHour !== undefined ? formatHourLabel(createModalHour) : undefined}
           onClose={handleCloseCreateModal}
           onSuccess={handleAppointmentsInvalidate}
         />

@@ -8,8 +8,11 @@ import { useTranslation } from '@/common/locale/LocaleProvider';
 import {
   CheckIcon,
   ChevronLeftIcon,
+  ClockIcon,
   CloseIcon,
+  FileTextIcon,
   SaveIcon,
+  ToothIcon,
   UserPlusIcon,
   WalletIcon,
   XCircleIcon,
@@ -157,6 +160,19 @@ export const AppointmentManagePanel = ({
   });
 
   const remaining = Math.max(paymentTotal - totalPaid, 0);
+  // Red when nothing's been paid yet, orange for a partial payment, green once settled —
+  // drives both the debt figure's text color and the whole payment band's background.
+  const debtValueClassName = (() => {
+    if (remaining <= 0) return styles.debtValuePaid;
+    if (totalPaid > 0) return styles.debtValuePartial;
+    return styles.debtValueUnpaid;
+  })();
+  const paymentSummaryClassName = (() => {
+    if (isPaymentLoading) return '';
+    if (remaining <= 0) return styles.paymentSummaryPaid;
+    if (totalPaid > 0) return styles.paymentSummaryPartial;
+    return styles.paymentSummaryUnpaid;
+  })();
 
   const handleAction = (action: AppointmentStatusAction) => {
     if (action === 'cancel') {
@@ -291,7 +307,7 @@ export const AppointmentManagePanel = ({
         </div>
       </div>
 
-      <div className={styles.paymentSummary}>
+      <div className={`${styles.paymentSummary} ${paymentSummaryClassName}`}>
         <div className={styles.paymentItem}>
           <span className={styles.paymentLabel}>{t.priceLabel}</span>
           <span className={styles.paymentValue}>
@@ -308,9 +324,7 @@ export const AppointmentManagePanel = ({
         <div className={styles.paymentDivider} aria-hidden="true" />
         <div className={styles.paymentItem}>
           <span className={styles.paymentLabel}>{t.debtLabel}</span>
-          <span
-            className={`${styles.paymentValue} ${remaining > 0 ? styles.paymentValueDebt : styles.paymentValuePaid}`}
-          >
+          <span className={`${styles.paymentValue} ${debtValueClassName}`}>
             {isPaymentLoading ? dict.common.dash : formatMoney(String(remaining), currency)}
           </span>
         </div>
@@ -320,7 +334,10 @@ export const AppointmentManagePanel = ({
 
       {!hideStatusCard ? (
         <div className={styles.card}>
-          <span className={styles.cardTitle}>{t.statusLabel}</span>
+          <span className={styles.cardTitle}>
+            <ClockIcon size={14} />
+            {t.statusLabel}
+          </span>
 
           {status === 'cancelled' ? (
             <div className={styles.state}>
@@ -404,7 +421,10 @@ export const AppointmentManagePanel = ({
       ) : null}
 
       <div className={styles.card}>
-        <span className={styles.cardTitle}>{t.planSectionTitle}</span>
+        <span className={styles.cardTitle}>
+          <ToothIcon size={14} />
+          {t.planSectionTitle}
+        </span>
         <AppointmentTreatmentSection
           patientId={appointment.patientId}
           canEdit={canEditRecord}
@@ -413,7 +433,10 @@ export const AppointmentManagePanel = ({
 
       {!isPaidInFull ? (
         <div className={styles.card}>
-          <span className={styles.cardTitle}>{t.paymentSectionTitle}</span>
+          <span className={styles.cardTitle}>
+            <WalletIcon size={14} />
+            {t.paymentSectionTitle}
+          </span>
 
           {isPaymentLoading ? <p className={styles.state}>{dict.common.loading}</p> : null}
 
@@ -481,7 +504,10 @@ export const AppointmentManagePanel = ({
       ) : null}
 
       <div className={styles.card}>
-        <span className={styles.cardTitle}>{t.recordSectionTitle}</span>
+        <span className={styles.cardTitle}>
+          <FileTextIcon size={14} />
+          {t.recordSectionTitle}
+        </span>
 
         {isRecordLoading ? <p className={styles.state}>{dict.common.loading}</p> : null}
 

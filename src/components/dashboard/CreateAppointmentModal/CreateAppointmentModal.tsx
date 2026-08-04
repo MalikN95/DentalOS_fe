@@ -24,6 +24,9 @@ import styles from './CreateAppointmentModal.module.css';
 type CreateAppointmentModalProps = {
   /** Pre-selects and locks the patient, e.g. when opened from their profile. */
   initialPatientId?: string;
+  /** Pre-fills the date/time, e.g. when opened from a specific hour slot on the board. */
+  initialDate?: Date;
+  initialTime?: string;
   onClose: () => void;
   onSuccess?: () => void;
   className?: string;
@@ -60,6 +63,8 @@ const formatDoctorLabel = (doctor: AppointmentFormDoctor): string =>
 
 export const CreateAppointmentModal = ({
   initialPatientId,
+  initialDate,
+  initialTime,
   onClose,
   onSuccess,
   className,
@@ -70,6 +75,8 @@ export const CreateAppointmentModal = ({
   const { form, optionsQuery, filteredDoctors, mutation, resetDoctorSelection, busyHoursQuery } =
     useCreateAppointmentForm({
       initialPatientId,
+      initialDate,
+      initialTime,
       onSuccess: () => {
         onSuccess?.();
         onClose();

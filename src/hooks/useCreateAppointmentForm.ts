@@ -69,7 +69,11 @@ const roundToDurationStep = (minutes: number): number =>
     MIN_APPOINTMENT_DURATION,
   );
 
-const getDefaultFormValues = (initialPatientId?: string): CreateAppointmentFormValues => {
+const getDefaultFormValues = (
+  initialPatientId?: string,
+  initialDate?: Date,
+  initialTime?: string,
+): CreateAppointmentFormValues => {
   const now = new Date();
   now.setMinutes(0, 0, 0);
   now.setHours(now.getHours() + 1);
@@ -79,8 +83,8 @@ const getDefaultFormValues = (initialPatientId?: string): CreateAppointmentFormV
     patientId: initialPatientId ?? '',
     doctorProfileId: '',
     serviceId: '',
-    date: toDateInputValue(now),
-    time: `${String(now.getHours()).padStart(2, '0')}:00`,
+    date: toDateInputValue(initialDate ?? now),
+    time: initialTime ?? `${String(now.getHours()).padStart(2, '0')}:00`,
     durationMinutes: DEFAULT_DURATION,
     comment: '',
   };
@@ -89,11 +93,16 @@ const getDefaultFormValues = (initialPatientId?: string): CreateAppointmentFormV
 type UseCreateAppointmentFormParams = {
   /** Pre-selects (and locks) the patient, e.g. when opened from their profile. */
   initialPatientId?: string;
+  /** Pre-fills the date/time, e.g. when opened from a specific hour slot on the board. */
+  initialDate?: Date;
+  initialTime?: string;
   onSuccess?: () => void;
 };
 
 export const useCreateAppointmentForm = ({
   initialPatientId,
+  initialDate,
+  initialTime,
   onSuccess,
 }: UseCreateAppointmentFormParams) => {
   const accessToken = useAppSelector(selectAccessToken);
@@ -113,7 +122,7 @@ export const useCreateAppointmentForm = ({
 
   const form = useForm<CreateAppointmentFormValues>({
     resolver: zodResolver(createAppointmentSchema),
-    defaultValues: getDefaultFormValues(initialPatientId),
+    defaultValues: getDefaultFormValues(initialPatientId, initialDate, initialTime),
   });
 
   const selectedBranchId = useWatch({
@@ -194,7 +203,7 @@ export const useCreateAppointmentForm = ({
       });
     },
     onSuccess: () => {
-      form.reset(getDefaultFormValues(initialPatientId));
+      form.reset(getDefaultFormValues(initialPatientId, initialDate, initialTime));
       onSuccess?.();
     },
     onError: (error) => {

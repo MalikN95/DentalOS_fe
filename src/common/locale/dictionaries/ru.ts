@@ -175,7 +175,10 @@ export const ru = {
     loadingOptions: 'Загрузка вариантов...',
     create: 'Создать запись',
     saving: 'Сохраняем...',
-    manageTitle: 'Управление записью',
+    manageTitle: 'Управление',
+    // Narrow-header variant of appointmentStatus.pending — the full "Ожидает
+    // подтверждения" doesn't fit the mobile title row alongside the badge.
+    pendingShort: 'Ожидает',
     statusLabel: 'Статус',
     confirmStatus: 'Подтвердить',
     markArrived: 'Пациент пришёл',

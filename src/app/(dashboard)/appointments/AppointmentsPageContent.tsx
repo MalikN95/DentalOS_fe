@@ -11,6 +11,7 @@ import { AppointmentsWeekBoard } from '@/components/dashboard/AppointmentsWeekBo
 import { AppointmentsYearView } from '@/components/dashboard/AppointmentsYearView/AppointmentsYearView';
 import { CreateAppointmentModal } from '@/components/dashboard/CreateAppointmentModal/CreateAppointmentModal';
 import { PatientQuickViewModal } from '@/components/patients/PatientQuickViewModal/PatientQuickViewModal';
+import { formatHourLabel } from '@/helpers/appointments-board';
 import { addDays, addMonths, addWeeks, addYears } from '@/helpers/date';
 import {
   APPOINTMENTS_BY_VIEW_QUERY_KEY,
@@ -31,6 +32,7 @@ const STEP_BY_VIEW: Record<AppointmentsViewMode, (date: Date, amount: number) =>
 export const AppointmentsPageContent = () => {
   const queryClient = useQueryClient();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createModalHour, setCreateModalHour] = useState<number | undefined>(undefined);
   const [viewMode, setViewMode] = useState<AppointmentsViewMode>('day');
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [viewingPatientId, setViewingPatientId] = useState<string | null>(null);
@@ -42,7 +44,8 @@ export const AppointmentsPageContent = () => {
   // A doctor only ever sees their own appointments, so filtering "by doctor" is meaningless for them.
   const showDoctorFilter = currentUser?.role !== 'doctor';
 
-  const handleOpenCreateModal = useCallback(() => {
+  const handleOpenCreateModal = useCallback((hour?: number) => {
+    setCreateModalHour(hour);
     setIsCreateModalOpen(true);
   }, []);
 
@@ -142,6 +145,8 @@ export const AppointmentsPageContent = () => {
 
       {isCreateModalOpen ? (
         <CreateAppointmentModal
+          initialDate={selectedDate}
+          initialTime={createModalHour !== undefined ? formatHourLabel(createModalHour) : undefined}
           onClose={handleCloseCreateModal}
           onSuccess={handleAppointmentsInvalidate}
         />

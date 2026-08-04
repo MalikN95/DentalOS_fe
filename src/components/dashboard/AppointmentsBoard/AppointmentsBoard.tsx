@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Appointment } from '@/common/types/appointment';
+import { PlusIcon } from '@/components/icons/icons';
 import { Alert, Button } from '@/components/ui';
 import {
   formatHourLabel,
@@ -21,7 +22,8 @@ type AppointmentsBoardProps = {
   errorMessage?: string | null;
   className?: string;
   style?: React.CSSProperties;
-  onAddClick: () => void;
+  /** Passes the clicked hour (0-23) when opened from a slot on an hour line, omitted from the header/mobile "new appointment" buttons. */
+  onAddClick: (hour?: number) => void;
   onPatientClick: (patientId: string) => void;
   onRowClick: (appointment: Appointment) => void;
   /** The day being shown — passed through to each card for its "not started yet" check. Defaults to today. */
@@ -67,7 +69,7 @@ export const AppointmentsBoard = ({
         <Button
           variant="soft"
           className={`${styles.addButton} ${showDoctorFilter ? styles.addButtonDesktopOnly : ''}`}
-          onClick={onAddClick}
+          onClick={() => onAddClick()}
         >
           {t.appointments.newAppointment}
         </Button>
@@ -88,7 +90,11 @@ export const AppointmentsBoard = ({
           showDoctorFilter={showDoctorFilter}
           mobileAction={
             showDoctorFilter ? (
-              <Button variant="soft" className={styles.mobileAddButton} onClick={onAddClick}>
+              <Button
+                variant="soft"
+                className={styles.mobileAddButton}
+                onClick={() => onAddClick()}
+              >
                 {t.appointments.newAppointmentShort}
               </Button>
             ) : null
@@ -108,7 +114,17 @@ export const AppointmentsBoard = ({
                   <div key={hour} className={styles.hourRow}>
                     <div className={styles.hourDivider}>
                       <span className={styles.hourLabel}>{formatHourLabel(hour)}</span>
-                      <span className={styles.hourLine} />
+                      <span className={styles.hourLine}>
+                        <button
+                          type="button"
+                          className={styles.hourAddButton}
+                          aria-label={t.appointments.newAppointment}
+                          title={t.appointments.newAppointment}
+                          onClick={() => onAddClick(hour)}
+                        >
+                          <PlusIcon size={10} />
+                        </button>
+                      </span>
                     </div>
 
                     {isEmptyHour ? null : (
