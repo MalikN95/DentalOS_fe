@@ -6,10 +6,11 @@ import { BranchesSection } from '@/components/settings/BranchesSection/BranchesS
 import { ClinicSettingsForm } from '@/components/settings/ClinicSettingsForm/ClinicSettingsForm';
 import { EmailTemplatesSection } from '@/components/settings/EmailTemplatesSection/EmailTemplatesSection';
 import { ServicesSection } from '@/components/settings/ServicesSection/ServicesSection';
+import { StatisticsSection } from '@/components/settings/StatisticsSection/StatisticsSection';
 import { Tabs } from '@/components/ui';
 import styles from './page.module.css';
 
-const SETTINGS_TABS = ['clinic', 'branches', 'services', 'emailTemplates'] as const;
+const SETTINGS_TABS = ['clinic', 'branches', 'services', 'emailTemplates', 'statistics'] as const;
 
 type SettingsTab = (typeof SETTINGS_TABS)[number];
 
@@ -22,6 +23,7 @@ export const SettingsPageContent = () => {
     { id: 'branches', label: t.branches.title },
     { id: 'services', label: t.services.title },
     { id: 'emailTemplates', label: t.emailTemplates.title },
+    { id: 'statistics', label: t.settings.statisticsTitle },
   ];
 
   const handleTabChange = (id: string) => {
@@ -44,6 +46,7 @@ export const SettingsPageContent = () => {
         {activeTab === 'branches' ? <BranchesSection /> : null}
         {activeTab === 'services' ? <ServicesSection /> : null}
         {activeTab === 'emailTemplates' ? <EmailTemplatesSection /> : null}
+        {activeTab === 'statistics' ? <StatisticsSection /> : null}
       </div>
     </div>
   );

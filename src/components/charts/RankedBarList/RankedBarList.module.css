@@ -1,0 +1,44 @@
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(60px, 2fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.label {
+  overflow: hidden;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.track {
+  height: 8px;
+  background: var(--color-gray-50);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  min-width: 4px;
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.value {
+  font-size: var(--text-m-size);
+  font-weight: 500;
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

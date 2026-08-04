@@ -17,3 +17,53 @@ export type RevenueAnalytics = {
   byDay: RevenueByDayItem[];
   byMethod: RevenueByMethodItem[];
 };
+
+export type DoctorLoadItem = {
+  doctorProfileId: string;
+  doctorName: string;
+  appointmentsCount: number;
+  minutesBooked: number;
+};
+
+export type TopServiceItem = {
+  serviceId: string;
+  name: string;
+  count: number;
+  revenue: number;
+};
+
+export type CancellationsAnalytics = {
+  cancelled: number;
+  noShow: number;
+  total: number;
+  cancellationRate: number;
+  noShowRate: number;
+};
+
+export type RepeatVisitsAnalytics = {
+  totalPatients: number;
+  repeatPatients: number;
+  rate: number;
+};
+
+export type GenderBreakdownItem = {
+  gender: 'male' | 'female' | 'other' | 'unknown';
+  count: number;
+};
+
+export type AgeGroupBreakdownItem = {
+  group: '0-17' | '18-34' | '35-54' | '55+' | 'unknown';
+  count: number;
+};
+
+export type InsurerBreakdownItem = {
+  company: string;
+  count: number;
+};
+
+export type PatientDemographics = {
+  totalPatients: number;
+  byGender: GenderBreakdownItem[];
+  byAgeGroup: AgeGroupBreakdownItem[];
+  byInsurer: InsurerBreakdownItem[];
+};
