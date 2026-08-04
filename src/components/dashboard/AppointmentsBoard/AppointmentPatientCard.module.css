@@ -235,6 +235,6 @@
   }
 
   .timelineWrap {
-    flex-basis: 100%;
+    display: none;
   }
 }
