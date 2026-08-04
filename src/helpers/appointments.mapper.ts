@@ -22,4 +22,11 @@ export const mapApiAppointmentToRow = (appointment: ApiAppointment): Appointment
   service: appointment.service.name,
   price: appointment.price,
   status: appointment.status,
+  cancellationReason: appointment.cancellationReason,
+  cancelledBy: appointment.cancelledBy
+    ? {
+        name: `${appointment.cancelledBy.firstName} ${appointment.cancelledBy.lastName}`.trim(),
+        isPatient: appointment.cancelledBy.role === 'patient',
+      }
+    : null,
 });

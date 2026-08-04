@@ -3,7 +3,14 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from '@/common/locale/LocaleProvider';
-import { DashboardIcon, CalendarIcon, LogoutIcon, MessageIcon, Logo } from '@/components/icons/icons';
+import {
+  DashboardIcon,
+  CalendarIcon,
+  ChevronLeftIcon,
+  LogoutIcon,
+  MessageIcon,
+  PlusIcon,
+} from '@/components/icons/icons';
 import { logoutRequest } from '@/helpers/auth-bridge';
 import { usePortalAuthGuard } from '@/hooks/usePortalAuthGuard';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -33,6 +40,12 @@ export const PatientPortalShell = ({ children }: PatientPortalShellProps) => {
       icon: CalendarIcon,
     },
     {
+      id: 'book',
+      href: '/patient/book',
+      label: t.patientPortal.bookNav,
+      icon: PlusIcon,
+    },
+    {
       id: 'messages',
       href: '/patient/messages',
       label: t.patientPortal.navMessages,
@@ -50,11 +63,31 @@ export const PatientPortalShell = ({ children }: PatientPortalShellProps) => {
     return null;
   }
 
+  const activeNavItem = navItems.find((item) =>
+    item.href === '/patient' ? pathname === item.href : pathname.startsWith(item.href),
+  );
+  const pageTitle = activeNavItem?.label ?? '';
+  // The composer on /patient/messages is pinned to the bottom itself — the
+  // floating nav would sit on top of it and eat half the screen otherwise.
+  const hideNav = pathname.startsWith('/patient/messages');
+
   return (
     <div className={styles.page}>
       <div className={styles.shell}>
         <header className={styles.header}>
-          <Logo height={20} />
+          <div className={styles.headerTitleRow}>
+            {hideNav ? (
+              <button
+                type="button"
+                className={styles.backButton}
+                aria-label={t.patientPortal.bookBackButton}
+                onClick={() => router.push('/patient')}
+              >
+                <ChevronLeftIcon size={18} />
+              </button>
+            ) : null}
+            <span className={styles.pageTitle}>{pageTitle}</span>
+          </div>
           <button
             type="button"
             className={styles.logoutButton}
@@ -65,27 +98,31 @@ export const PatientPortalShell = ({ children }: PatientPortalShellProps) => {
           </button>
         </header>
 
-        <main className={styles.content}>{children}</main>
+        <main className={`${styles.content} ${hideNav ? styles.contentNoNav : ''}`}>
+          {children}
+        </main>
       </div>
 
-      <nav className={styles.nav}>
-        {navItems.map((item) => {
-          const isActive =
-            item.href === '/patient' ? pathname === item.href : pathname.startsWith(item.href);
-          const Icon = item.icon;
+      {hideNav ? null : (
+        <nav className={styles.nav}>
+          {navItems.map((item) => {
+            const isActive =
+              item.href === '/patient' ? pathname === item.href : pathname.startsWith(item.href);
+            const Icon = item.icon;
 
-          return (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
-            >
-              <Icon size={20} />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+              >
+                <Icon size={18} />
+                <span className={styles.navLabel}>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      )}
     </div>
   );
 };

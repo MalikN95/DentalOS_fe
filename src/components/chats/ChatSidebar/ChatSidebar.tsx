@@ -17,6 +17,7 @@ type ChatSidebarProps = {
   onLoadMoreConversations: () => void;
   loadMoreLabel: string;
   emptyConversationsLabel: string;
+  className?: string;
 };
 
 const formatConversationTime = (isoDate: string): string =>
@@ -33,8 +34,9 @@ export const ChatSidebar = ({
   onLoadMoreConversations,
   loadMoreLabel,
   emptyConversationsLabel,
+  className,
 }: ChatSidebarProps) => (
-  <aside className={styles.sidebar}>
+  <aside className={`${styles.sidebar} ${className ?? ''}`}>
     <button
       type="button"
       className={`${styles.row} ${selection.type === 'team' ? styles.rowActive : ''}`}

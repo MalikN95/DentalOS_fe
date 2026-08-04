@@ -61,9 +61,21 @@
   line-height: 16px;
 }
 
+.cancellationBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cancelledByLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-red-600);
+}
+
 .cancellationReason {
   font-size: var(--text-m-size);
-  color: var(--color-red-600);
+  color: var(--color-black-500);
 }
 
 .reviewRow {

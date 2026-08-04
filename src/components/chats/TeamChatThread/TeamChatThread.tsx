@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { ApiChatMessage } from '@/common/types/chat';
+import { ChevronLeftIcon } from '@/components/icons/icons';
 import { Button } from '@/components/ui';
 import { formatDate, formatTime, isSameDay } from '@/helpers/date';
 import styles from './TeamChatThread.module.css';
@@ -17,6 +18,10 @@ type TeamChatThreadProps = {
   sendLabel: string;
   isSending: boolean;
   onSend: (body: string) => void;
+  /** Shown as a back chevron on mobile, next to the title — returns to the conversation list. */
+  onBack?: () => void;
+  backLabel?: string;
+  className?: string;
 };
 
 const formatMessageTime = (isoDate: string): string =>
@@ -33,6 +38,9 @@ export const TeamChatThread = ({
   sendLabel,
   isSending,
   onSend,
+  onBack,
+  backLabel,
+  className,
 }: TeamChatThreadProps) => {
   const [draft, setDraft] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -56,8 +64,19 @@ export const TeamChatThread = ({
   };
 
   return (
-    <div className={styles.thread}>
+    <div className={`${styles.thread} ${className ?? ''}`}>
       <div className={styles.header}>
+        {onBack ? (
+          <button
+            type="button"
+            className={styles.backButton}
+            aria-label={backLabel}
+            title={backLabel}
+            onClick={onBack}
+          >
+            <ChevronLeftIcon size={18} />
+          </button>
+        ) : null}
         <span className={styles.title}>{title}</span>
       </div>
 

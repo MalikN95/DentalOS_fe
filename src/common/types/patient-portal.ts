@@ -21,6 +21,7 @@ export type PatientPortalAppointment = {
   price: string;
   comment: string | null;
   cancellationReason: string | null;
+  cancelledBy: 'patient' | 'staff' | null;
   isCancellable: boolean;
 };
 
@@ -29,4 +30,13 @@ export type PatientPortalReview = {
   appointmentId: string;
   rating: number;
   comment: string | null;
+};
+
+export type PatientPortalBookingPayload = {
+  branchId: string;
+  serviceId: string;
+  doctorProfileId: string;
+  date: string;
+  time: string;
+  comment?: string;
 };

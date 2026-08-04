@@ -85,6 +85,10 @@ export const AppointmentManagePanel = ({
   const paymentMethodFieldId = useId();
 
   const [status, setStatus] = useState<AppointmentStatus>(appointment.status);
+  const [cancelledInfo, setCancelledInfo] = useState<{
+    reason: string | null;
+    by: Appointment['cancelledBy'];
+  }>({ reason: appointment.cancellationReason, by: appointment.cancelledBy });
   const [isCancelling, setIsCancelling] = useState(false);
   const [cancellationReason, setCancellationReason] = useState('');
   const [cancelError, setCancelError] = useState<string | null>(null);
@@ -96,6 +100,7 @@ export const AppointmentManagePanel = ({
     appointmentId: appointment.id,
     onSuccess: (updated) => {
       setStatus(updated.status);
+      setCancelledInfo({ reason: updated.cancellationReason, by: updated.cancelledBy });
       onStatusChange?.(updated.status);
       onChanged?.();
     },
@@ -196,7 +201,7 @@ export const AppointmentManagePanel = ({
   };
 
   return (
-    <div className={className} style={style}>
+    <div className={`${styles.panel} ${className ?? ''}`} style={style}>
       <div className={styles.summary}>
         <div className={styles.field}>
           <span className={styles.label}>{t.codeLabel}</span>
@@ -251,10 +256,28 @@ export const AppointmentManagePanel = ({
 
       {statusMutation.error ? <Alert color="danger">{statusMutation.error.message}</Alert> : null}
 
-      <div className={styles.section}>
-        <span className={styles.sectionTitle}>{t.statusLabel}</span>
+      <div className={styles.card}>
+        <span className={styles.cardTitle}>{t.statusLabel}</span>
 
-        {isTerminalStatus(status) ? <p className={styles.state}>{t.terminalNote}</p> : null}
+        {status === 'cancelled' ? (
+          <div className={styles.state}>
+            {cancelledInfo.by ? (
+              <p>
+                {cancelledInfo.by.isPatient ? t.cancelledByPatientLabel : t.cancelledByStaffLabel}{' '}
+                {cancelledInfo.by.name}
+              </p>
+            ) : null}
+            {cancelledInfo.reason ? (
+              <p>
+                {t.cancelReasonLabel}: {cancelledInfo.reason}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {isTerminalStatus(status) && status !== 'cancelled' ? (
+          <p className={styles.state}>{t.terminalNote}</p>
+        ) : null}
 
         {!isTerminalStatus(status) && isCancelling ? (
           <div className={styles.cancelForm}>
@@ -269,19 +292,12 @@ export const AppointmentManagePanel = ({
               }}
             />
             <div className={styles.actions}>
-              <Button
-                type="button"
-                variant="soft"
-                color="gray"
-                className={styles.compactButton}
-                onClick={handleCancelBack}
-              >
+              <Button type="button" variant="soft" color="gray" onClick={handleCancelBack}>
                 {t.cancelBack}
               </Button>
               <Button
                 type="button"
                 color="danger"
-                className={styles.compactButton}
                 disabled={statusMutation.isPending}
                 onClick={handleConfirmCancel}
               >
@@ -292,7 +308,7 @@ export const AppointmentManagePanel = ({
         ) : null}
 
         {!isTerminalStatus(status) && !isCancelling ? (
-          <div className={styles.actions}>
+          <div className={styles.statusActions}>
             {appointmentStatusActions[status]
               // when the current user can fill in the record, "complete" is
               // handled by the combined button in the record section below
@@ -303,7 +319,6 @@ export const AppointmentManagePanel = ({
                   type="button"
                   variant={action === 'cancel' ? 'soft' : 'solid'}
                   color={actionColors[action]}
-                  className={styles.compactButton}
                   disabled={statusMutation.isPending}
                   onClick={() => handleAction(action)}
                 >
@@ -314,16 +329,16 @@ export const AppointmentManagePanel = ({
         ) : null}
       </div>
 
-      <div className={styles.section}>
-        <span className={styles.sectionTitle}>{t.planSectionTitle}</span>
+      <div className={styles.card}>
+        <span className={styles.cardTitle}>{t.planSectionTitle}</span>
         <AppointmentTreatmentSection
           patientId={appointment.patientId}
           canEdit={canEditRecord}
         />
       </div>
 
-      <div className={styles.section}>
-        <span className={styles.sectionTitle}>{t.paymentSectionTitle}</span>
+      <div className={styles.card}>
+        <span className={styles.cardTitle}>{t.paymentSectionTitle}</span>
 
         {isPaymentLoading ? <p className={styles.state}>{dict.common.loading}</p> : null}
 
@@ -376,7 +391,6 @@ export const AppointmentManagePanel = ({
             <div className={styles.actions}>
               <Button
                 type="button"
-                className={styles.compactButton}
                 disabled={paymentMutation.isPending}
                 onClick={handleRecordPayment}
               >
@@ -387,8 +401,8 @@ export const AppointmentManagePanel = ({
         ) : null}
       </div>
 
-      <div className={styles.section}>
-        <span className={styles.sectionTitle}>{t.recordSectionTitle}</span>
+      <div className={styles.card}>
+        <span className={styles.cardTitle}>{t.recordSectionTitle}</span>
 
         {isRecordLoading ? <p className={styles.state}>{dict.common.loading}</p> : null}
 
@@ -416,7 +430,6 @@ export const AppointmentManagePanel = ({
                 type="button"
                 variant="soft"
                 color="gray"
-                className={styles.compactButton}
                 disabled={recordMutation.isPending}
                 onClick={handleSaveRecord}
               >
@@ -426,7 +439,6 @@ export const AppointmentManagePanel = ({
               {status === 'in_treatment' ? (
                 <Button
                   type="button"
-                  className={styles.compactButton}
                   disabled={recordMutation.isPending || statusMutation.isPending}
                   onClick={handleCompleteTreatment}
                 >

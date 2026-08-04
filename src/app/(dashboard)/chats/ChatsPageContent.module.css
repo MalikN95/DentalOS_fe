@@ -7,3 +7,9 @@
   background: var(--color-white);
   overflow: hidden;
 }
+
+@media (max-width: 900px) {
+  .hiddenOnMobile {
+    display: none;
+  }
+}

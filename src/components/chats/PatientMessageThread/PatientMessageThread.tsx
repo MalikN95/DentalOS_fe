@@ -1,7 +1,7 @@
 'use client';
 
 import type { ApiPatientMessage } from '@/common/types/chat';
-import { MailIcon, PhoneIcon } from '@/components/icons/icons';
+import { ChevronLeftIcon, MailIcon, PhoneIcon } from '@/components/icons/icons';
 import { format } from '@/common/locale/LocaleProvider';
 import { formatDate, formatTime, isSameDay } from '@/helpers/date';
 import styles from './PatientMessageThread.module.css';
@@ -14,6 +14,10 @@ type PatientMessageThreadProps = {
   emptyLabel: string;
   sentByTemplate: string;
   automaticLabel: string;
+  /** Shown as a back chevron on mobile, next to the title — returns to the conversation list. */
+  onBack?: () => void;
+  backLabel?: string;
+  className?: string;
 };
 
 const formatMessageTime = (isoDate: string): string =>
@@ -27,9 +31,23 @@ export const PatientMessageThread = ({
   emptyLabel,
   sentByTemplate,
   automaticLabel,
+  onBack,
+  backLabel,
+  className,
 }: PatientMessageThreadProps) => (
-  <div className={styles.thread}>
+  <div className={`${styles.thread} ${className ?? ''}`}>
     <div className={styles.header}>
+      {onBack ? (
+        <button
+          type="button"
+          className={styles.backButton}
+          aria-label={backLabel}
+          title={backLabel}
+          onClick={onBack}
+        >
+          <ChevronLeftIcon size={18} />
+        </button>
+      ) : null}
       <span className={styles.title}>{patientName}</span>
     </div>
 

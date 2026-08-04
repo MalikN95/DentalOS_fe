@@ -29,8 +29,6 @@ export const PatientMessagesPageContent = () => {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>{t.patientPortal.messagesTitle}</h1>
-
       <div className={styles.thread}>
         {!isLoading && messages.length === 0 ? (
           <EmptyState title={t.patientPortal.messagesEmpty} />
@@ -40,12 +38,14 @@ export const PatientMessagesPageContent = () => {
         <div ref={bottomRef} />
       </div>
 
-      <MessageComposer
-        value={draft}
-        isSending={sendMessage.isPending}
-        onChange={setDraft}
-        onSend={handleSend}
-      />
+      <div className={styles.composerWrapper}>
+        <MessageComposer
+          value={draft}
+          isSending={sendMessage.isPending}
+          onChange={setDraft}
+          onSend={handleSend}
+        />
+      </div>
     </div>
   );
 };

@@ -28,6 +28,12 @@
   font-size: 12px;
 }
 
+.mobileAddButton {
+  display: none;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
 .stateWrap {
   padding: 0 14px 12px;
 }
@@ -104,6 +110,18 @@
 
   .board {
     overflow-y: visible;
+  }
+
+  .cardHeaderMobileCollapsed {
+    display: none;
+  }
+
+  .addButtonDesktopOnly {
+    display: none;
+  }
+
+  .mobileAddButton {
+    display: inline-flex;
   }
 }
 

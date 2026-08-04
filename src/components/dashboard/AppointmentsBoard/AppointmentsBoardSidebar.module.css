@@ -123,6 +123,10 @@
   position: relative;
 }
 
+.mobileActionSlot {
+  display: none;
+}
+
 .legendTrigger {
   display: inline-flex;
   align-items: center;
@@ -166,20 +170,46 @@
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
     padding: 0 0 12px;
     border-right: none;
     border-bottom: 1px solid var(--color-gray-50);
   }
 
   .doctors {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-width: 0;
+    gap: 14px;
+    overflow-x: auto;
     overflow-y: visible;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .doctors::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Sits inline with the doctor chips instead of stacked above them. */
+  .selectAll {
+    flex-shrink: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    white-space: nowrap;
   }
 
   .doctorList {
     flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px 12px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    gap: 14px;
+  }
+
+  .doctorItem {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   /* Collapsed behind the "?" trigger instead — see .legendMobile below. */
@@ -191,5 +221,11 @@
     display: inline-flex;
     flex-shrink: 0;
     margin-left: auto;
+  }
+
+  .mobileActionSlot {
+    display: inline-flex;
+    flex-shrink: 0;
+    margin-left: 8px;
   }
 }

@@ -3,6 +3,11 @@ export type AppointmentStatus =
 
 export type AppointmentsViewMode = 'day' | 'week' | 'month' | 'year';
 
+export type AppointmentCancelledBy = {
+  name: string;
+  isPatient: boolean;
+};
+
 export type Appointment = {
   id: string;
   /** 'YYYY-MM-DD' in local time — the calendar day this appointment falls on. */
@@ -19,6 +24,8 @@ export type Appointment = {
   service: string;
   price: string;
   status: AppointmentStatus;
+  cancellationReason: string | null;
+  cancelledBy: AppointmentCancelledBy | null;
 };
 
 export type ApiAppointmentPatient = {
@@ -46,6 +53,13 @@ export type ApiAppointmentCabinet = {
   name: string;
 };
 
+export type ApiAppointmentCancelledBy = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+};
+
 export type ApiAppointment = {
   id: string;
   startsAt: string;
@@ -56,6 +70,8 @@ export type ApiAppointment = {
   doctorProfile: ApiAppointmentDoctorProfile;
   service: ApiAppointmentService;
   cabinet: ApiAppointmentCabinet | null;
+  cancellationReason: string | null;
+  cancelledBy: ApiAppointmentCancelledBy | null;
 };
 
 export type DashboardStat = {

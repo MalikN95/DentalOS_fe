@@ -84,6 +84,7 @@ export const AppointmentsCalendarNav = ({
       <Tabs
         items={viewItems}
         activeId={viewMode}
+        className={styles.tabsRow}
         onChange={(id) => onViewModeChange(id as AppointmentsViewMode)}
       />
     </div>

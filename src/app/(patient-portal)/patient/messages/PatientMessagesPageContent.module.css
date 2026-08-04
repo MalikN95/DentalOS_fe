@@ -1,14 +1,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   height: 100%;
-}
-
-.title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--color-black-700);
 }
 
 .thread {
@@ -16,4 +9,17 @@
   flex-direction: column;
   gap: 10px;
   flex: 1;
+  /* Clears the fixed composer pinned below (see .composerWrapper) so the
+     last message is never hidden behind it. */
+  padding-bottom: 76px;
+}
+
+.composerWrapper {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 720px;
+  z-index: 500;
 }

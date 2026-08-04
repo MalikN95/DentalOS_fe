@@ -73,7 +73,16 @@ export const AppointmentCard = ({
       </div>
 
       {appointment.cancellationReason ? (
-        <span className={styles.cancellationReason}>{appointment.cancellationReason}</span>
+        <div className={styles.cancellationBlock}>
+          {appointment.cancelledBy ? (
+            <span className={styles.cancelledByLabel}>
+              {appointment.cancelledBy === 'patient'
+                ? t.patientPortal.cancelledByYou
+                : t.patientPortal.cancelledByClinic}
+            </span>
+          ) : null}
+          <span className={styles.cancellationReason}>{appointment.cancellationReason}</span>
+        </div>
       ) : null}
 
       {appointment.status === 'completed' && onReview ? (

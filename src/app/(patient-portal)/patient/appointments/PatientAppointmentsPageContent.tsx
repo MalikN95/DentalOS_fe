@@ -56,8 +56,6 @@ export const PatientAppointmentsPageContent = () => {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>{t.patientPortal.appointmentsTitle}</h1>
-
       <Tabs items={tabs} activeId={activeTab} onChange={(id) => setActiveTab(id as 'upcoming' | 'past')} />
 
       <div className={styles.list}>

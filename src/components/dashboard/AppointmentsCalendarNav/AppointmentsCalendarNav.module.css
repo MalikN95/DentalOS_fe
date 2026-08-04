@@ -12,8 +12,13 @@
 
 .dateNav {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 2px;
+}
+
+.tabsRow {
+  flex-shrink: 0;
 }
 
 .navButton {
@@ -93,4 +98,30 @@
   color-scheme: light;
   opacity: 0;
   cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .bar {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dateLabel {
+    min-width: 0;
+  }
+
+  .tabsRow {
+    margin-left: 4px;
+    padding-left: 10px;
+    border-left: 1px solid var(--color-gray-100);
+  }
 }

@@ -24,28 +24,64 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 10px 16px;
   background: var(--color-white);
   border-bottom: 1px solid var(--color-gray-100);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 720px;
+  /* Above CookieConsentBanner (z-index: 200) and the floating .nav (1000). */
+  z-index: 1000;
 }
 
 @media (min-width: 720px) {
   .header {
-    padding: 20px 32px;
+    padding: 14px 32px;
   }
+}
+
+.headerTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pageTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-black-700);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-left: -4px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--color-black-600);
+  cursor: pointer;
+}
+
+.backButton:hover {
+  background: var(--color-gray-50);
 }
 
 .logoutButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--color-gray-50);
   color: var(--color-black-600);
   cursor: pointer;
@@ -54,12 +90,27 @@
 .content {
   flex: 1;
   padding: 20px;
+  /* Header is position: fixed (removed from flow) — reserve its height. */
+  padding-top: 68px;
   padding-bottom: 96px;
 }
 
 @media (min-width: 720px) {
   .content {
     padding: 32px 40px 108px;
+    padding-top: 84px;
+  }
+}
+
+/* No floating nav to clear on this page — its own fixed composer reserves
+   whatever bottom space it needs instead (see PatientMessagesPageContent). */
+.contentNoNav {
+  padding-bottom: 20px;
+}
+
+@media (min-width: 720px) {
+  .contentNoNav {
+    padding-bottom: 32px;
   }
 }
 
@@ -67,6 +118,9 @@
   position: fixed;
   bottom: 16px;
   left: 50%;
+  /* Above CookieConsentBanner (z-index: 200) — it's fixed to the bottom of
+     the viewport too and would otherwise intercept clicks on this nav. */
+  z-index: 1000;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -88,12 +142,12 @@
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
+  gap: 6px;
+  padding: 8px 14px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  line-height: 18px;
+  line-height: 16px;
   white-space: nowrap;
   color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
@@ -110,4 +164,17 @@
 .navItemActive {
   color: var(--color-primary-100);
   background: rgba(255, 255, 255, 0.14);
+}
+
+/* Same breakpoint/approach as the staff dashboard's own BottomNav: below
+   this width, icons-only reads cleaner than a horizontally-scrolling pill
+   with four labels squeezed into it. */
+@media (max-width: 480px) {
+  .navLabel {
+    display: none;
+  }
+
+  .navItem {
+    padding: 10px;
+  }
 }

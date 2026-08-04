@@ -1,8 +1,15 @@
+import type {
+  BookingBranch,
+  BookingConfirmation,
+  BookingDoctor,
+  BookingServiceCategory,
+} from '@/common/types/booking';
 import type { ApiPatientMessage } from '@/common/types/chat';
 import type { PaginatedResult } from '@/common/types/pagination';
 import type {
   PatientPortalAppointment,
   PatientPortalAppointmentScope,
+  PatientPortalBookingPayload,
   PatientPortalProfile,
   PatientPortalReview,
 } from '@/common/types/patient-portal';
@@ -85,5 +92,63 @@ export const submitMyReview = (
 ): Promise<PatientPortalReview> =>
   apiFetch<PatientPortalReview>(accessToken, `/api/patient/appointments/${appointmentId}/review`, {
     method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+
+export const fetchMyBookingBranches = (
+  accessToken: string,
+  signal?: AbortSignal,
+): Promise<BookingBranch[]> =>
+  apiFetch<BookingBranch[]>(accessToken, '/api/patient/booking/branches', { signal });
+
+export const fetchMyBookingServices = (
+  accessToken: string,
+  signal?: AbortSignal,
+): Promise<BookingServiceCategory[]> =>
+  apiFetch<BookingServiceCategory[]>(accessToken, '/api/patient/booking/services', { signal });
+
+export const fetchMyBookingDoctors = (
+  accessToken: string,
+  params: { serviceId: string },
+  signal?: AbortSignal,
+): Promise<BookingDoctor[]> => {
+  const query = new URLSearchParams(params);
+  return apiFetch<BookingDoctor[]>(
+    accessToken,
+    `/api/patient/booking/doctors?${query.toString()}`,
+    {
+      signal,
+    },
+  );
+};
+
+export const fetchMyBookingDays = (
+  accessToken: string,
+  params: { doctorProfileId: string; serviceId: string; branchId: string; month: string },
+  signal?: AbortSignal,
+): Promise<string[]> => {
+  const query = new URLSearchParams(params);
+  return apiFetch<string[]>(accessToken, `/api/patient/booking/days?${query.toString()}`, {
+    signal,
+  });
+};
+
+export const fetchMyBookingSlots = (
+  accessToken: string,
+  params: { doctorProfileId: string; serviceId: string; branchId: string; date: string },
+  signal?: AbortSignal,
+): Promise<string[]> => {
+  const query = new URLSearchParams(params);
+  return apiFetch<string[]>(accessToken, `/api/patient/booking/slots?${query.toString()}`, {
+    signal,
+  });
+};
+
+export const createMyBooking = (
+  accessToken: string,
+  payload: PatientPortalBookingPayload,
+): Promise<BookingConfirmation> =>
+  apiFetch<BookingConfirmation>(accessToken, '/api/patient/booking', {
+    method: 'POST',
     body: JSON.stringify(payload),
   });

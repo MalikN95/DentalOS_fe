@@ -59,9 +59,16 @@ export const AppointmentsBoard = ({
 
   return (
     <div className={`${styles.card} ${className ?? ''}`} style={style}>
-      <div className={styles.cardHeader}>
+      <div
+        className={`${styles.cardHeader} ${!title && showDoctorFilter ? styles.cardHeaderMobileCollapsed : ''}`}
+      >
         <span className={styles.cardTitle}>{title ?? ''}</span>
-        <Button variant="soft" className={styles.addButton} onClick={onAddClick}>
+
+        <Button
+          variant="soft"
+          className={`${styles.addButton} ${showDoctorFilter ? styles.addButtonDesktopOnly : ''}`}
+          onClick={onAddClick}
+        >
           {t.appointments.newAppointment}
         </Button>
       </div>
@@ -79,6 +86,13 @@ export const AppointmentsBoard = ({
           onToggleDoctor={toggleDoctor}
           onToggleAll={toggleAll}
           showDoctorFilter={showDoctorFilter}
+          mobileAction={
+            showDoctorFilter ? (
+              <Button variant="soft" className={styles.mobileAddButton} onClick={onAddClick}>
+                {t.appointments.newAppointmentShort}
+              </Button>
+            ) : null
+          }
         />
 
         <div className={styles.board}>

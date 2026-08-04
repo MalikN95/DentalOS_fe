@@ -19,6 +19,15 @@ export const ChatsPageContent = () => {
   const t = dict.chats;
   const currentUser = useAppSelector(selectCurrentUser);
   const [selection, setSelection] = useState<ChatSelection>({ type: 'team' });
+  // Only meaningful on mobile, where the sidebar and the thread share one pane.
+  const [isThreadOpenOnMobile, setIsThreadOpenOnMobile] = useState(false);
+
+  const handleSelect = (next: ChatSelection) => {
+    setSelection(next);
+    setIsThreadOpenOnMobile(true);
+  };
+
+  const handleBack = () => setIsThreadOpenOnMobile(false);
 
   const { messages: teamMessages, isLoading: isTeamLoading, errorMessage: teamError } =
     useTeamChatMessages();
@@ -42,8 +51,9 @@ export const ChatsPageContent = () => {
   return (
     <div className={styles.page}>
       <ChatSidebar
+        className={isThreadOpenOnMobile ? styles.hiddenOnMobile : undefined}
         selection={selection}
-        onSelect={setSelection}
+        onSelect={handleSelect}
         teamChatLabel={t.teamChatName}
         teamChatPreview={teamChatPreview}
         patientsHeading={t.patientsHeading}
@@ -56,6 +66,7 @@ export const ChatsPageContent = () => {
 
       {selection.type === 'team' ? (
         <TeamChatThread
+          className={isThreadOpenOnMobile ? undefined : styles.hiddenOnMobile}
           title={t.teamChatName}
           messages={teamMessages}
           currentUserId={currentUser?.id ?? ''}
@@ -66,9 +77,12 @@ export const ChatsPageContent = () => {
           sendLabel={t.send}
           isSending={sendTeamMessage.isPending}
           onSend={(body) => sendTeamMessage.mutate(body)}
+          onBack={handleBack}
+          backLabel={t.back}
         />
       ) : (
         <PatientMessageThread
+          className={isThreadOpenOnMobile ? undefined : styles.hiddenOnMobile}
           patientName={selectedConversation?.patientName ?? ''}
           messages={patientMessages}
           isLoading={isPatientLoading}
@@ -76,6 +90,8 @@ export const ChatsPageContent = () => {
           emptyLabel={t.patientMessagesEmpty}
           sentByTemplate={t.sentBy}
           automaticLabel={t.automatic}
+          onBack={handleBack}
+          backLabel={t.back}
         />
       )}
     </div>

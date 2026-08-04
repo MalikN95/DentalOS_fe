@@ -63,6 +63,14 @@ export const formatMoney = (value: string, currency = 'RUB'): string => {
   const amount = Number(value);
   if (Number.isNaN(amount)) return value;
 
+  // Intl has no dedicated symbol for KGS in most locales/ICU builds and
+  // falls back to the bare ISO code ("1 500 KGS") — the clinic wants the
+  // actual currency name ("сом") instead, so format the number plainly and
+  // append it ourselves rather than relying on Intl's currency display.
+  if (currency === 'KGS') {
+    return `${amount.toLocaleString('ru-RU', { maximumFractionDigits: 0 })} сом`;
+  }
+
   try {
     return new Intl.NumberFormat('ru-RU', {
       style: 'currency',

@@ -30,6 +30,8 @@ type AppointmentsBoardSidebarProps = {
   onToggleAll: () => void;
   /** Hides the doctor filter checklist — pointless when there's only ever one doctor to filter by. */
   showDoctorFilter?: boolean;
+  /** Pinned at the end of this row on mobile, next to the legend trigger — lets the board's "+ New appointment" button share the line instead of sitting alone above it. */
+  mobileAction?: React.ReactNode;
   className?: string;
 };
 
@@ -39,6 +41,7 @@ export const AppointmentsBoardSidebar = ({
   onToggleDoctor,
   onToggleAll,
   showDoctorFilter = true,
+  mobileAction,
   className,
 }: AppointmentsBoardSidebarProps) => {
   const { t } = useTranslation();
@@ -130,6 +133,8 @@ export const AppointmentsBoardSidebar = ({
 
         {isLegendOpen ? <div className={styles.legendPopover}>{legendItems}</div> : null}
       </div>
+
+      {mobileAction ? <div className={styles.mobileActionSlot}>{mobileAction}</div> : null}
     </aside>
   );
 };
