@@ -25,7 +25,9 @@
   background: rgb(255 255 255 / 85%);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 1px 0 var(--color-gray-50), 0 16px 32px -20px rgb(92 89 232 / 22%);
+  box-shadow:
+    0 1px 0 var(--color-gray-50),
+    0 16px 32px -20px rgb(92 89 232 / 22%);
 }
 
 .nav::after {
@@ -35,7 +37,12 @@
   right: 0;
   bottom: -1px;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-primary-500), var(--color-primary-200) 45%, transparent 80%);
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-500),
+    var(--color-primary-200) 45%,
+    transparent 80%
+  );
   opacity: 0.8;
 }
 
@@ -362,6 +369,21 @@
   height: 7px;
   border-radius: 50%;
   background: var(--color-primary-500);
+}
+
+/* ---------- Product showcase ---------- */
+.showcaseSection {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 56px 24px 64px;
+}
+
+.showcaseSubtitle {
+  text-align: center;
+  font-size: 14.5px;
+  color: var(--color-black-500);
+  max-width: 52ch;
+  margin: 0 auto 32px;
 }
 
 /* ---------- Features ---------- */

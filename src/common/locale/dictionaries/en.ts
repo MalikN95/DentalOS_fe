@@ -564,7 +564,8 @@ export const en: Dictionary = {
     notifyPush: 'Browser push',
     notificationsNone: 'Disabled',
     loginCode: 'Login code (test only)',
-    loginCodeHint: "Only visible until WhatsApp is configured — hides itself once real sending is live",
+    loginCodeHint:
+      'Only visible until WhatsApp is configured — hides itself once real sending is live',
     showLoginCode: 'Show code',
     hideLoginCode: 'Hide code',
   },
@@ -971,6 +972,42 @@ export const en: Dictionary = {
     visitInTreatment: 'In treatment',
     visitOnlineBooking: 'Online booking · +3 today',
     trustText: 'clinics already run their appointments through DentalOS',
+    showcaseTitle: 'See the real interface',
+    showcaseSubtitle: 'Not mockups — the same screens the team uses every day.',
+    showcaseTabBoard: 'Appointments board',
+    showcaseTabChart: 'Patient chart',
+    showcaseTabBooking: 'Online booking',
+    showcaseTabFinance: 'Finance',
+    showcaseTabReviews: 'Reviews & chat',
+    showcaseBoardTitle: 'Every doctor and cabinet on one screen',
+    showcaseBoardText:
+      "Each appointment is a color-coded card by status — see who's arrived, who's in treatment, and who's still waiting.",
+    showcaseBoardPoint1: 'New appointment in 3 clicks: branch → service → doctor and time',
+    showcaseBoardPoint2:
+      'Doctor availability and working hours are checked automatically — a conflict is flagged right away',
+    showcaseChartTitle: 'Dental chart and treatment plan, right on the patient card',
+    showcaseChartText:
+      'Every one of 32 teeth, its history, and the cost of treatment — no paper charts, no lost X-rays.',
+    showcaseChartPoint1: 'Chart marks: caries, filling, crown, implant, extracted',
+    showcaseChartPoint2: 'Treatment plan with per-item progress and a running total',
+    showcaseBookingTitle: 'Patients book themselves — on your own page',
+    showcaseBookingText:
+      'A widget at a link like dentalos.ru/book/{slug}: branch, service, doctor and time — no phone call to the front desk.',
+    showcaseBookingPoint1:
+      "Only truly open slots — the doctor's schedule and time off are already factored in",
+    showcaseBookingPoint2: 'Confirmation goes straight to the patient over WhatsApp and email',
+    showcaseFinanceTitle: 'Invoices raise themselves, payments stay in view',
+    showcaseFinanceText:
+      'An invoice is created together with the appointment. All that is left is to take the payment and check the clinic total for the period.',
+    showcaseFinancePoint1: 'Cash, card, transfer, gift certificate and membership — in one report',
+    showcaseFinancePoint2:
+      "A patient's balance is visible right on the appointment card, no trip to accounting",
+    showcaseReviewsTitle: 'Reviews and patient messaging, no third-party chat app',
+    showcaseReviewsText:
+      "A post-visit rating lands on the doctor's card, and patient messages land in the clinic's shared chat.",
+    showcaseReviewsPoint1: 'Feature your best reviews on the public clinic page',
+    showcaseReviewsPoint2:
+      'Patient portal: their own appointments, visit history and messages with the clinic',
     featuresTitle: 'Everything a clinic needs, in one place',
     feature1Title: 'Appointments board',
     feature1Text: "All doctors' appointments on one calendar, color-coded by status.",
@@ -984,6 +1021,15 @@ export const en: Dictionary = {
     feature5Text: "Post-visit ratings — on the doctor's card and on the future public showcase.",
     feature6Title: 'Treatment plans',
     feature6Text: 'Build a plan from priced services and track its progress.',
+    feature7Title: 'Medical records & documents',
+    feature7Text:
+      "Allergies, chronic conditions, X-rays and files — a patient's whole history on one card.",
+    feature8Title: 'Patient messaging',
+    feature8Text:
+      'Patient conversations and the clinic team chat, in one place — no third-party messenger.',
+    feature9Title: 'Patient portal',
+    feature9Text:
+      'Patients see their appointments, treatment history and messages with the clinic without calling the front desk.',
     stepsTitle: 'How to get started',
     step1Title: 'Sign up your clinic',
     step1Text: 'You get your own booking link, like dentalos.ru/book/maximum.',

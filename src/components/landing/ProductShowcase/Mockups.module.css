@@ -1,0 +1,341 @@
+.window {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 48px -28px rgb(51 56 67 / 22%);
+}
+
+.windowBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--color-gray-25);
+  border-bottom: 1px solid var(--color-gray-50);
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-gray-200);
+}
+
+.windowTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-black-500);
+}
+
+.windowBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+/* ---------- Rows (board / finance) ---------- */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--color-gray-50);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.rowName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-black-700);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowMeta {
+  font-size: 12px;
+  color: var(--color-black-500);
+}
+
+/* ---------- Tooth chart ---------- */
+.teethRow {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tooth {
+  width: 26px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid var(--color-gray-100);
+  background: var(--color-gray-25);
+  color: var(--color-black-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+.tooth.caries {
+  background: var(--color-red-100);
+  border-color: var(--color-red-200);
+  color: var(--color-red-600);
+}
+
+.tooth.filling {
+  background: var(--color-blue-100);
+  border-color: var(--color-blue-200);
+  color: var(--color-blue-600);
+}
+
+.tooth.crown {
+  background: var(--color-orange-100);
+  border-color: var(--color-orange-200);
+  color: var(--color-orange-600);
+}
+
+/* ---------- Treatment plan ---------- */
+.planRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.planCheck {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+}
+
+.planCheckDone {
+  background: var(--color-green-500);
+  border-color: var(--color-green-500);
+}
+
+.planRow .rowName {
+  flex: 1;
+  font-weight: 500;
+}
+
+.planPrice {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-black-700);
+  white-space: nowrap;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 6px;
+  border-radius: 100px;
+  background: var(--color-gray-100);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 100px;
+  background: var(--color-primary-500);
+}
+
+/* ---------- Booking steps ---------- */
+.stepsRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stepChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.stepDone {
+  background: var(--color-green-100);
+  color: var(--color-green-600);
+}
+
+.stepActive {
+  background: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+.doctorCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-gray-25);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-orange-500);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chipsRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.slotChip {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-gray-100);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--color-black-600);
+}
+
+.slotActive {
+  background: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+.chip {
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: var(--color-gray-25);
+  border: 1px solid var(--color-gray-100);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-black-600);
+}
+
+.successBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--color-green-100);
+  color: var(--color-green-600);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Finance stats ---------- */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--color-gray-25);
+}
+
+.statValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-black-700);
+  white-space: nowrap;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: var(--color-black-500);
+}
+
+/* ---------- Reviews & chat ---------- */
+.reviewRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.reviewRow .rowMeta {
+  font-style: italic;
+}
+
+.chatThread {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chatBubbleIn,
+.chatBubbleOut {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  line-height: 18px;
+}
+
+.chatBubbleIn {
+  align-self: flex-start;
+  background: var(--color-gray-50);
+  color: var(--color-black-700);
+  border-bottom-left-radius: 4px;
+}
+
+.chatBubbleOut {
+  align-self: flex-end;
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+  border-bottom-right-radius: 4px;
+}
+
+@media (max-width: 420px) {
+  .statsRow {
+    grid-template-columns: 1fr;
+  }
+}

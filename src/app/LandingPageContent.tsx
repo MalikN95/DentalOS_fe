@@ -6,13 +6,27 @@ import { Badge, Button } from '@/components/ui';
 import {
   CalendarIcon,
   ClockIcon,
+  FileTextIcon,
   Logo,
+  MessageIcon,
+  PatientsIcon,
   StaffIcon,
   StarIcon,
   ToothIcon,
   WalletIcon,
 } from '@/components/icons/icons';
 import { openCookiePreferences } from '@/helpers/cookie-consent';
+import {
+  ProductShowcase,
+  type ShowcaseItem,
+} from '@/components/landing/ProductShowcase/ProductShowcase';
+import {
+  BoardMockup,
+  BookingMockup,
+  ChartMockup,
+  FinanceMockup,
+  ReviewsMockup,
+} from '@/components/landing/ProductShowcase/Mockups';
 import styles from './LandingPageContent.module.css';
 
 const SALES_EMAIL = 'sales@dentalos.ru';
@@ -27,6 +41,52 @@ export const LandingPageContent = () => {
     { icon: WalletIcon, title: t.landing.feature4Title, text: t.landing.feature4Text },
     { icon: StarIcon, title: t.landing.feature5Title, text: t.landing.feature5Text },
     { icon: ToothIcon, title: t.landing.feature6Title, text: t.landing.feature6Text },
+    { icon: FileTextIcon, title: t.landing.feature7Title, text: t.landing.feature7Text },
+    { icon: MessageIcon, title: t.landing.feature8Title, text: t.landing.feature8Text },
+    { icon: PatientsIcon, title: t.landing.feature9Title, text: t.landing.feature9Text },
+  ];
+
+  const showcaseItems: ShowcaseItem[] = [
+    {
+      id: 'board',
+      tabLabel: t.landing.showcaseTabBoard,
+      title: t.landing.showcaseBoardTitle,
+      text: t.landing.showcaseBoardText,
+      points: [t.landing.showcaseBoardPoint1, t.landing.showcaseBoardPoint2],
+      render: () => <BoardMockup />,
+    },
+    {
+      id: 'chart',
+      tabLabel: t.landing.showcaseTabChart,
+      title: t.landing.showcaseChartTitle,
+      text: t.landing.showcaseChartText,
+      points: [t.landing.showcaseChartPoint1, t.landing.showcaseChartPoint2],
+      render: () => <ChartMockup />,
+    },
+    {
+      id: 'booking',
+      tabLabel: t.landing.showcaseTabBooking,
+      title: t.landing.showcaseBookingTitle,
+      text: t.landing.showcaseBookingText,
+      points: [t.landing.showcaseBookingPoint1, t.landing.showcaseBookingPoint2],
+      render: () => <BookingMockup />,
+    },
+    {
+      id: 'finance',
+      tabLabel: t.landing.showcaseTabFinance,
+      title: t.landing.showcaseFinanceTitle,
+      text: t.landing.showcaseFinanceText,
+      points: [t.landing.showcaseFinancePoint1, t.landing.showcaseFinancePoint2],
+      render: () => <FinanceMockup />,
+    },
+    {
+      id: 'reviews',
+      tabLabel: t.landing.showcaseTabReviews,
+      title: t.landing.showcaseReviewsTitle,
+      text: t.landing.showcaseReviewsText,
+      points: [t.landing.showcaseReviewsPoint1, t.landing.showcaseReviewsPoint2],
+      render: () => <ReviewsMockup />,
+    },
   ];
 
   const steps = [
@@ -118,8 +178,15 @@ export const LandingPageContent = () => {
         </div>
       </section>
 
-      <section id="features" className={styles.features}>
+      <section className={styles.showcaseSection}>
         <span className={styles.sectionEyebrow}>02</span>
+        <h2 className={styles.sectionTitle}>{t.landing.showcaseTitle}</h2>
+        <p className={styles.showcaseSubtitle}>{t.landing.showcaseSubtitle}</p>
+        <ProductShowcase items={showcaseItems} />
+      </section>
+
+      <section id="features" className={styles.features}>
+        <span className={styles.sectionEyebrow}>03</span>
         <h2 className={styles.sectionTitle}>{t.landing.featuresTitle}</h2>
         <div className={styles.featureGrid}>
           {features.map((feature) => (
@@ -135,7 +202,7 @@ export const LandingPageContent = () => {
       </section>
 
       <section className={styles.steps}>
-        <span className={styles.sectionEyebrow}>03</span>
+        <span className={styles.sectionEyebrow}>04</span>
         <h2 className={styles.sectionTitle}>{t.landing.stepsTitle}</h2>
         <div className={styles.stepsRow}>
           {steps.map((step, index) => (
@@ -149,7 +216,7 @@ export const LandingPageContent = () => {
       </section>
 
       <section id="pricing" className={styles.pricing}>
-        <span className={styles.sectionEyebrowLight}>04</span>
+        <span className={styles.sectionEyebrowLight}>05</span>
         <h2>{t.landing.pricingTitle}</h2>
         <p>{t.landing.pricingText}</p>
         <a href={`mailto:${SALES_EMAIL}`}>
