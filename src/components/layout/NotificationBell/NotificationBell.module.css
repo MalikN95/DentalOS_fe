@@ -105,6 +105,25 @@
   background: var(--color-gray-400);
 }
 
+@media (max-width: 640px) {
+  /* Anchored to the bell's own right edge, the panel overflows off-screen
+     on narrow headers where the bell isn't near the viewport edge — pin it
+     to the viewport instead. 68px = 60px header height + the 8px gap used
+     above. */
+  .panel {
+    position: fixed;
+    top: 68px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+  }
+
+  .list {
+    max-height: calc(100vh - 140px);
+  }
+}
+
 .empty {
   padding: 24px 14px;
   text-align: center;

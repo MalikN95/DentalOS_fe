@@ -43,6 +43,10 @@
   flex: 1;
   min-height: 0;
   padding-left: 14px;
+  /* Without this, setting overflow-y below makes the UA treat overflow-x as
+     "auto" too (per the CSS overflow spec) — any child that's even 1px too
+     wide then opens a horizontal scrollbar here instead of just wrapping. */
+  overflow-x: hidden;
 }
 
 .board {
@@ -50,6 +54,7 @@
   min-width: 0;
   min-height: 0;
   padding: 4px 14px 14px;
+  overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--color-gray-200) transparent;

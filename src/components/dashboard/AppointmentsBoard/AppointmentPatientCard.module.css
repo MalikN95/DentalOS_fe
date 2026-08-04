@@ -227,7 +227,11 @@
   }
 
   .info {
-    width: auto;
+    /* flex-basis 0 (not auto) — auto would size the hypothetical main size
+       off the unshrunk content (e.g. the long service/doctor line), which
+       made flex-wrap pack quickActions onto its own line prematurely. */
+    flex: 1;
+    min-width: 0;
   }
 
   .timelineWrap {

@@ -1,7 +1,12 @@
 .shell {
   display: flex;
   flex-direction: column;
+  /* 100vh is measured against the browser chrome's largest state — once the
+     address bar collapses on scroll, the real viewport grows past it,
+     exposing the page background (and the fixed BottomNav floating on it)
+     below the shell. 100dvh tracks the actual visible height instead. */
   height: 100vh;
+  height: 100dvh;
   background: var(--color-gray-25);
   overflow: hidden;
 }
