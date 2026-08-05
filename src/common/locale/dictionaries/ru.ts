@@ -863,6 +863,7 @@ export const ru = {
     loadError: 'Не удалось загрузить данные. Обновите страницу.',
     back: 'Назад',
     stepOf: 'Шаг {current} из {total}',
+    headerLoginCta: 'Войти',
 
     branchTitle: 'Выберите филиал',
 

@@ -863,6 +863,7 @@ export const ky: Dictionary = {
     loadError: 'Маалыматтарды жүктөө мүмкүн болбоду. Баракчаны жаңыртыңыз.',
     back: 'Артка',
     stepOf: '{total} кадамдын {current}',
+    headerLoginCta: 'Кирүү',
 
     branchTitle: 'Филиалды тандаңыз',
 

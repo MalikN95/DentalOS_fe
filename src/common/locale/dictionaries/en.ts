@@ -861,6 +861,7 @@ export const en: Dictionary = {
     loadError: 'Failed to load data. Please refresh the page.',
     back: 'Back',
     stepOf: 'Step {current} of {total}',
+    headerLoginCta: 'Log in',
 
     branchTitle: 'Choose a branch',
 

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type { BookingStep } from '@/hooks/useBookingWizard';
 import { useBookingWizard } from '@/hooks/useBookingWizard';
@@ -124,6 +125,9 @@ export const BookingPageContent = ({ clinicSlug }: BookingPageContentProps) => {
           <Logo height={22} />
         )}
         <span className={styles.clinicName}>{clinic?.name ?? ''}</span>
+        <Link href={`/portal/${clinicSlug}`} className={styles.headerLoginLink}>
+          {t.headerLoginCta}
+        </Link>
       </header>
 
       <div className={styles.card}>
