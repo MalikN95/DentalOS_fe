@@ -914,6 +914,14 @@ export const ru = {
     confirmationPortalText:
       'Войдите в личный кабинет пациента, чтобы видеть свои записи и переписку с клиникой.',
     confirmationPortalCta: 'Войти в личный кабинет',
+    confirmationEnableNotificationsTitle: 'Включите уведомления',
+    confirmationEnableNotificationsText:
+      'Получайте напоминания о визите и ответы клиники прямо в браузере.',
+    confirmationEnableNotificationsCta: 'Включить уведомления',
+    confirmationInstallAppTitle: 'Установите приложение',
+    confirmationInstallAppText:
+      'Добавьте DentalOS на главный экран — быстрый доступ без браузера.',
+    confirmationInstallAppCta: 'Установить приложение',
   },
   reviews: {
     title: 'Отзывы',

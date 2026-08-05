@@ -914,6 +914,14 @@ export const ky: Dictionary = {
     confirmationPortalText:
       'Жазууларыңызды көрүү жана клиника менен байланышуу үчүн бейтап кабинетине кириңиз.',
     confirmationPortalCta: 'Бейтап кабинетине кирүү',
+    confirmationEnableNotificationsTitle: 'Билдирүүлөрдү иштетиңиз',
+    confirmationEnableNotificationsText:
+      'Кабыл алуу жөнүндө эскертмелерди жана клиниканын жоопторун браузерден алыңыз.',
+    confirmationEnableNotificationsCta: 'Билдирүүлөрдү иштетүү',
+    confirmationInstallAppTitle: 'Тиркемени орнотуңуз',
+    confirmationInstallAppText:
+      'DentalOS\'ту башкы экранга кошуңуз — браузерсиз тез жетүү үчүн.',
+    confirmationInstallAppCta: 'Тиркемени орнотуу',
   },
   reviews: {
     title: 'Пикирлер',

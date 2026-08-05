@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { BookingConfirmation } from '@/common/types/booking';
+import type { PushPermissionStatus } from '@/hooks/useBookingWizard';
 import { CheckIcon } from '@/components/icons/icons';
 import { Button } from '@/components/ui';
 import { formatDate, formatTime } from '@/helpers/date';
@@ -11,12 +12,20 @@ import styles from './BookingConfirmationStep.module.css';
 type BookingConfirmationStepProps = {
   confirmation: BookingConfirmation;
   clinicSlug: string;
+  pushPermission: PushPermissionStatus;
+  onEnableNotifications: () => void;
+  canInstallApp: boolean;
+  onInstallApp: () => void;
   onBookAnother: () => void;
 };
 
 export const BookingConfirmationStep = ({
   confirmation,
   clinicSlug,
+  pushPermission,
+  onEnableNotifications,
+  canInstallApp,
+  onInstallApp,
   onBookAnother,
 }: BookingConfirmationStepProps) => {
   const { t: dict } = useTranslation();
@@ -51,6 +60,26 @@ export const BookingConfirmationStep = ({
           <span>{confirmation.branchAddress}</span>
         </div>
       </div>
+
+      {pushPermission !== 'granted' && pushPermission !== 'unsupported' ? (
+        <div className={styles.portalPromo}>
+          <span className={styles.portalPromoTitle}>{t.confirmationEnableNotificationsTitle}</span>
+          <p className={styles.portalPromoText}>{t.confirmationEnableNotificationsText}</p>
+          <Button className={styles.portalPromoButton} onClick={onEnableNotifications}>
+            {t.confirmationEnableNotificationsCta}
+          </Button>
+        </div>
+      ) : null}
+
+      {canInstallApp ? (
+        <div className={styles.portalPromo}>
+          <span className={styles.portalPromoTitle}>{t.confirmationInstallAppTitle}</span>
+          <p className={styles.portalPromoText}>{t.confirmationInstallAppText}</p>
+          <Button className={styles.portalPromoButton} onClick={onInstallApp}>
+            {t.confirmationInstallAppCta}
+          </Button>
+        </div>
+      ) : null}
 
       <div className={styles.portalPromo}>
         <span className={styles.portalPromoTitle}>{t.confirmationPortalTitle}</span>

@@ -3,6 +3,7 @@
 import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type { BookingStep } from '@/hooks/useBookingWizard';
 import { useBookingWizard } from '@/hooks/useBookingWizard';
+import { useInstallPrompt } from '@/hooks/useInstallPrompt';
 import { BookingConfirmationStep } from '@/components/booking/BookingConfirmationStep/BookingConfirmationStep';
 import { BookingDateTimeStep } from '@/components/booking/BookingDateTimeStep/BookingDateTimeStep';
 import { BookingDetailsStep } from '@/components/booking/BookingDetailsStep/BookingDetailsStep';
@@ -19,6 +20,7 @@ export const BookingPageContent = ({ clinicSlug }: BookingPageContentProps) => {
   const { t: dict } = useTranslation();
   const t = dict.booking;
   const wizard = useBookingWizard(clinicSlug);
+  const installPrompt = useInstallPrompt();
 
   const isInitialLoading =
     wizard.clinicQuery.isLoading || wizard.branchesQuery.isLoading || wizard.servicesQuery.isLoading;
@@ -100,6 +102,10 @@ export const BookingPageContent = ({ clinicSlug }: BookingPageContentProps) => {
         <BookingConfirmationStep
           confirmation={wizard.bookingMutation.data}
           clinicSlug={clinicSlug}
+          pushPermission={wizard.pushPermission}
+          onEnableNotifications={wizard.enablePushNotifications}
+          canInstallApp={installPrompt.canInstall}
+          onInstallApp={installPrompt.promptInstall}
           onBookAnother={() => window.location.reload()}
         />
       );

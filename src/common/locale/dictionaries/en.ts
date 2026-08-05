@@ -912,6 +912,14 @@ export const en: Dictionary = {
     confirmationPortalText:
       'Log into the patient portal to see your appointments and message the clinic.',
     confirmationPortalCta: 'Log into patient portal',
+    confirmationEnableNotificationsTitle: 'Turn on notifications',
+    confirmationEnableNotificationsText:
+      'Get appointment reminders and clinic replies right in your browser.',
+    confirmationEnableNotificationsCta: 'Enable notifications',
+    confirmationInstallAppTitle: 'Install the app',
+    confirmationInstallAppText:
+      'Add DentalOS to your home screen for quick access without a browser.',
+    confirmationInstallAppCta: 'Install app',
   },
   reviews: {
     title: 'Reviews',

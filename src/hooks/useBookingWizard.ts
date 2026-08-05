@@ -19,6 +19,11 @@ import { getMessagingInstance } from '@/helpers/firebase';
 
 export type BookingStep = 'service' | 'doctor' | 'datetime' | 'details' | 'done';
 
+export type PushPermissionStatus = 'unsupported' | NotificationPermission;
+
+const readPushPermission = (): PushPermissionStatus =>
+  typeof Notification === 'undefined' ? 'unsupported' : Notification.permission;
+
 export type PatientDetailsValues = {
   firstName: string;
   lastName: string;
@@ -72,6 +77,7 @@ export const useBookingWizard = (clinicSlug: string) => {
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
   const [details, setDetails] = useState<PatientDetailsValues>(EMPTY_DETAILS);
+  const [pushPermission, setPushPermission] = useState<PushPermissionStatus>(readPushPermission);
 
   const clinicQuery = useQuery({
     queryKey: ['booking', clinicSlug, 'clinic'],
@@ -161,10 +167,20 @@ export const useBookingWizard = (clinicSlug: string) => {
       setStep('done');
 
       if (details.notifyPush) {
-        registerPushForBooking(clinicSlug, confirmation.patientId).catch(() => undefined);
+        registerPushForBooking(clinicSlug, confirmation.patientId)
+          .catch(() => undefined)
+          .finally(() => setPushPermission(readPushPermission()));
       }
     },
   });
+
+  const enablePushNotifications = async (): Promise<void> => {
+    const patientId = bookingMutation.data?.patientId;
+    if (!patientId) return;
+
+    await registerPushForBooking(clinicSlug, patientId).catch(() => undefined);
+    setPushPermission(readPushPermission());
+  };
 
   const selectService = (id: string) => {
     setServiceId(id);
@@ -258,6 +274,8 @@ export const useBookingWizard = (clinicSlug: string) => {
     details,
     setDetails,
     bookingMutation,
+    pushPermission,
+    enablePushNotifications,
     selectService,
     selectDoctor,
     selectDate,
