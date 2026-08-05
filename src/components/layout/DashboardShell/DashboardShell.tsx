@@ -14,6 +14,7 @@ import { useClinic } from '@/hooks/useClinic';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useMobileNav } from '@/hooks/useMobileNav';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { useSyncProfileFromServer } from '@/hooks/useSyncProfileFromServer';
 import { useTodayAppointments } from '@/hooks/useTodayAppointments';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/slices/auth/auth.slice';
@@ -33,6 +34,7 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
   // Mock fallback until real auth is wired to the API
   const user = useAppSelector(selectCurrentUser) ?? MOCK_USER;
   const accessToken = useAppSelector(selectAccessToken);
+  useSyncProfileFromServer();
   const { data: todayAppointments } = useTodayAppointments();
   const { data: clinic } = useClinic();
   const {
@@ -114,6 +116,9 @@ export const DashboardShell = ({ children }: DashboardShellProps) => {
         newPatientLabel={t.patients.newPatient}
         userName={`${user.firstName} ${user.lastName}`}
         userRole={userRole}
+        userAvatarUrl={user.avatarUrl}
+        accountHref="/account"
+        accountLabel={t.account.pageTitle}
         logoutLabel={t.nav.logout}
         onLogout={handleLogout}
         isMobileOpen={isMobileNavOpen}

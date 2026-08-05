@@ -2,7 +2,7 @@
 
 import { useCallback, useId, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useWatch } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import { STAFF_ROLES } from '@/common/types/staff';
 import { CalendarIcon, EditIcon, FileTextIcon } from '@/components/icons/icons';
@@ -11,7 +11,7 @@ import { ReviewsCard } from '@/components/reviews/ReviewsCard/ReviewsCard';
 import { DoctorScheduleExceptions } from '@/components/staff/DoctorScheduleExceptions/DoctorScheduleExceptions';
 import { DoctorScheduleSection } from '@/components/staff/DoctorScheduleSection/DoctorScheduleSection';
 import { DoctorServicesField } from '@/components/staff/DoctorServicesField/DoctorServicesField';
-import { Alert, Badge, Button, SwitchToggle, TextField } from '@/components/ui';
+import { Alert, Badge, Button, PhoneField, SwitchToggle, TextField } from '@/components/ui';
 import {
   NOTIFICATION_CHANNEL_COLOR,
   type NotificationChannelKey,
@@ -181,11 +181,18 @@ export const StaffDetailContent = ({ staffId }: StaffDetailContentProps) => {
                       error={errors.email?.message}
                       {...register('email')}
                     />
-                    <TextField
-                      label={t.phone}
-                      placeholder="+79001234567"
-                      error={errors.phone?.message}
-                      {...register('phone')}
+                    <Controller
+                      control={control}
+                      name="phone"
+                      render={({ field, fieldState }) => (
+                        <PhoneField
+                          label={t.phone}
+                          error={fieldState.error?.message}
+                          value={field.value ?? ''}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                        />
+                      )}
                     />
                     <label className={styles.field} htmlFor={roleFieldId}>
                       <span className={styles.label}>{t.role}</span>

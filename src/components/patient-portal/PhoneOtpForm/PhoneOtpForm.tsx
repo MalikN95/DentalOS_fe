@@ -2,7 +2,7 @@
 
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { PortalLoginStep } from '@/hooks/usePortalLogin';
-import { Alert, Button, TextField } from '@/components/ui';
+import { Alert, Button, PhoneField, TextField } from '@/components/ui';
 import styles from './PhoneOtpForm.module.css';
 
 type PhoneOtpFormProps = {
@@ -62,14 +62,11 @@ export const PhoneOtpForm = ({
 
       {step === 'phone' ? (
         <>
-          <TextField
+          <PhoneField
             label={t.patientPortal.phoneLabel}
-            type="tel"
-            autoComplete="tel"
-            placeholder={t.patientPortal.phonePlaceholder}
             value={phone}
             disabled={isSubmitting}
-            onChange={(event) => onPhoneChange(event.target.value)}
+            onChange={onPhoneChange}
           />
           <Button type="submit" disabled={isSubmitting} className={styles.submitButton}>
             {t.patientPortal.requestCodeButton}

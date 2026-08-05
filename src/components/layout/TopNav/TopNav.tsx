@@ -30,6 +30,9 @@ type TopNavProps = {
   newPatientLabel: string;
   userName: string;
   userRole: string;
+  userAvatarUrl?: string | null;
+  accountHref: string;
+  accountLabel: string;
   logoutLabel: string;
   onLogout: () => void;
   isMobileOpen: boolean;
@@ -50,6 +53,9 @@ export const TopNav = ({
   newPatientLabel,
   userName,
   userRole,
+  userAvatarUrl,
+  accountHref,
+  accountLabel,
   logoutLabel,
   onLogout,
   isMobileOpen,
@@ -114,13 +120,20 @@ export const TopNav = ({
           <div className={styles.profileGroup}>
             <NotificationBell />
 
-            <div className={styles.user}>
-              <span className={styles.avatar}>{getInitials(userName)}</span>
+            <Link href={accountHref} className={styles.user} title={accountLabel}>
+              <span className={styles.avatar}>
+                {userAvatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- presigned S3 URL
+                  <img src={userAvatarUrl} alt="" className={styles.avatarImage} />
+                ) : (
+                  getInitials(userName)
+                )}
+              </span>
               <span className={styles.userInfo}>
                 <span className={styles.userName}>{userName}</span>
                 <span className={styles.userRole}>{userRole}</span>
               </span>
-            </div>
+            </Link>
           </div>
 
           <button

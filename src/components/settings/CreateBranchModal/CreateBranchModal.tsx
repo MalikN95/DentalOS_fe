@@ -1,11 +1,11 @@
 'use client';
 
-import { useWatch, type UseFormReturn } from 'react-hook-form';
+import { Controller, useWatch, type UseFormReturn } from 'react-hook-form';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { BranchSettings, WorkingHours } from '@/common/types/settings';
 import type { CreateBranchFormValues } from '@/hooks/useBranchSettings';
-import { Alert, Button, Modal, SwitchToggle, TextField } from '@/components/ui';
+import { Alert, Button, Modal, PhoneField, SwitchToggle, TextField } from '@/components/ui';
 import { WorkingHoursEditor } from '@/components/settings/WorkingHoursEditor/WorkingHoursEditor';
 import styles from './CreateBranchModal.module.css';
 
@@ -87,7 +87,19 @@ export const CreateBranchModal = ({
 
       <div className={styles.grid}>
         <TextField label={t.name} error={errors.name?.message} {...register('name')} />
-        <TextField label={t.phone} error={errors.phone?.message} {...register('phone')} />
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field, fieldState }) => (
+            <PhoneField
+              label={t.phone}
+              error={fieldState.error?.message}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
+        />
         <TextField
           label={t.address}
           className={styles.gridFull}

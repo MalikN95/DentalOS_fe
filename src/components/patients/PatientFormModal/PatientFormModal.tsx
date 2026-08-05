@@ -5,7 +5,7 @@ import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { Patient } from '@/common/types/patient';
 import { StringTagField } from '@/components/patients/StringTagField/StringTagField';
-import { Alert, Button, Modal, SwitchToggle, TextField } from '@/components/ui';
+import { Alert, Button, Modal, PhoneField, SwitchToggle, TextField } from '@/components/ui';
 import { useAllergiesCatalog, useChronicDiseasesCatalog } from '@/hooks/usePatientClinicalCatalog';
 import { usePatientForm } from '@/hooks/usePatientForm';
 import styles from './PatientFormModal.module.css';
@@ -126,9 +126,8 @@ export const PatientFormModal = ({
           control={control}
           name="phone"
           render={({ field, fieldState }) => (
-            <TextField
+            <PhoneField
               label={t.phone}
-              placeholder="+79001234567"
               error={fieldState.error?.message}
               value={field.value}
               onChange={field.onChange}

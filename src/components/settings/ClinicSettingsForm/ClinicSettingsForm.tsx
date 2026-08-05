@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation, type Language } from '@/common/locale/LocaleProvider';
 import type { WorkingHours } from '@/common/types/settings';
-import { Alert, Button, SearchSelect, SwitchToggle, TextField } from '@/components/ui';
+import { Alert, Button, PhoneField, SearchSelect, SwitchToggle, TextField } from '@/components/ui';
 import { SaveSettingsModal } from '@/components/settings/SaveSettingsModal/SaveSettingsModal';
 import { WorkingHoursEditor } from '@/components/settings/WorkingHoursEditor/WorkingHoursEditor';
 import { useClinicSettings } from '@/hooks/useClinicSettings';
@@ -157,7 +157,19 @@ export const ClinicSettingsForm = () => {
 
       <div className={styles.grid}>
         <TextField label={t.address} error={errors.address?.message} {...register('address')} />
-        <TextField label={t.phone} error={errors.phone?.message} {...register('phone')} />
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field, fieldState }) => (
+            <PhoneField
+              label={t.phone}
+              error={fieldState.error?.message}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
+        />
         <TextField
           label={t.email}
           type="email"

@@ -33,7 +33,11 @@ export const requestClinicLogoUpload = (
     body: JSON.stringify({ contentType }),
   });
 
-export const uploadFileToPresignedUrl = async (uploadUrl: string, file: File): Promise<void> => {
+export const uploadFileToPresignedUrl = async (
+  uploadUrl: string,
+  file: File,
+  errorMessage = 'Не удалось загрузить логотип',
+): Promise<void> => {
   const response = await fetch(uploadUrl, {
     method: 'PUT',
     headers: {
@@ -43,7 +47,7 @@ export const uploadFileToPresignedUrl = async (uploadUrl: string, file: File): P
   });
 
   if (response.ok === false) {
-    throw new Error('Не удалось загрузить логотип');
+    throw new Error(errorMessage);
   }
 };
 

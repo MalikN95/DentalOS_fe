@@ -18,6 +18,7 @@ export { PlaceholderText } from './PlaceholderText/PlaceholderText';
 export { Pagination } from './Pagination/Pagination';
 export { PatientAvatar } from './PatientAvatar/PatientAvatar';
 export type { PatientAvatarSize } from './PatientAvatar/PatientAvatar';
+export { PhoneField } from './PhoneField/PhoneField';
 export { SearchSelect } from './SearchSelect/SearchSelect';
 export type { SearchSelectOption } from './SearchSelect/SearchSelect';
 export { Tabs } from './Tabs/Tabs';

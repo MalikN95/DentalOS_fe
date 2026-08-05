@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from './TimeSelect.module.css';
 
 type TimeSelectProps = {
@@ -71,14 +71,18 @@ export const TimeSelect = ({
   style,
 }: TimeSelectProps) => {
   const { hour, minute } = parseValue(value);
+  const [prevValue, setPrevValue] = useState(value);
   const [digits, setDigits] = useState(() => digitsOf(value));
   const [freshStart, setFreshStart] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  // Re-derive from a prop change during render (React's documented
+  // alternative to syncing props->state via an effect).
+  if (value !== prevValue) {
+    setPrevValue(value);
     setDigits(digitsOf(value));
     setFreshStart(true);
-  }, [value]);
+  }
 
   const commit = (fourDigits: string) => {
     onChange(`${fourDigits.slice(0, 2)}:${fourDigits.slice(2, 4)}`);
@@ -150,11 +154,12 @@ export const TimeSelect = ({
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     event.preventDefault();
     const pasted = event.clipboardData.getData('text').replace(/\D/g, '');
-    let next = freshStart ? '' : digits;
-    for (const digit of pasted) {
-      if (next.length >= 4) break;
-      if (isDigitAllowed(next, digit)) next += digit;
-    }
+    const next = pasted
+      .split('')
+      .reduce(
+        (acc, digit) => (acc.length < 4 && isDigitAllowed(acc, digit) ? acc + digit : acc),
+        freshStart ? '' : digits,
+      );
     setDigits(next);
     setFreshStart(false);
     if (next.length === 4) commit(next);

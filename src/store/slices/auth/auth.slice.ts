@@ -8,6 +8,7 @@ export type AuthUser = {
   firstName: string;
   lastName: string;
   role: string;
+  avatarUrl?: string | null;
   // Patient portal only — lets the auth guard redirect back to the right
   // clinic's /portal/{slug} login on logout/401 (staff logins don't set this).
   clinicSlug?: string;
@@ -42,8 +43,15 @@ export const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
     },
+    // Patches the current user in place — used after GET/PATCH /auth/me so
+    // TopNav etc. reflect the real name/photo without a full re-login.
+    updateProfile: (state, action: PayloadAction<Partial<AuthUser>>) => {
+      if (state.user) {
+        Object.assign(state.user, action.payload);
+      }
+    },
     logout: () => initialState,
   },
 });
 
-export const { setCredentials, setTokens, logout } = authSlice.actions;
+export const { setCredentials, setTokens, updateProfile, logout } = authSlice.actions;

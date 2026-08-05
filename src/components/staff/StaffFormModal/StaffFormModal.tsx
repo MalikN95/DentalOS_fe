@@ -1,14 +1,14 @@
 'use client';
 
 import { useId } from 'react';
-import { useWatch } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { StaffMember } from '@/common/types/staff';
 import { STAFF_ROLES } from '@/common/types/staff';
 import { StringTagField } from '@/components/patients/StringTagField/StringTagField';
 import { DoctorScheduleSection } from '@/components/staff/DoctorScheduleSection/DoctorScheduleSection';
 import { DoctorServicesField } from '@/components/staff/DoctorServicesField/DoctorServicesField';
-import { Alert, Button, Modal, SwitchToggle, TextField } from '@/components/ui';
+import { Alert, Button, Modal, PhoneField, SwitchToggle, TextField } from '@/components/ui';
 import { useBranchOptions } from '@/hooks/useBranchOptions';
 import { useServiceOptions } from '@/hooks/useServiceOptions';
 import { useSpecializationsCatalog } from '@/hooks/useSpecializationsCatalog';
@@ -120,11 +120,18 @@ export const StaffFormModal = ({
           error={errors.email?.message}
           {...register('email')}
         />
-        <TextField
-          label={t.phone}
-          placeholder="+79001234567"
-          error={errors.phone?.message}
-          {...register('phone')}
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field, fieldState }) => (
+            <PhoneField
+              label={t.phone}
+              error={fieldState.error?.message}
+              value={field.value ?? ''}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
         />
         <label className={styles.field} htmlFor={roleFieldId}>
           <span className={styles.label}>{t.role}</span>

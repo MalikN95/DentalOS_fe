@@ -3,7 +3,7 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { PlatformClinicSummary } from '@/common/types/platform-admin';
-import { Alert, Button, Modal, TextField } from '@/components/ui';
+import { Alert, Button, Modal, PhoneField, TextField } from '@/components/ui';
 import { usePlatformClinicForm } from '@/hooks/usePlatformClinicForm';
 import styles from './ClinicFormModal.module.css';
 
@@ -116,9 +116,8 @@ export const ClinicFormModal = ({
           control={control}
           name="phone"
           render={({ field }) => (
-            <TextField
+            <PhoneField
               label={t.phone}
-              placeholder="+79001234567"
               value={field.value}
               onChange={field.onChange}
               onBlur={field.onBlur}
@@ -230,9 +229,8 @@ export const ClinicFormModal = ({
               control={control}
               name="adminPhone"
               render={({ field }) => (
-                <TextField
+                <PhoneField
                   label={t.adminPhone}
-                  placeholder="+79001234567"
                   value={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
