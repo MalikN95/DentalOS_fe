@@ -2,11 +2,17 @@
 
 import { format, useTranslation } from '@/common/locale/LocaleProvider';
 import type { Appointment } from '@/common/types/appointment';
-import { CalendarIcon, MessageIcon, StarIcon } from '@/components/icons/icons';
+import { CalendarIcon, ClockIcon, MessageIcon, StarIcon } from '@/components/icons/icons';
 import { StatCard } from '@/components/dashboard/StatCard/StatCard';
-import { formatMonthLabel, getMonthMatrix, isSameDay, toDateInputValue } from '@/helpers/date';
+import {
+  formatMonthLabel,
+  getMonthMatrix,
+  isSameDay,
+  parseDateInputValue,
+  toDateInputValue,
+} from '@/helpers/date';
 import { groupAppointmentsByDate, summarizeAppointmentsByOutcome } from '@/helpers/appointments-board';
-import type { useProfileOverview } from '@/hooks/useProfileOverview';
+import type { ActivityDay, useProfileOverview } from '@/hooks/useProfileOverview';
 import styles from './ProfileOverview.module.css';
 
 const WEEKDAY_ORDER = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
@@ -151,6 +157,62 @@ const CompletionDonut = ({
   );
 };
 
+const ActivityChart = ({ activityByDay }: { activityByDay: ActivityDay[] }) => {
+  const { t } = useTranslation();
+  const maxCount = Math.max(1, ...activityByDay.map((day) => day.count));
+  const totalCount = activityByDay.reduce((sum, day) => sum + day.count, 0);
+  const busiestDay = activityByDay.reduce(
+    (busiest, day) => (day.count > busiest.count ? day : busiest),
+    activityByDay[0],
+  );
+
+  return (
+    <div className={styles.widget}>
+      <span className={styles.widgetTitle}>
+        <ClockIcon size={14} />
+        {t.account.activityTitle}
+      </span>
+
+      <p className={styles.activitySummary}>
+        {format(t.account.activityTotal, { count: totalCount })}
+        {busiestDay.count > 0
+          ? ` · ${format(t.account.activityBusiestDay, {
+              date: formatMonthLabel(parseDateInputValue(busiestDay.date)).toLowerCase(),
+              day: parseDateInputValue(busiestDay.date).getDate(),
+              count: busiestDay.count,
+            })}`
+          : null}
+      </p>
+
+      <div className={styles.activityBars}>
+        {activityByDay.map((day) => {
+          const date = parseDateInputValue(day.date);
+          const weekdayKey = WEEKDAY_ORDER[(date.getDay() + 6) % 7];
+
+          return (
+            <span key={day.date} className={styles.activityColumn}>
+              <span className={styles.activityCount}>{day.count > 0 ? day.count : ''}</span>
+              <span
+                className={styles.activityBarTrack}
+                title={`${day.date}: ${day.count}`}
+              >
+                <span
+                  className={styles.activityBar}
+                  style={{ height: `${Math.max(6, (day.count / maxCount) * 100)}%` }}
+                />
+              </span>
+              <span className={styles.activityDayLabel}>
+                {t.weekdaysShort[weekdayKey].charAt(0)}
+                <span className={styles.activityDateLabel}>{date.getDate()}</span>
+              </span>
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 type ProfileOverviewProps = Omit<ReturnType<typeof useProfileOverview>, 'upcoming' | 'errorMessage'>;
 
 export const ProfileOverview = ({
@@ -160,6 +222,7 @@ export const ProfileOverview = ({
   monthCount,
   monthAppointments,
   monthSummary,
+  activityByDay,
   reviews,
 }: ProfileOverviewProps) => {
   const { t: dict } = useTranslation();
@@ -194,6 +257,8 @@ export const ProfileOverview = ({
         <MiniMonthCalendar appointments={monthAppointments} />
         <CompletionDonut summary={monthSummary} />
       </div>
+
+      <ActivityChart activityByDay={activityByDay} />
 
       {doctorProfileId ? (
         <div className={styles.widget}>

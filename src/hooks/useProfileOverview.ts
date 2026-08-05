@@ -9,7 +9,13 @@ import {
   summarizeAppointmentsByOutcome,
 } from '@/helpers/appointments-board';
 import { isTerminalStatus } from '@/helpers/appointment-status';
-import { getMonthIsoRange, getWeekDays, getWeekIsoRange, toDateInputValue } from '@/helpers/date';
+import {
+  addDays,
+  getMonthIsoRange,
+  getWeekDays,
+  getWeekIsoRange,
+  toDateInputValue,
+} from '@/helpers/date';
 import { useMyDoctorProfile } from '@/hooks/useMyDoctorProfile';
 import { useReviews } from '@/hooks/useReviews';
 import { useAppSelector } from '@/store/hooks';
@@ -17,6 +23,7 @@ import { selectAccessToken } from '@/store/slices/auth/selectors';
 
 export const PROFILE_OVERVIEW_QUERY_KEY = 'profile-overview';
 
+const ACTIVITY_DAYS = 14;
 const UPCOMING_LIMIT = 3;
 const REVIEWS_SAMPLE_LIMIT = 50;
 const REVIEWS_PREVIEW_LIMIT = 3;
@@ -27,6 +34,8 @@ const appointmentDateTime = (appointment: Appointment): Date => {
   return new Date(year, month - 1, day, hours, minutes);
 };
 
+export type ActivityDay = { date: string; count: number };
+
 export const useProfileOverview = () => {
   const accessToken = useAppSelector(selectAccessToken);
   const { doctorProfileId, isLoading: isDoctorProfileLoading } = useMyDoctorProfile();
@@ -36,6 +45,7 @@ export const useProfileOverview = () => {
   // the query key below) would refetch forever instead of once.
   const bounds = useMemo(() => {
     const now = new Date();
+    const activityStart = addDays(now, -(ACTIVITY_DAYS - 1));
     const weekRange = getWeekIsoRange(now);
     const monthRange = getMonthIsoRange(now);
     // Local 'YYYY-MM-DD' bounds for bucketing — `Appointment.date` is already
@@ -46,17 +56,20 @@ export const useProfileOverview = () => {
 
     return {
       now,
+      activityStart,
       weekStartDate: toDateInputValue(weekDays[0]),
       weekEndDate: toDateInputValue(weekDays[6]),
       monthStartDate: toDateInputValue(new Date(now.getFullYear(), now.getMonth(), 1)),
       monthEndDate: toDateInputValue(new Date(now.getFullYear(), now.getMonth() + 1, 0)),
-      // One request wide enough to cover this week and this month (whichever
-      // bounds are widest) — everything else below is derived from it.
-      from: [weekRange.from, monthRange.from].sort()[0],
+      // One request wide enough to cover the past 14 days plus this week and
+      // this month (whichever bounds are widest) — everything else below is
+      // derived from it.
+      from: [activityStart.toISOString(), weekRange.from, monthRange.from].sort()[0],
       to: [weekRange.to, monthRange.to].sort().at(-1) as string,
     };
   }, []);
-  const { now, weekStartDate, weekEndDate, monthStartDate, monthEndDate, from, to } = bounds;
+  const { now, activityStart, weekStartDate, weekEndDate, monthStartDate, monthEndDate, from, to } =
+    bounds;
 
   const appointmentsQuery = useQuery({
     queryKey: [PROFILE_OVERVIEW_QUERY_KEY, from, to],
@@ -97,6 +110,14 @@ export const useProfileOverview = () => {
     (appointment) => appointment.date >= monthStartDate && appointment.date <= monthEndDate,
   );
 
+  const activityByDay: ActivityDay[] = Array.from({ length: ACTIVITY_DAYS }, (_, index) => {
+    const date = toDateInputValue(addDays(activityStart, index));
+    return {
+      date,
+      count: appointments.filter((appointment) => appointment.date === date).length,
+    };
+  });
+
   const monthSummary: AppointmentOutcomeSummary = summarizeAppointmentsByOutcome(monthAppointments);
 
   const ratedReviews = allReviews.filter((review) => review.rating > 0);
@@ -113,6 +134,7 @@ export const useProfileOverview = () => {
     monthCount: monthAppointments.length,
     monthAppointments,
     monthSummary,
+    activityByDay,
     reviews: {
       isLoading: reviewsQuery.isLoading,
       preview: allReviews.slice(0, REVIEWS_PREVIEW_LIMIT),
