@@ -16,24 +16,28 @@ type PhoneFieldProps = {
   style?: React.CSSProperties;
 };
 
-type CountryCode = {
+type KnownCountry = {
   /** Dial code digits, no "+". */
   code: string;
-  label: string;
   nationalLength: number;
 };
 
-// Ordered by how often clinics in this rollout hit them; extend freely — the
-// selector/masking logic below reads entirely off this list.
-const COUNTRY_CODES: CountryCode[] = [
-  { code: '996', label: '🇰🇬 +996', nationalLength: 9 },
-  { code: '998', label: '🇺🇿 +998', nationalLength: 9 },
-  { code: '992', label: '🇹🇯 +992', nationalLength: 9 },
-  { code: '993', label: '🇹🇲 +993', nationalLength: 8 },
-  { code: '7', label: '🇰🇿 +7', nationalLength: 10 },
+// Just used to auto-mask/auto-detect nicely for the countries clinics in this
+// rollout hit most — the code field itself accepts any dial code, not only
+// these. Extend freely.
+const KNOWN_COUNTRIES: KnownCountry[] = [
+  { code: '996', nationalLength: 9 }, // Kyrgyzstan
+  { code: '998', nationalLength: 9 }, // Uzbekistan
+  { code: '992', nationalLength: 9 }, // Tajikistan
+  { code: '993', nationalLength: 8 }, // Turkmenistan
+  { code: '7', nationalLength: 10 }, // Kazakhstan/Russia
 ];
 
-const DEFAULT_COUNTRY = COUNTRY_CODES[0];
+const DEFAULT_CODE = KNOWN_COUNTRIES[0].code;
+const MAX_CODE_LENGTH = 4;
+// E.164 allows up to 15 digits total; used as the national-number cap for
+// any dial code we don't have an exact length for.
+const FALLBACK_NATIONAL_LENGTH = 12;
 
 const NAVIGATION_KEYS = new Set([
   'Tab',
@@ -49,18 +53,24 @@ const NAVIGATION_KEYS = new Set([
 ]);
 
 // Longer codes first so e.g. "998" isn't shadowed by a shorter overlapping prefix.
-const CODES_BY_LENGTH_DESC = [...COUNTRY_CODES].sort((a, b) => b.code.length - a.code.length);
+const CODES_BY_LENGTH_DESC = [...KNOWN_COUNTRIES].sort((a, b) => b.code.length - a.code.length);
 
-const detectCountry = (digitsOnly: string): CountryCode | null =>
-  CODES_BY_LENGTH_DESC.find((country) => digitsOnly.startsWith(country.code)) ?? null;
+const nationalLengthForCode = (code: string): number =>
+  KNOWN_COUNTRIES.find((country) => country.code === code)?.nationalLength ??
+  FALLBACK_NATIONAL_LENGTH;
 
-/** Strips the given country's dial code and/or a local "0" trunk prefix, so
- *  both "+996700123456" and "0700123456" resolve to the same national number. */
-const extractNationalDigits = (raw: string, country: CountryCode): string => {
+/** Only used to make a good first guess for an existing value/paste — the
+ *  user is always free to overwrite the detected code afterwards. */
+const detectCode = (digitsOnly: string): string | null =>
+  CODES_BY_LENGTH_DESC.find((country) => digitsOnly.startsWith(country.code))?.code ?? null;
+
+/** Strips the given dial code and/or a local "0" trunk prefix, so both
+ *  "+996700123456" and "0700123456" resolve to the same national number. */
+const extractNationalDigits = (raw: string, code: string): string => {
   let digits = raw.replace(/\D/g, '');
-  if (digits.startsWith(country.code)) digits = digits.slice(country.code.length);
+  if (digits.startsWith(code)) digits = digits.slice(code.length);
   if (digits.startsWith('0')) digits = digits.slice(1);
-  return digits.slice(0, country.nationalLength);
+  return digits.slice(0, nationalLengthForCode(code));
 };
 
 // Grouped with spaces for the input's visible text only.
@@ -72,22 +82,18 @@ const formatDisplay = (digits: string): string => {
 
 // Space-free — this is what actually gets committed via onChange, so it
 // stays compatible with plain E.164-style validation (e.g. patient OTP login).
-const formatCommitted = (country: CountryCode, digits: string): string =>
-  `+${country.code}${digits}`;
+const formatCommitted = (code: string, digits: string): string => `+${code}${digits}`;
 
-// A record saved under a dial code we don't offer in the selector (e.g. legacy
-// "+1..." data) must not get silently mangled into a bogus number just because
-// this field re-rendered — leave those as plain free text instead of masking.
-const isUnsupportedCountryNumber = (raw: string): boolean => {
-  const trimmed = raw.trim();
-  if (!/^\+\d/.test(trimmed)) return false;
-  return detectCountry(trimmed.replace(/\D/g, '')) === null;
-};
+// A record saved without a "+" at all (e.g. legacy free-text data) must not
+// get silently mangled into a bogus number just because this field
+// re-rendered — leave those as plain free text instead of masking.
+const isPlainTextNumber = (raw: string): boolean => !/^\+\d/.test(raw.trim());
 
-/** Phone input with a country-code selector (defaults to +996); only the
- *  national number is actually editable, keystroke by keystroke like
- *  TimeSelect's HH:mm mask. Switching the country re-masks the same digits
- *  to the new country's length instead of discarding them. */
+/** Phone input with an editable dial-code field (defaults to +996, but any
+ *  code can be typed — it's not limited to a fixed list); only digits are
+ *  actually editable, keystroke by keystroke like TimeSelect's HH:mm mask.
+ *  Changing the code re-masks the same digits to its national length
+ *  instead of discarding them. */
 export const PhoneField = ({
   label,
   error,
@@ -99,38 +105,37 @@ export const PhoneField = ({
   style,
 }: PhoneFieldProps) => {
   const inputId = useId();
-  const [isPlainMode] = useState(() => isUnsupportedCountryNumber(value));
+  const [isPlainMode] = useState(() => isPlainTextNumber(value));
   const [prevValue, setPrevValue] = useState(value);
-  const [country, setCountry] = useState<CountryCode>(
-    () => detectCountry(value.replace(/\D/g, '')) ?? DEFAULT_COUNTRY,
+  const [code, setCode] = useState<string>(
+    () => detectCode(value.replace(/\D/g, '')) ?? DEFAULT_CODE,
   );
-  const [digits, setDigits] = useState(() => extractNationalDigits(value, country));
+  const [digits, setDigits] = useState(() => extractNationalDigits(value, code));
 
   // Re-derive from a prop change during render (React's documented
   // alternative to syncing props->state via an effect).
   if (!isPlainMode && value !== prevValue) {
     setPrevValue(value);
-    const nextCountry = detectCountry(value.replace(/\D/g, '')) ?? country;
-    setCountry(nextCountry);
-    setDigits(extractNationalDigits(value, nextCountry));
+    const nextCode = detectCode(value.replace(/\D/g, '')) ?? code;
+    setCode(nextCode);
+    setDigits(extractNationalDigits(value, nextCode));
   }
 
-  const commit = (nextCountry: CountryCode, nextDigits: string) => {
-    setCountry(nextCountry);
+  const commit = (nextCode: string, nextDigits: string) => {
+    setCode(nextCode);
     setDigits(nextDigits);
-    onChange(formatCommitted(nextCountry, nextDigits));
+    onChange(formatCommitted(nextCode, nextDigits));
   };
 
-  const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const nextCountry =
-      COUNTRY_CODES.find((candidate) => candidate.code === event.target.value) ?? DEFAULT_COUNTRY;
-    commit(nextCountry, digits.slice(0, nextCountry.nationalLength));
+  const handleCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextCode = event.target.value.replace(/\D/g, '').slice(0, MAX_CODE_LENGTH) || DEFAULT_CODE;
+    commit(nextCode, digits.slice(0, nationalLengthForCode(nextCode)));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Backspace' || event.key === 'Delete') {
       event.preventDefault();
-      if (digits.length > 0) commit(country, digits.slice(0, -1));
+      if (digits.length > 0) commit(code, digits.slice(0, -1));
       return;
     }
 
@@ -142,15 +147,15 @@ export const PhoneField = ({
     }
 
     event.preventDefault();
-    if (digits.length >= country.nationalLength) return;
-    commit(country, digits + event.key);
+    if (digits.length >= nationalLengthForCode(code)) return;
+    commit(code, digits + event.key);
   };
 
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     event.preventDefault();
     const pasted = event.clipboardData.getData('text');
-    const nextCountry = detectCountry(pasted.replace(/\D/g, '')) ?? country;
-    commit(nextCountry, extractNationalDigits(pasted, nextCountry));
+    const nextCode = detectCode(pasted.replace(/\D/g, '')) ?? code;
+    commit(nextCode, extractNationalDigits(pasted, nextCode));
   };
 
   const fieldClassName = [
@@ -182,19 +187,17 @@ export const PhoneField = ({
           />
         ) : (
           <>
-            <select
-              className={styles.countrySelect}
+            <span className={styles.codePrefix}>+</span>
+            <input
+              className={styles.codeInput}
+              type="text"
+              inputMode="numeric"
               aria-label="Country code"
               disabled={disabled}
-              value={country.code}
-              onChange={handleCountryChange}
-            >
-              {COUNTRY_CODES.map((candidate) => (
-                <option key={candidate.code} value={candidate.code}>
-                  {candidate.label}
-                </option>
-              ))}
-            </select>
+              value={code}
+              onChange={handleCodeChange}
+              size={Math.max(code.length, 3)}
+            />
             <input
               id={inputId}
               className={textFieldStyles.input}

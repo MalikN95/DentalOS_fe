@@ -1,6 +1,14 @@
-.countrySelect {
+.codePrefix {
   flex-shrink: 0;
-  padding-right: 8px;
+  color: var(--color-black-500);
+}
+
+.codeInput {
+  flex-shrink: 0;
+  width: auto;
+  min-width: 0;
+  max-width: 44px;
+  padding: 0 8px 0 2px;
   border: none;
   border-right: 1px solid var(--color-gray-100);
   outline: none;
@@ -8,10 +16,9 @@
   font-size: var(--text-m-size);
   line-height: var(--text-m-line);
   color: var(--color-black-700);
-  cursor: pointer;
 }
 
-.countrySelect:disabled {
+.codeInput:disabled {
   color: var(--color-gray-400);
   cursor: not-allowed;
 }
