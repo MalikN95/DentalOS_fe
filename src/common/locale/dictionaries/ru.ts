@@ -904,7 +904,7 @@ export const ru = {
     submitting: 'Записываем...',
 
     confirmationTitle: 'Вы успешно записаны!',
-    confirmationText: 'Мы отправили подтверждение на указанный телефон.',
+    confirmationText: 'Мы отправили детали записи на указанный телефон. Клиника подтвердит её в ближайшее время.',
     confirmationAppointment: 'Запись',
     confirmationDoctor: 'Врач',
     confirmationService: 'Услуга',

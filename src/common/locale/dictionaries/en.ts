@@ -902,7 +902,8 @@ export const en: Dictionary = {
     submitting: 'Booking...',
 
     confirmationTitle: "You're booked!",
-    confirmationText: "We've sent a confirmation to the phone number you provided.",
+    confirmationText:
+      "We've sent the booking details to the phone number you provided. The clinic will confirm it shortly.",
     confirmationAppointment: 'Appointment',
     confirmationDoctor: 'Doctor',
     confirmationService: 'Service',

@@ -259,10 +259,15 @@
 }
 
 @media (max-width: 480px) {
+  /* Fixed (not min-) height + overflow:hidden so the screen itself never
+   * scrolls — only .panel below scrolls internally, and only as a last
+   * resort when brand + form together don't fit a short viewport. */
   .page {
+    height: 100dvh;
     align-items: stretch;
     justify-content: stretch;
     padding: 0;
+    overflow: hidden;
   }
 
   .shell {
@@ -270,33 +275,38 @@
     flex-direction: column;
     width: 100%;
     max-width: 100%;
-    min-height: 100dvh;
+    height: 100dvh;
     border: none;
     border-radius: 0;
     box-shadow: none;
     animation: none;
   }
 
+  /* Only the logo/name strip stays — the tagline/features/footer take up
+   * more height than a short phone screen has to spare, and this login
+   * screen should never need scrolling to reach the submit button. */
   .brand {
     display: flex;
-    flex: 1 1 auto;
-    min-height: 200px;
-    padding: 32px 24px 48px;
+    flex: 0 0 auto;
+    min-height: 0;
+    padding: 20px 24px 32px;
+  }
+
+  .brandBody,
+  .brandFooter {
+    display: none;
   }
 
   .mobileLogo {
     display: none;
   }
 
-  .brandTagline {
-    font-size: 22px;
-    line-height: 28px;
-  }
-
   .panel {
     position: relative;
     z-index: 1;
-    flex: 0 0 auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
     margin-top: -24px;
     padding: 28px 20px calc(24px + env(safe-area-inset-bottom, 0px));
     border-radius: 24px 24px 0 0;

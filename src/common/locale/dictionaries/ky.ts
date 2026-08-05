@@ -904,7 +904,8 @@ export const ky: Dictionary = {
     submitting: 'Жазылууда...',
 
     confirmationTitle: 'Сиз ийгиликтүү жазылдыңыз!',
-    confirmationText: 'Биз көрсөтүлгөн телефонго тастыктоо жибердик.',
+    confirmationText:
+      'Биз көрсөтүлгөн телефонго жазылуу маалыматын жибердик. Клиника жакын арада аны ырастайт.',
     confirmationAppointment: 'Жазуу',
     confirmationDoctor: 'Дарыгер',
     confirmationService: 'Кызмат',

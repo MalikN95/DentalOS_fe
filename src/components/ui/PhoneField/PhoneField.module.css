@@ -1,0 +1,17 @@
+.countrySelect {
+  flex-shrink: 0;
+  padding-right: 8px;
+  border: none;
+  border-right: 1px solid var(--color-gray-100);
+  outline: none;
+  background: transparent;
+  font-size: var(--text-m-size);
+  line-height: var(--text-m-line);
+  color: var(--color-black-700);
+  cursor: pointer;
+}
+
+.countrySelect:disabled {
+  color: var(--color-gray-400);
+  cursor: not-allowed;
+}
