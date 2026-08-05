@@ -85,13 +85,9 @@
   color: var(--color-black-600);
 }
 
-.portalPromoLink {
-  margin-top: 8px;
-  text-decoration: none;
-}
-
 .portalPromoButton {
   width: 100%;
+  margin-top: 8px;
   justify-content: center;
 }
 

@@ -1,32 +1,36 @@
 'use client';
 
-import Link from 'next/link';
 import { useTranslation } from '@/common/locale/LocaleProvider';
 import type { BookingConfirmation } from '@/common/types/booking';
+import type { BookingLoginLinkStatus } from '@/hooks/useBookingLoginLink';
 import type { PushPermissionStatus } from '@/hooks/useBookingWizard';
 import { CheckIcon } from '@/components/icons/icons';
-import { Button } from '@/components/ui';
+import { Alert, Button } from '@/components/ui';
 import { formatDate, formatTime } from '@/helpers/date';
 import styles from './BookingConfirmationStep.module.css';
 
 type BookingConfirmationStepProps = {
   confirmation: BookingConfirmation;
-  clinicSlug: string;
   pushPermission: PushPermissionStatus;
   onEnableNotifications: () => void;
   canInstallApp: boolean;
   onInstallApp: () => void;
   onBookAnother: () => void;
+  loginLinkStatus: BookingLoginLinkStatus;
+  loginLinkError: string | null;
+  onRequestLogin: () => void;
 };
 
 export const BookingConfirmationStep = ({
   confirmation,
-  clinicSlug,
   pushPermission,
   onEnableNotifications,
   canInstallApp,
   onInstallApp,
   onBookAnother,
+  loginLinkStatus,
+  loginLinkError,
+  onRequestLogin,
 }: BookingConfirmationStepProps) => {
   const { t: dict } = useTranslation();
   const t = dict.booking;
@@ -83,10 +87,19 @@ export const BookingConfirmationStep = ({
 
       <div className={styles.portalPromo}>
         <span className={styles.portalPromoTitle}>{t.confirmationPortalTitle}</span>
-        <p className={styles.portalPromoText}>{t.confirmationPortalText}</p>
-        <Link href={`/portal/${clinicSlug}`} className={styles.portalPromoLink}>
-          <Button className={styles.portalPromoButton}>{t.confirmationPortalCta}</Button>
-        </Link>
+        <p className={styles.portalPromoText}>
+          {loginLinkStatus === 'sent' ? t.confirmationPortalSentText : t.confirmationPortalText}
+        </p>
+        {loginLinkError ? <Alert color="danger">{loginLinkError}</Alert> : null}
+        {loginLinkStatus !== 'sent' ? (
+          <Button
+            className={styles.portalPromoButton}
+            disabled={loginLinkStatus === 'sending'}
+            onClick={onRequestLogin}
+          >
+            {t.confirmationPortalCta}
+          </Button>
+        ) : null}
       </div>
 
       <Button className={styles.again} variant="soft" color="gray" onClick={onBookAnother}>

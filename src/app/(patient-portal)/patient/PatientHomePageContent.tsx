@@ -7,11 +7,13 @@ import { CalendarIcon, MessageIcon } from '@/components/icons/icons';
 import { AccordionSection } from '@/components/patient-portal/AccordionSection/AccordionSection';
 import { AppointmentCard } from '@/components/patient-portal/AppointmentCard/AppointmentCard';
 import { MessageBubble } from '@/components/patient-portal/MessageBubble/MessageBubble';
+import { PushNotificationPrompt } from '@/components/patient-portal/PushNotificationPrompt/PushNotificationPrompt';
 import { EmptyState } from '@/components/ui';
 import { useClinic } from '@/hooks/useClinic';
 import { usePortalAppointments } from '@/hooks/usePortalAppointments';
 import { usePortalMessages } from '@/hooks/usePortalMessages';
 import { usePortalProfile } from '@/hooks/usePortalProfile';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 import styles from './PatientHomePageContent.module.css';
 
 const PREVIEW_COUNT = 3;
@@ -23,6 +25,7 @@ export const PatientHomePageContent = () => {
   const { messages } = usePortalMessages();
   const { data: clinic } = useClinic();
   const currency = clinic?.currency ?? 'RUB';
+  const { status: pushStatus, enablePush } = usePushNotifications();
 
   const [isAppointmentsOpen, setIsAppointmentsOpen] = useState(true);
   const [isMessagesOpen, setIsMessagesOpen] = useState(false);
@@ -31,12 +34,18 @@ export const PatientHomePageContent = () => {
   const previewAppointments = appointments.slice(0, PREVIEW_COUNT);
   const previewMessages = messages.slice(-PREVIEW_COUNT);
 
+  const handleEnablePush = () => {
+    enablePush().catch(() => undefined);
+  };
+
   return (
     <div className={styles.page}>
       <h1 className={styles.greeting}>
         {t.patientPortal.hello}
         {profile ? `, ${profile.firstName}` : ''}
       </h1>
+
+      {pushStatus === 'default' ? <PushNotificationPrompt onEnable={handleEnablePush} /> : null}
 
       <section>
         <h2 className={styles.sectionTitle}>{t.patientPortal.upcomingSectionTitle}</h2>

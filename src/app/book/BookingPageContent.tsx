@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { format, useTranslation } from '@/common/locale/LocaleProvider';
+import { normalizePhone } from '@/helpers/phone';
+import { useBookingLoginLink } from '@/hooks/useBookingLoginLink';
+import { useBookingPortalRedirect } from '@/hooks/useBookingPortalRedirect';
 import type { BookingStep } from '@/hooks/useBookingWizard';
 import { useBookingWizard } from '@/hooks/useBookingWizard';
 import { useInstallPrompt } from '@/hooks/useInstallPrompt';
@@ -20,8 +23,14 @@ type BookingPageContentProps = {
 export const BookingPageContent = ({ clinicSlug }: BookingPageContentProps) => {
   const { t: dict } = useTranslation();
   const t = dict.booking;
+  const { isRedirecting } = useBookingPortalRedirect(clinicSlug);
   const wizard = useBookingWizard(clinicSlug);
   const installPrompt = useInstallPrompt();
+  const loginLink = useBookingLoginLink(clinicSlug, normalizePhone(wizard.details.phone));
+
+  if (isRedirecting) {
+    return null;
+  }
 
   const isInitialLoading =
     wizard.clinicQuery.isLoading || wizard.branchesQuery.isLoading || wizard.servicesQuery.isLoading;
@@ -102,12 +111,14 @@ export const BookingPageContent = ({ clinicSlug }: BookingPageContentProps) => {
       return (
         <BookingConfirmationStep
           confirmation={wizard.bookingMutation.data}
-          clinicSlug={clinicSlug}
           pushPermission={wizard.pushPermission}
           onEnableNotifications={wizard.enablePushNotifications}
           canInstallApp={installPrompt.canInstall}
           onInstallApp={installPrompt.promptInstall}
           onBookAnother={() => window.location.reload()}
+          loginLinkStatus={loginLink.status}
+          loginLinkError={loginLink.errorMessage}
+          onRequestLogin={loginLink.sendLink}
         />
       );
     }

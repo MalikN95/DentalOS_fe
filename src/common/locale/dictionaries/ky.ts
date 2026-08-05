@@ -916,6 +916,9 @@ export const ky: Dictionary = {
     confirmationPortalText:
       'Жазууларыңызды көрүү жана клиника менен байланышуу үчүн бейтап кабинетине кириңиз.',
     confirmationPortalCta: 'Бейтап кабинетине кирүү',
+    confirmationPortalSentText:
+      'WhatsApp аркылуу кирүү шилтемесин жөнөттүк. Билдирүүнү ачып, шилтемени басыңыз.',
+    confirmationPortalError: 'Шилтемени жөнөтүү мүмкүн болбоду. Кайра аракет кылыңыз.',
     confirmationEnableNotificationsTitle: 'Билдирүүлөрдү иштетиңиз',
     confirmationEnableNotificationsText:
       'Кабыл алуу жөнүндө эскертмелерди жана клиниканын жоопторун браузерден алыңыз.',
@@ -1121,6 +1124,9 @@ export const ky: Dictionary = {
     magicVerifying: 'Кирүү аткарылып жатат…',
     magicInvalid: 'Шилтеме жараксыз же мөөнөтү өттү. Кирүү бетинен жаңысын сурап алыңыз.',
     magicBackToLogin: 'Кирүү бетине кайтуу',
+    enablePushTitle: 'Билдирүүлөрдү иштетиңиз',
+    enablePushText: 'Кабылдоо жөнүндө эскертүүнү же клиникадан билдирүүнү өткөрүп жибербеш үчүн',
+    enablePushCta: 'Билдирүүлөрдү иштетүү',
     navHome: 'Башкы бет',
     navAppointments: 'Жазуулар',
     navMessages: 'Билдирүүлөр',

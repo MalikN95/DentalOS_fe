@@ -915,6 +915,9 @@ export const ru = {
     confirmationPortalText:
       'Войдите в личный кабинет пациента, чтобы видеть свои записи и переписку с клиникой.',
     confirmationPortalCta: 'Войти в личный кабинет',
+    confirmationPortalSentText:
+      'Мы отправили ссылку для входа в WhatsApp. Откройте сообщение и перейдите по ссылке.',
+    confirmationPortalError: 'Не удалось отправить ссылку. Попробуйте ещё раз.',
     confirmationEnableNotificationsTitle: 'Включите уведомления',
     confirmationEnableNotificationsText:
       'Получайте напоминания о визите и ответы клиники прямо в браузере.',
@@ -1117,6 +1120,9 @@ export const ru = {
     magicVerifying: 'Выполняется вход…',
     magicInvalid: 'Ссылка недействительна или устарела. Запросите новую на странице входа.',
     magicBackToLogin: 'Вернуться на страницу входа',
+    enablePushTitle: 'Включите уведомления',
+    enablePushText: 'Чтобы не пропустить напоминание о записи или сообщение от клиники',
+    enablePushCta: 'Включить уведомления',
     navHome: 'Главная',
     navAppointments: 'Записи',
     navMessages: 'Сообщения',

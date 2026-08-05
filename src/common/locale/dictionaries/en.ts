@@ -914,6 +914,8 @@ export const en: Dictionary = {
     confirmationPortalText:
       'Log into the patient portal to see your appointments and message the clinic.',
     confirmationPortalCta: 'Log into patient portal',
+    confirmationPortalSentText: 'We sent a login link over WhatsApp. Open the message and tap the link.',
+    confirmationPortalError: 'Could not send the link. Please try again.',
     confirmationEnableNotificationsTitle: 'Turn on notifications',
     confirmationEnableNotificationsText:
       'Get appointment reminders and clinic replies right in your browser.',
@@ -1117,6 +1119,9 @@ export const en: Dictionary = {
     magicVerifying: 'Signing you in…',
     magicInvalid: 'This link is invalid or has expired. Request a new one from the sign-in page.',
     magicBackToLogin: 'Back to sign in',
+    enablePushTitle: 'Turn on notifications',
+    enablePushText: "So you don't miss an appointment reminder or a message from the clinic",
+    enablePushCta: 'Enable notifications',
     navHome: 'Home',
     navAppointments: 'Appointments',
     navMessages: 'Messages',

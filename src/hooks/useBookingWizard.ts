@@ -16,6 +16,7 @@ import {
   registerBookingPushToken,
 } from '@/helpers/booking.api';
 import { getMessagingInstance } from '@/helpers/firebase';
+import { normalizePhone } from '@/helpers/phone';
 
 export type BookingStep = 'service' | 'doctor' | 'datetime' | 'details' | 'done';
 
@@ -245,7 +246,7 @@ export const useBookingWizard = (clinicSlug: string) => {
       time,
       firstName: details.firstName.trim(),
       lastName: details.lastName.trim(),
-      phone: details.phone.trim(),
+      phone: normalizePhone(details.phone),
       email: details.email.trim() || undefined,
       comment: details.comment.trim() || undefined,
       notificationPreferences: {
