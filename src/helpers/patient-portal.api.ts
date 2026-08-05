@@ -20,20 +20,19 @@ type TokensResponse = {
   refreshToken: string;
 };
 
-export const requestPatientOtp = (slug: string, phone: string): Promise<void> =>
+export const requestPatientLoginLink = (slug: string, phone: string): Promise<void> =>
   publicApiFetch<void>(`/api/auth/${slug}/sms/request`, {
     method: 'POST',
     body: JSON.stringify({ phone }),
   });
 
-export const verifyPatientOtp = (
-  slug: string,
-  phone: string,
-  code: string,
-): Promise<TokensResponse> =>
+// `slug` only picks the route (`TenantGuard` needs *a* `:clinicSlug` to
+// resolve) — the token itself already identifies the clinic + phone it was
+// issued for, see SmsAuthService#verifyLoginLink on the backend.
+export const verifyPatientMagicLink = (slug: string, token: string): Promise<TokensResponse> =>
   publicApiFetch<TokensResponse>(`/api/auth/${slug}/sms/verify`, {
     method: 'POST',
-    body: JSON.stringify({ phone, code }),
+    body: JSON.stringify({ token }),
   });
 
 export const fetchMyPatientProfile = (accessToken: string): Promise<PatientPortalProfile> =>

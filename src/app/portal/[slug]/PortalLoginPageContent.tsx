@@ -1,7 +1,7 @@
 'use client';
 
 import { Logo } from '@/components/icons/icons';
-import { PhoneOtpForm } from '@/components/patient-portal/PhoneOtpForm/PhoneOtpForm';
+import { PhoneLinkForm } from '@/components/patient-portal/PhoneLinkForm/PhoneLinkForm';
 import { usePortalLogin } from '@/hooks/usePortalLogin';
 import styles from './PortalLoginPageContent.module.css';
 
@@ -14,34 +14,28 @@ export const PortalLoginPageContent = ({ clinicSlug }: PortalLoginPageContentPro
     step,
     phone,
     setPhone,
-    code,
-    setCode,
     isSubmitting,
     error,
     resendCooldown,
-    requestCode,
-    verifyCode,
+    requestLink,
     changePhone,
-    resendCode,
+    resendLink,
   } = usePortalLogin(clinicSlug);
 
   return (
     <div className={styles.page}>
       <Logo height={28} className={styles.logo} />
 
-      <PhoneOtpForm
+      <PhoneLinkForm
         step={step}
         phone={phone}
-        code={code}
         isSubmitting={isSubmitting}
         error={error}
         resendCooldown={resendCooldown}
         onPhoneChange={setPhone}
-        onCodeChange={setCode}
-        onSubmitPhone={requestCode}
-        onSubmitCode={verifyCode}
+        onSubmitPhone={requestLink}
         onChangePhone={changePhone}
-        onResendCode={resendCode}
+        onResendLink={resendLink}
       />
     </div>
   );
