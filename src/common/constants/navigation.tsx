@@ -86,7 +86,14 @@ export const BOTTOM_NAV_ITEMS: NavItem[] = [
   },
 ];
 
-const ALL_NAV_ITEMS = [...NAV_ITEMS, ...BOTTOM_NAV_ITEMS];
+// Reachable only via the TopNav avatar/name, never rendered as a nav pill —
+// still needs an entry here so getNavItemByPathname's fallback (NAV_ITEMS[0],
+// which is role-restricted) doesn't wrongly gate it for roles like doctor.
+const HIDDEN_NAV_ITEMS: NavItem[] = [
+  { id: 'account', labelKey: 'account', href: '/account', icon: <SettingsIcon /> },
+];
+
+const ALL_NAV_ITEMS = [...NAV_ITEMS, ...BOTTOM_NAV_ITEMS, ...HIDDEN_NAV_ITEMS];
 
 export const getNavItemByPathname = (pathname: string): NavItem => {
   const match = ALL_NAV_ITEMS.find((item) => pathname.startsWith(item.href));

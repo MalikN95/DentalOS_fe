@@ -2,7 +2,23 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.topRow {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.topRow > .section {
+  flex: 1;
   max-width: 640px;
+}
+
+.topRow > * {
+  min-width: 0;
 }
 
 .pageTitle {
@@ -42,6 +58,7 @@
 }
 
 .photoPreview {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,30 +84,56 @@
   text-align: center;
 }
 
+.photoEditButton {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  color: var(--color-white);
+  background: var(--color-primary-500);
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.photoEditButton:hover {
+  background: var(--color-primary-600);
+}
+
+.photoEditButton:disabled {
+  background: var(--color-gray-200);
+  cursor: not-allowed;
+}
+
+.identityInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
 .identityName {
   font-size: 15px;
   font-weight: 600;
-  line-height: 22px;
+  line-height: 20px;
   color: var(--color-black-700);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.photoLink {
-  all: unset;
-  margin-left: auto;
-  flex-shrink: 0;
+.identityRole {
   font-size: 12px;
-  line-height: 18px;
-  font-weight: 500;
+  line-height: 16px;
   color: var(--color-black-500);
-  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.photoLink:hover {
-  color: var(--color-primary-600);
 }
 
 .hiddenInput {
@@ -103,13 +146,24 @@
   gap: 12px;
 }
 
-.actions {
-  grid-column: 1 / -1;
+.saveSlot {
   display: flex;
-  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.saveButton {
+  width: 100%;
 }
 
 @media (max-width: 560px) {
+  .topRow {
+    flex-direction: column;
+  }
+
+  .topRow > .section {
+    max-width: none;
+  }
+
   .grid {
     grid-template-columns: minmax(0, 1fr);
   }
